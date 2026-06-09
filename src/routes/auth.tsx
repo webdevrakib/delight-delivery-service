@@ -31,17 +31,17 @@ function AuthPage() {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/app`,
+            emailRedirectTo: `${window.location.origin}/dashboard`,
             data: { full_name: fullName },
           },
         });
         if (error) throw error;
         toast.success(t("signupCheckEmail"));
-        navigate({ to: "/app" });
+        navigate({ to: "/dashboard" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/app" });
+        navigate({ to: "/dashboard" });
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("authError");
@@ -54,10 +54,10 @@ function AuthPage() {
   async function handleGoogle() {
     setGoogleLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/app" });
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
       if (result.error) { toast.error(t("authError")); return; }
       if (result.redirected) return;
-      navigate({ to: "/app" });
+      navigate({ to: "/dashboard" });
     } finally {
       setGoogleLoading(false);
     }

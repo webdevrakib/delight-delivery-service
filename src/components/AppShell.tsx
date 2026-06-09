@@ -6,11 +6,11 @@ import type { ReactNode } from "react";
 
 type NavKey = keyof typeof Dict;
 const items: { to: string; icon: typeof Home; label: NavKey }[] = [
-  { to: "/app", icon: Home, label: "home" },
-  { to: "/app/schemes", icon: Sprout, label: "schemes" },
-  { to: "/app/tips", icon: Newspaper, label: "tips" },
-  { to: "/app/market", icon: TrendingUp, label: "market" },
-  { to: "/app/profile", icon: User, label: "profile" },
+  { to: "/dashboard", icon: Home, label: "home" },
+  { to: "/schemes", icon: Sprout, label: "schemes" },
+  { to: "/tips", icon: Newspaper, label: "tips" },
+  { to: "/market", icon: TrendingUp, label: "market" },
+  { to: "/profile", icon: User, label: "profile" },
 ];
 
 export function AppShell({ title, children }: { title?: string; children: ReactNode }) {
@@ -39,7 +39,7 @@ export function AppShell({ title, children }: { title?: string; children: ReactN
       <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-border/60 bg-card/95 backdrop-blur-lg">
         <div className="mx-auto flex max-w-2xl items-stretch justify-between px-2 py-1.5">
           {items.map(({ to, icon: Icon, label }) => {
-            const active = to === "/app" ? pathname === "/app" : pathname.startsWith(to);
+            const active = pathname === to || pathname.startsWith(to + "/");
             return (
               <Link
                 key={to}
