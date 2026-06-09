@@ -14,7 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      market_prices: {
+        Row: {
+          created_at: string
+          crop_bn: string
+          crop_en: string
+          id: string
+          market_bn: string
+          market_en: string
+          price_date: string
+          price_max: number
+          price_min: number
+          unit: string
+        }
+        Insert: {
+          created_at?: string
+          crop_bn: string
+          crop_en: string
+          id?: string
+          market_bn: string
+          market_en: string
+          price_date?: string
+          price_max: number
+          price_min: number
+          unit?: string
+        }
+        Update: {
+          created_at?: string
+          crop_bn?: string
+          crop_en?: string
+          id?: string
+          market_bn?: string
+          market_en?: string
+          price_date?: string
+          price_max?: number
+          price_min?: number
+          unit?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          district: string | null
+          full_name: string | null
+          id: string
+          land_size_acres: number | null
+          phone: string | null
+          preferred_language: string
+          primary_crops: string[] | null
+          updated_at: string
+          village: string | null
+        }
+        Insert: {
+          created_at?: string
+          district?: string | null
+          full_name?: string | null
+          id: string
+          land_size_acres?: number | null
+          phone?: string | null
+          preferred_language?: string
+          primary_crops?: string[] | null
+          updated_at?: string
+          village?: string | null
+        }
+        Update: {
+          created_at?: string
+          district?: string | null
+          full_name?: string | null
+          id?: string
+          land_size_acres?: number | null
+          phone?: string | null
+          preferred_language?: string
+          primary_crops?: string[] | null
+          updated_at?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
+      schemes: {
+        Row: {
+          category: string
+          created_at: string
+          description_bn: string
+          description_en: string
+          eligibility_bn: string | null
+          eligibility_en: string | null
+          id: string
+          link: string | null
+          ministry: string | null
+          title_bn: string
+          title_en: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description_bn: string
+          description_en: string
+          eligibility_bn?: string | null
+          eligibility_en?: string | null
+          id?: string
+          link?: string | null
+          ministry?: string | null
+          title_bn: string
+          title_en: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description_bn?: string
+          description_en?: string
+          eligibility_bn?: string | null
+          eligibility_en?: string | null
+          id?: string
+          link?: string | null
+          ministry?: string | null
+          title_bn?: string
+          title_en?: string
+        }
+        Relationships: []
+      }
+      tips: {
+        Row: {
+          category: string
+          content_bn: string
+          content_en: string
+          created_at: string
+          id: string
+          image_url: string | null
+          title_bn: string
+          title_en: string
+        }
+        Insert: {
+          category: string
+          content_bn: string
+          content_en: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          title_bn: string
+          title_en: string
+        }
+        Update: {
+          category?: string
+          content_bn?: string
+          content_en?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          title_bn?: string
+          title_en?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
