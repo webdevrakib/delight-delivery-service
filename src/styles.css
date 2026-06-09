@@ -1,11 +1,11 @@
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
 /* Krishi Bondhu — earthy, hopeful, farmer-first design system */
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @theme inline {
   --font-sans: 'Plus Jakarta Sans', 'Hind Siliguri', system-ui, sans-serif;
