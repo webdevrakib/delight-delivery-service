@@ -14,6 +14,214 @@ export type Database = {
   }
   public: {
     Tables: {
+      buyers: {
+        Row: {
+          address: string | null
+          buyer_type: string
+          created_at: string
+          crops_buying: string[]
+          district: string
+          id: string
+          name_bn: string
+          name_en: string
+          offered_price_note: string | null
+          phone: string
+          verified: boolean
+          whatsapp: string | null
+        }
+        Insert: {
+          address?: string | null
+          buyer_type: string
+          created_at?: string
+          crops_buying?: string[]
+          district: string
+          id?: string
+          name_bn: string
+          name_en: string
+          offered_price_note?: string | null
+          phone: string
+          verified?: boolean
+          whatsapp?: string | null
+        }
+        Update: {
+          address?: string | null
+          buyer_type?: string
+          created_at?: string
+          crops_buying?: string[]
+          district?: string
+          id?: string
+          name_bn?: string
+          name_en?: string
+          offered_price_note?: string | null
+          phone?: string
+          verified?: boolean
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      crop_sales: {
+        Row: {
+          buyer_id: string | null
+          created_at: string
+          crop: string
+          farmer_id: string
+          id: string
+          notes: string | null
+          price_per_kg: number
+          quantity_kg: number
+          sale_date: string
+        }
+        Insert: {
+          buyer_id?: string | null
+          created_at?: string
+          crop: string
+          farmer_id: string
+          id?: string
+          notes?: string | null
+          price_per_kg: number
+          quantity_kg: number
+          sale_date?: string
+        }
+        Update: {
+          buyer_id?: string | null
+          created_at?: string
+          crop?: string
+          farmer_id?: string
+          id?: string
+          notes?: string | null
+          price_per_kg?: number
+          quantity_kg?: number
+          sale_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crop_sales_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "buyers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      disease_questions: {
+        Row: {
+          answer: string | null
+          answered_at: string | null
+          created_at: string
+          crop: string
+          farmer_id: string
+          id: string
+          question: string
+        }
+        Insert: {
+          answer?: string | null
+          answered_at?: string | null
+          created_at?: string
+          crop: string
+          farmer_id: string
+          id?: string
+          question: string
+        }
+        Update: {
+          answer?: string | null
+          answered_at?: string | null
+          created_at?: string
+          crop?: string
+          farmer_id?: string
+          id?: string
+          question?: string
+        }
+        Relationships: []
+      }
+      machine_bookings: {
+        Row: {
+          created_at: string
+          end_date: string
+          farmer_id: string
+          id: string
+          machine_id: string
+          notes: string | null
+          start_date: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          farmer_id: string
+          id?: string
+          machine_id: string
+          notes?: string | null
+          start_date: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          farmer_id?: string
+          id?: string
+          machine_id?: string
+          notes?: string | null
+          start_date?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "machine_bookings_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      machines: {
+        Row: {
+          available: boolean
+          contact_phone: string
+          created_at: string
+          description: string | null
+          district: string
+          id: string
+          image_url: string | null
+          machine_type: string
+          owner_id: string
+          rate_per_day: number
+          title: string
+          upazila: string | null
+          updated_at: string
+        }
+        Insert: {
+          available?: boolean
+          contact_phone: string
+          created_at?: string
+          description?: string | null
+          district: string
+          id?: string
+          image_url?: string | null
+          machine_type: string
+          owner_id: string
+          rate_per_day: number
+          title: string
+          upazila?: string | null
+          updated_at?: string
+        }
+        Update: {
+          available?: boolean
+          contact_phone?: string
+          created_at?: string
+          description?: string | null
+          district?: string
+          id?: string
+          image_url?: string | null
+          machine_type?: string
+          owner_id?: string
+          rate_per_day?: number
+          title?: string
+          upazila?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       market_prices: {
         Row: {
           created_at: string
@@ -55,11 +263,13 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string
           district: string | null
           full_name: string | null
           id: string
           land_size_acres: number | null
+          land_unit: string
           phone: string | null
           preferred_language: string
           primary_crops: string[] | null
@@ -67,11 +277,13 @@ export type Database = {
           village: string | null
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           district?: string | null
           full_name?: string | null
           id: string
           land_size_acres?: number | null
+          land_unit?: string
           phone?: string | null
           preferred_language?: string
           primary_crops?: string[] | null
@@ -79,11 +291,13 @@ export type Database = {
           village?: string | null
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           district?: string | null
           full_name?: string | null
           id?: string
           land_size_acres?: number | null
+          land_unit?: string
           phone?: string | null
           preferred_language?: string
           primary_crops?: string[] | null
