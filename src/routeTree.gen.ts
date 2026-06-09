@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedTipsRouteImport } from './routes/_authenticated/tips'
 import { Route as AuthenticatedSellRouteImport } from './routes/_authenticated/sell'
 import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -36,11 +35,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedTipsRoute = AuthenticatedTipsRouteImport.update({
-  id: '/tips',
-  path: '/tips',
-  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSellRoute = AuthenticatedSellRouteImport.update({
   id: '/sell',
@@ -100,7 +94,6 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/sell': typeof AuthenticatedSellRouteWithChildren
-  '/tips': typeof AuthenticatedTipsRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
@@ -114,7 +107,6 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/sell': typeof AuthenticatedSellRouteWithChildren
-  '/tips': typeof AuthenticatedTipsRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
@@ -130,7 +122,6 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schemes': typeof AuthenticatedSchemesRoute
   '/_authenticated/sell': typeof AuthenticatedSellRouteWithChildren
-  '/_authenticated/tips': typeof AuthenticatedTipsRoute
   '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/_authenticated/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
@@ -146,7 +137,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/schemes'
     | '/sell'
-    | '/tips'
     | '/machines/$id'
     | '/sell/$buyerId'
   fileRoutesByTo: FileRoutesByTo
@@ -160,7 +150,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/schemes'
     | '/sell'
-    | '/tips'
     | '/machines/$id'
     | '/sell/$buyerId'
   id:
@@ -175,7 +164,6 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/schemes'
     | '/_authenticated/sell'
-    | '/_authenticated/tips'
     | '/_authenticated/machines/$id'
     | '/_authenticated/sell/$buyerId'
   fileRoutesById: FileRoutesById
@@ -208,13 +196,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/tips': {
-      id: '/_authenticated/tips'
-      path: '/tips'
-      fullPath: '/tips'
-      preLoaderRoute: typeof AuthenticatedTipsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/sell': {
       id: '/_authenticated/sell'
@@ -314,7 +295,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSchemesRoute: typeof AuthenticatedSchemesRoute
   AuthenticatedSellRoute: typeof AuthenticatedSellRouteWithChildren
-  AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -325,7 +305,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSchemesRoute: AuthenticatedSchemesRoute,
   AuthenticatedSellRoute: AuthenticatedSellRouteWithChildren,
-  AuthenticatedTipsRoute: AuthenticatedTipsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
