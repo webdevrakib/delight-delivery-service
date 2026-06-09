@@ -12,11 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedTipsRouteImport } from './routes/_authenticated/tips'
+import { Route as AuthenticatedSellRouteImport } from './routes/_authenticated/sell'
 import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedMarketRouteImport } from './routes/_authenticated/market'
+import { Route as AuthenticatedMachinesRouteImport } from './routes/_authenticated/machines'
+import { Route as AuthenticatedKrishiBondhuRouteImport } from './routes/_authenticated/krishi-bondhu'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedSellBuyerIdRouteImport } from './routes/_authenticated/sell.$buyerId'
+import { Route as AuthenticatedMachinesIdRouteImport } from './routes/_authenticated/machines.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -32,9 +36,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedTipsRoute = AuthenticatedTipsRouteImport.update({
-  id: '/tips',
-  path: '/tips',
+const AuthenticatedSellRoute = AuthenticatedSellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSchemesRoute = AuthenticatedSchemesRouteImport.update({
@@ -52,29 +56,59 @@ const AuthenticatedMarketRoute = AuthenticatedMarketRouteImport.update({
   path: '/market',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMachinesRoute = AuthenticatedMachinesRouteImport.update({
+  id: '/machines',
+  path: '/machines',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKrishiBondhuRoute =
+  AuthenticatedKrishiBondhuRouteImport.update({
+    id: '/krishi-bondhu',
+    path: '/krishi-bondhu',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSellBuyerIdRoute =
+  AuthenticatedSellBuyerIdRouteImport.update({
+    id: '/$buyerId',
+    path: '/$buyerId',
+    getParentRoute: () => AuthenticatedSellRoute,
+  } as any)
+const AuthenticatedMachinesIdRoute = AuthenticatedMachinesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedMachinesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
+  '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
-  '/tips': typeof AuthenticatedTipsRoute
+  '/sell': typeof AuthenticatedSellRouteWithChildren
+  '/machines/$id': typeof AuthenticatedMachinesIdRoute
+  '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
+  '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
-  '/tips': typeof AuthenticatedTipsRoute
+  '/sell': typeof AuthenticatedSellRouteWithChildren
+  '/machines/$id': typeof AuthenticatedMachinesIdRoute
+  '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +116,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
+  '/_authenticated/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/_authenticated/market': typeof AuthenticatedMarketRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schemes': typeof AuthenticatedSchemesRoute
-  '/_authenticated/tips': typeof AuthenticatedTipsRoute
+  '/_authenticated/sell': typeof AuthenticatedSellRouteWithChildren
+  '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
+  '/_authenticated/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -93,29 +131,41 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/krishi-bondhu'
+    | '/machines'
     | '/market'
     | '/profile'
     | '/schemes'
-    | '/tips'
+    | '/sell'
+    | '/machines/$id'
+    | '/sell/$buyerId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/krishi-bondhu'
+    | '/machines'
     | '/market'
     | '/profile'
     | '/schemes'
-    | '/tips'
+    | '/sell'
+    | '/machines/$id'
+    | '/sell/$buyerId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/krishi-bondhu'
+    | '/_authenticated/machines'
     | '/_authenticated/market'
     | '/_authenticated/profile'
     | '/_authenticated/schemes'
-    | '/_authenticated/tips'
+    | '/_authenticated/sell'
+    | '/_authenticated/machines/$id'
+    | '/_authenticated/sell/$buyerId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -147,11 +197,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/tips': {
-      id: '/_authenticated/tips'
-      path: '/tips'
-      fullPath: '/tips'
-      preLoaderRoute: typeof AuthenticatedTipsRouteImport
+    '/_authenticated/sell': {
+      id: '/_authenticated/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof AuthenticatedSellRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/schemes': {
@@ -175,6 +225,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMarketRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/machines': {
+      id: '/_authenticated/machines'
+      path: '/machines'
+      fullPath: '/machines'
+      preLoaderRoute: typeof AuthenticatedMachinesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/krishi-bondhu': {
+      id: '/_authenticated/krishi-bondhu'
+      path: '/krishi-bondhu'
+      fullPath: '/krishi-bondhu'
+      preLoaderRoute: typeof AuthenticatedKrishiBondhuRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -182,23 +246,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sell/$buyerId': {
+      id: '/_authenticated/sell/$buyerId'
+      path: '/$buyerId'
+      fullPath: '/sell/$buyerId'
+      preLoaderRoute: typeof AuthenticatedSellBuyerIdRouteImport
+      parentRoute: typeof AuthenticatedSellRoute
+    }
+    '/_authenticated/machines/$id': {
+      id: '/_authenticated/machines/$id'
+      path: '/$id'
+      fullPath: '/machines/$id'
+      preLoaderRoute: typeof AuthenticatedMachinesIdRouteImport
+      parentRoute: typeof AuthenticatedMachinesRoute
+    }
   }
 }
 
+interface AuthenticatedMachinesRouteChildren {
+  AuthenticatedMachinesIdRoute: typeof AuthenticatedMachinesIdRoute
+}
+
+const AuthenticatedMachinesRouteChildren: AuthenticatedMachinesRouteChildren = {
+  AuthenticatedMachinesIdRoute: AuthenticatedMachinesIdRoute,
+}
+
+const AuthenticatedMachinesRouteWithChildren =
+  AuthenticatedMachinesRoute._addFileChildren(
+    AuthenticatedMachinesRouteChildren,
+  )
+
+interface AuthenticatedSellRouteChildren {
+  AuthenticatedSellBuyerIdRoute: typeof AuthenticatedSellBuyerIdRoute
+}
+
+const AuthenticatedSellRouteChildren: AuthenticatedSellRouteChildren = {
+  AuthenticatedSellBuyerIdRoute: AuthenticatedSellBuyerIdRoute,
+}
+
+const AuthenticatedSellRouteWithChildren =
+  AuthenticatedSellRoute._addFileChildren(AuthenticatedSellRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedKrishiBondhuRoute: typeof AuthenticatedKrishiBondhuRoute
+  AuthenticatedMachinesRoute: typeof AuthenticatedMachinesRouteWithChildren
   AuthenticatedMarketRoute: typeof AuthenticatedMarketRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSchemesRoute: typeof AuthenticatedSchemesRoute
-  AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
+  AuthenticatedSellRoute: typeof AuthenticatedSellRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedKrishiBondhuRoute: AuthenticatedKrishiBondhuRoute,
+  AuthenticatedMachinesRoute: AuthenticatedMachinesRouteWithChildren,
   AuthenticatedMarketRoute: AuthenticatedMarketRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSchemesRoute: AuthenticatedSchemesRoute,
-  AuthenticatedTipsRoute: AuthenticatedTipsRoute,
+  AuthenticatedSellRoute: AuthenticatedSellRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =

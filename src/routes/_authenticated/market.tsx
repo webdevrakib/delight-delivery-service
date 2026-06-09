@@ -16,9 +16,9 @@ const pricesQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/market")({
-  head: () => ({ meta: [{ title: "Market Prices — Krishi Bondhu" }] }),
+  head: () => ({ meta: [{ title: "বাজার দর — কৃষি বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(pricesQuery),
-  component: () => <AppShell><Suspense fallback={null}><MarketPage /></Suspense></AppShell>,
+  component: () => <AppShell title="বাজার দর" showBack><Suspense fallback={null}><MarketPage /></Suspense></AppShell>,
 });
 
 function MarketPage() {
@@ -28,21 +28,18 @@ function MarketPage() {
     <div className="space-y-5">
       <div>
         <h1 className={`text-2xl font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("marketPrices")}</h1>
-        <p className="text-sm text-muted-foreground">{t("marketPricesDesc")}</p>
+        <p className={`text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>বাংলাদেশের জেলা ভিত্তিক আজকের দর</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {data.map((p) => (
           <div key={p.id} className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
-            <div className="absolute right-3 top-3 text-[color:var(--saffron)]">
-              <TrendingUp className="h-4 w-4" />
-            </div>
+            <div className="absolute right-3 top-3 text-[color:var(--saffron)]"><TrendingUp className="h-4 w-4" /></div>
             <div className={`text-base font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? p.crop_bn : p.crop_en}</div>
-            <div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+            <div className={`mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
               <MapPin className="h-3 w-3" /> {lang === "bn" ? p.market_bn : p.market_en}
             </div>
-            <div className="mt-3 text-2xl font-extrabold text-primary">₹{p.price_min}<span className="text-sm text-muted-foreground">–{p.price_max}</span></div>
-            <div className="text-[11px] text-muted-foreground">{p.unit === "kg" ? t("perKg") : t("perQuintal")}</div>
-            <div className="mt-2 text-[10px] text-muted-foreground">{new Date(p.price_date).toLocaleDateString()}</div>
+            <div className="mt-3 text-2xl font-extrabold text-primary">৳{p.price_min}<span className="text-sm text-muted-foreground">–{p.price_max}</span></div>
+            <div className={`text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{p.unit === "kg" ? t("perKg") : t("perQuintal")}</div>
           </div>
         ))}
       </div>
