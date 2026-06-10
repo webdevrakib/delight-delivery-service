@@ -286,8 +286,13 @@ function pickFemaleVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynt
     pool = voices.filter((v) => v.lang?.toLowerCase().startsWith("en"));
   }
   if (!pool.length) pool = voices;
-  const female = pool.find((v) => /female|woman|zira|samantha|google|priya|veena|jenny|aria/i.test(v.name));
-  return female || pool[0] || voices[0];
+  const notMale = pool.filter((v) => !/male\b|man\b/i.test(v.name));
+  const femalePool = notMale.length ? notMale : pool;
+  const femaleRegex = lang === "en"
+    ? /female|woman|samantha|zira|jenny|aria|eva|karen|susan|victoria|tessa|allison|ava|joanna|salli|kimberly|amy|emma|sonia/i
+    : /female|woman|priya|veena|sonia|kalpana|swara/i;
+  const female = femalePool.find((v) => femaleRegex.test(v.name));
+  return female || femalePool[0] || pool[0] || voices[0];
 }
 
 function PresentationPage() {
