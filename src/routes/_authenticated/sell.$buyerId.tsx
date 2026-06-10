@@ -18,7 +18,7 @@ const buyerQuery = (id: string) =>
   });
 
 export const Route = createFileRoute("/_authenticated/sell/$buyerId")({
-  head: () => ({ meta: [{ title: "ক্রেতা — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "ক্রেতা — কৃষক বন্ধু" }] }),
   loader: ({ params, context }) => context.queryClient.ensureQueryData(buyerQuery(params.buyerId)),
   component: () => (
     <AppShell title="ক্রেতার বিস্তারিত" showBack><Suspense fallback={null}><Detail /></Suspense></AppShell>

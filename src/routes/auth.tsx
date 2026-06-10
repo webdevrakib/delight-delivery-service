@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { LangToggle } from "@/components/LangToggle";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Login — Krishi Bondhu" }, { name: "description", content: "Sign in or create your farmer account." }] }),
+  head: () => ({ meta: [{ title: "Login — Krishok Bondhu" }, { name: "description", content: "Sign in or create your farmer account." }] }),
   component: AuthPage,
 });
 
