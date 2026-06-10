@@ -92,6 +92,29 @@ function Detail() {
 
       {m.description && <p className={`rounded-2xl border border-border bg-card p-4 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{m.description}</p>}
 
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
+        <div className={`mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+          {lang === "bn" ? "মালিকের তথ্য" : "Owner Info"}
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <User className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className={`truncate text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+              {owner?.full_name || (lang === "bn" ? "মালিক" : "Owner")}
+            </div>
+            {(owner?.district || m.district) && (
+              <div className={`flex items-center gap-1 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                <MapPin className="h-3 w-3" /> {owner?.district || m.district}
+              </div>
+            )}
+            <div className="mt-0.5 text-xs text-muted-foreground">📞 {m.contact_phone}</div>
+          </div>
+        </div>
+      </div>
+
+
       <div className="grid grid-cols-2 gap-2">
         <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-3 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
           <Phone className="h-4 w-4" /> {t("contactOwner")}
