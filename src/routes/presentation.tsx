@@ -307,13 +307,6 @@ function PresentationPage() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [total]);
-      if (e.key === "ArrowRight") setI((v) => Math.min(total - 1, v + 1));
-      if (e.key === "ArrowLeft") setI((v) => Math.max(0, v - 1));
-      if (e.key === " ") { e.preventDefault(); setPlaying((p) => !p); }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [total]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
@@ -325,10 +318,10 @@ function PresentationPage() {
     const speak = () => {
       if (cancelled) return;
       const voices = synth.getVoices();
-      const u = new SpeechSynthesisUtterance(slideToSpeech(s));
-      const v = pickFemaleVoice(voices);
+      const u = new SpeechSynthesisUtterance(slideToSpeech(s, lang));
+      const v = pickFemaleVoice(voices, lang);
       if (v) u.voice = v;
-      u.lang = v?.lang || "bn-BD";
+      u.lang = v?.lang || (lang === "bn" ? "bn-BD" : "en-US");
       u.rate = 0.95;
       u.pitch = 1.15;
       u.onend = () => {
@@ -349,7 +342,7 @@ function PresentationPage() {
       cancelled = true;
       synth.cancel();
     };
-  }, [i, playing, total, s]);
+  }, [i, playing, total, s, lang]);
 
   useEffect(() => {
     return () => {
