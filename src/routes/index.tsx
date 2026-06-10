@@ -94,6 +94,10 @@ function Landing() {
             <Link to="/auth" className={`inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-accent ${bn}`}>
               {t("login")}
             </Link>
+            <Link to="/presentation" className={`inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-6 py-3 text-sm font-semibold text-primary hover:bg-primary/10 ${bn}`}>
+              <PlayCircle className="h-4 w-4" />
+              {lang === "bn" ? "অ্যাপ পরিচিতি দেখুন" : "View Presentation"}
+            </Link>
           </div>
           <div className="grid grid-cols-3 gap-3 pt-4">
             {[{ icon: ShieldCheck, label: t("govSchemes") }, { icon: TrendingUp, label: t("marketPrices") }, { icon: Newspaper, label: t("farmingTips") }].map((it, i) => (
