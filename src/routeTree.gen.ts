@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMarketRouteImport } from './routes/_authenticated/market'
 import { Route as AuthenticatedMachinesRouteImport } from './routes/_authenticated/machines'
 import { Route as AuthenticatedKrishiBondhuRouteImport } from './routes/_authenticated/krishi-bondhu'
@@ -53,6 +54,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMarketRoute = AuthenticatedMarketRouteImport.update({
   id: '/market',
   path: '/market',
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
   '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
@@ -120,6 +128,7 @@ export interface FileRoutesByTo {
   '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
   '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
@@ -137,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
   '/_authenticated/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/_authenticated/market': typeof AuthenticatedMarketRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schemes': typeof AuthenticatedSchemesRoute
   '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/krishi-bondhu'
     | '/machines'
     | '/market'
+    | '/notifications'
     | '/profile'
     | '/schemes'
     | '/machines/$id'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/krishi-bondhu'
     | '/machines'
     | '/market'
+    | '/notifications'
     | '/profile'
     | '/schemes'
     | '/machines/$id'
@@ -185,6 +197,7 @@ export interface FileRouteTypes {
     | '/_authenticated/krishi-bondhu'
     | '/_authenticated/machines'
     | '/_authenticated/market'
+    | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/schemes'
     | '/_authenticated/machines/$id'
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/market': {
@@ -321,6 +341,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedKrishiBondhuRoute: typeof AuthenticatedKrishiBondhuRoute
   AuthenticatedMachinesRoute: typeof AuthenticatedMachinesRouteWithChildren
   AuthenticatedMarketRoute: typeof AuthenticatedMarketRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSchemesRoute: typeof AuthenticatedSchemesRoute
   AuthenticatedSellBuyerIdRoute: typeof AuthenticatedSellBuyerIdRoute
@@ -333,6 +354,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedKrishiBondhuRoute: AuthenticatedKrishiBondhuRoute,
   AuthenticatedMachinesRoute: AuthenticatedMachinesRouteWithChildren,
   AuthenticatedMarketRoute: AuthenticatedMarketRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSchemesRoute: AuthenticatedSchemesRoute,
   AuthenticatedSellBuyerIdRoute: AuthenticatedSellBuyerIdRoute,
