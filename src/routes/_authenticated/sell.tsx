@@ -222,24 +222,35 @@ function BuyMode() {
 function AddListingModal({ onClose }: { onClose: () => void }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", description: "" });
+  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
   const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!form.contact_phone.trim()) {
+      toast.error(lang === "bn" ? "যোগাযোগের ফোন নম্বর দিন" : "Please add a contact phone");
+      return;
+    }
+    if (form.seller_type === "company" && !form.company_name.trim()) {
+      toast.error(lang === "bn" ? "প্রতিষ্ঠানের নাম দিন" : "Please add a company name");
+      return;
+    }
     setSaving(true);
     try {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Not signed in");
       const { error } = await supabase.from("farmer_crop_listings").insert({
         farmer_id: u.user.id,
+        seller_type: form.seller_type,
+        company_name: form.seller_type === "company" ? form.company_name.trim() : null,
         crop: form.crop.trim(),
         quantity: Number(form.quantity),
         unit: form.unit,
         price_per_unit: Number(form.price_per_unit),
         area: form.area.trim() || null,
+        contact_phone: form.contact_phone.trim(),
         description: form.description.trim() || null,
-      });
+      } as any);
       if (error) throw error;
       toast.success(t("listingAdded"));
       await qc.invalidateQueries({ queryKey: ["sell-data"] });
