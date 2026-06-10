@@ -11,14 +11,21 @@ const sellQuery = queryOptions({
   queryKey: ["sell-data"],
   queryFn: async () => {
     const { data: u } = await supabase.auth.getUser();
-    const [buyers, listings] = await Promise.all([
+    const [buyers, myListings, activeListings] = await Promise.all([
       supabase.from("buyers").select("*").order("verified", { ascending: false }),
       u.user
         ? supabase.from("farmer_crop_listings").select("*").eq("farmer_id", u.user.id).neq("status", "removed").order("created_at", { ascending: false })
         : Promise.resolve({ data: [] as any[], error: null }),
+      supabase.from("farmer_crop_listings").select("*").eq("status", "active").order("created_at", { ascending: false }),
     ]);
     if (buyers.error) throw buyers.error;
-    return { buyers: buyers.data ?? [], listings: listings.data ?? [] };
+    const sellerIds = Array.from(new Set((activeListings.data ?? []).map((l: any) => l.farmer_id)));
+    const sellers = sellerIds.length
+      ? (await supabase.from("profiles").select("id, full_name, phone, district, village, avatar_url").in("id", sellerIds)).data ?? []
+      : [];
+    const sellerMap = Object.fromEntries(sellers.map((s: any) => [s.id, s]));
+    const listingsWithSeller = (activeListings.data ?? []).map((l: any) => ({ ...l, seller: sellerMap[l.farmer_id] ?? null }));
+    return { buyers: buyers.data ?? [], listings: myListings.data ?? [], farmerListings: listingsWithSeller };
   },
 });
 
