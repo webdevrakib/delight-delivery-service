@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sprout, ArrowRight, ShieldCheck, TrendingUp, Newspaper,
   AlertTriangle, Users, MapPin, Wheat, Lightbulb,
-  CheckCircle2, UserPlus, Settings2, HandHeart, Languages,
+  CheckCircle2, UserPlus, Settings2, HandHeart, Languages, PlayCircle,
 } from "lucide-react";
 import heroImg from "@/assets/hero-farmer.jpg";
 import { useLang, dict } from "@/lib/i18n";
@@ -67,6 +67,10 @@ function Landing() {
           </div>
           <div className="flex items-center gap-2">
             <LangToggle />
+            <Link to="/presentation" className={`hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10 ${bn}`}>
+              <PlayCircle className="h-3.5 w-3.5" />
+              {lang === "bn" ? "প্রেজেন্টেশন" : "Presentation"}
+            </Link>
             <Link to="/auth" className="rounded-full bg-foreground px-4 py-1.5 text-xs font-semibold text-background hover:opacity-90">
               {t("login")}
             </Link>
@@ -89,6 +93,10 @@ function Landing() {
             </Link>
             <Link to="/auth" className={`inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-accent ${bn}`}>
               {t("login")}
+            </Link>
+            <Link to="/presentation" className={`inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-6 py-3 text-sm font-semibold text-primary hover:bg-primary/10 ${bn}`}>
+              <PlayCircle className="h-4 w-4" />
+              {lang === "bn" ? "অ্যাপ পরিচিতি দেখুন" : "View Presentation"}
             </Link>
           </div>
           <div className="grid grid-cols-3 gap-3 pt-4">

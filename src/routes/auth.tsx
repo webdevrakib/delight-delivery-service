@@ -93,13 +93,6 @@ function AuthPage() {
           <span className="text-lg font-bold">{t("appName")}</span>
         </Link>
 
-        <Link
-          to="/presentation"
-          className={`mb-4 flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-primary/10 ${lang === "bn" ? "font-bangla" : ""}`}
-        >
-          <PlayCircle className="h-4 w-4" />
-          {lang === "bn" ? "অ্যাপ পরিচিতি দেখুন (প্রেজেন্টেশন)" : "View App Presentation"}
-        </Link>
 
         <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-elevated)]">
           <h1 className={`text-2xl font-bold tracking-tight text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
