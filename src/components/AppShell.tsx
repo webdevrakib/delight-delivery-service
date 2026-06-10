@@ -2,6 +2,7 @@ import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { Home, Tractor, ShoppingBag, Leaf, User, ArrowLeft, Sprout } from "lucide-react";
 import { useLang, type dict as Dict } from "@/lib/i18n";
 import { LangToggle } from "./LangToggle";
+import { NotificationBell } from "./NotificationBell";
 import type { ReactNode } from "react";
 
 type NavKey = keyof typeof Dict;
@@ -60,7 +61,10 @@ export function AppShell({
               )}
             </div>
           </div>
-          <LangToggle />
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <LangToggle />
+          </div>
         </div>
       </header>
 
