@@ -18,10 +18,10 @@ import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMarketRouteImport } from './routes/_authenticated/market'
-import { Route as AuthenticatedMachinesRouteImport } from './routes/_authenticated/machines'
 import { Route as AuthenticatedKrishiBondhuRouteImport } from './routes/_authenticated/krishi-bondhu'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSellIndexRouteImport } from './routes/_authenticated/sell.index'
+import { Route as AuthenticatedMachinesIndexRouteImport } from './routes/_authenticated/machines.index'
 import { Route as AuthenticatedSellBuyerIdRouteImport } from './routes/_authenticated/sell.$buyerId'
 import { Route as AuthenticatedMachinesIdRouteImport } from './routes/_authenticated/machines.$id'
 import { Route as AuthenticatedSellListingListingIdRouteImport } from './routes/_authenticated/sell.listing.$listingId'
@@ -71,11 +71,6 @@ const AuthenticatedMarketRoute = AuthenticatedMarketRouteImport.update({
   path: '/market',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedMachinesRoute = AuthenticatedMachinesRouteImport.update({
-  id: '/machines',
-  path: '/machines',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedKrishiBondhuRoute =
   AuthenticatedKrishiBondhuRouteImport.update({
     id: '/krishi-bondhu',
@@ -92,6 +87,12 @@ const AuthenticatedSellIndexRoute = AuthenticatedSellIndexRouteImport.update({
   path: '/sell/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMachinesIndexRoute =
+  AuthenticatedMachinesIndexRouteImport.update({
+    id: '/machines/',
+    path: '/machines/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSellBuyerIdRoute =
   AuthenticatedSellBuyerIdRouteImport.update({
     id: '/sell/$buyerId',
@@ -99,9 +100,9 @@ const AuthenticatedSellBuyerIdRoute =
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedMachinesIdRoute = AuthenticatedMachinesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AuthenticatedMachinesRoute,
+  id: '/machines/$id',
+  path: '/machines/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSellListingListingIdRoute =
   AuthenticatedSellListingListingIdRouteImport.update({
@@ -117,13 +118,13 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
-  '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/machines/': typeof AuthenticatedMachinesIndexRoute
   '/sell/': typeof AuthenticatedSellIndexRoute
   '/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
@@ -134,13 +135,13 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
-  '/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/market': typeof AuthenticatedMarketRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/machines': typeof AuthenticatedMachinesIndexRoute
   '/sell': typeof AuthenticatedSellIndexRoute
   '/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
@@ -153,13 +154,13 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/krishi-bondhu': typeof AuthenticatedKrishiBondhuRoute
-  '/_authenticated/machines': typeof AuthenticatedMachinesRouteWithChildren
   '/_authenticated/market': typeof AuthenticatedMarketRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schemes': typeof AuthenticatedSchemesRoute
   '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/_authenticated/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/_authenticated/machines/': typeof AuthenticatedMachinesIndexRoute
   '/_authenticated/sell/': typeof AuthenticatedSellIndexRoute
   '/_authenticated/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
@@ -172,13 +173,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard'
     | '/krishi-bondhu'
-    | '/machines'
     | '/market'
     | '/notifications'
     | '/profile'
     | '/schemes'
     | '/machines/$id'
     | '/sell/$buyerId'
+    | '/machines/'
     | '/sell/'
     | '/sell/listing/$listingId'
   fileRoutesByTo: FileRoutesByTo
@@ -189,13 +190,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard'
     | '/krishi-bondhu'
-    | '/machines'
     | '/market'
     | '/notifications'
     | '/profile'
     | '/schemes'
     | '/machines/$id'
     | '/sell/$buyerId'
+    | '/machines'
     | '/sell'
     | '/sell/listing/$listingId'
   id:
@@ -207,13 +208,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/dashboard'
     | '/_authenticated/krishi-bondhu'
-    | '/_authenticated/machines'
     | '/_authenticated/market'
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/schemes'
     | '/_authenticated/machines/$id'
     | '/_authenticated/sell/$buyerId'
+    | '/_authenticated/machines/'
     | '/_authenticated/sell/'
     | '/_authenticated/sell/listing/$listingId'
   fileRoutesById: FileRoutesById
@@ -291,13 +292,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMarketRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/machines': {
-      id: '/_authenticated/machines'
-      path: '/machines'
-      fullPath: '/machines'
-      preLoaderRoute: typeof AuthenticatedMachinesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/krishi-bondhu': {
       id: '/_authenticated/krishi-bondhu'
       path: '/krishi-bondhu'
@@ -319,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSellIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/machines/': {
+      id: '/_authenticated/machines/'
+      path: '/machines'
+      fullPath: '/machines/'
+      preLoaderRoute: typeof AuthenticatedMachinesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sell/$buyerId': {
       id: '/_authenticated/sell/$buyerId'
       path: '/sell/$buyerId'
@@ -328,10 +329,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/machines/$id': {
       id: '/_authenticated/machines/$id'
-      path: '/$id'
+      path: '/machines/$id'
       fullPath: '/machines/$id'
       preLoaderRoute: typeof AuthenticatedMachinesIdRouteImport
-      parentRoute: typeof AuthenticatedMachinesRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/sell/listing/$listingId': {
       id: '/_authenticated/sell/listing/$listingId'
@@ -343,28 +344,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedMachinesRouteChildren {
-  AuthenticatedMachinesIdRoute: typeof AuthenticatedMachinesIdRoute
-}
-
-const AuthenticatedMachinesRouteChildren: AuthenticatedMachinesRouteChildren = {
-  AuthenticatedMachinesIdRoute: AuthenticatedMachinesIdRoute,
-}
-
-const AuthenticatedMachinesRouteWithChildren =
-  AuthenticatedMachinesRoute._addFileChildren(
-    AuthenticatedMachinesRouteChildren,
-  )
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedKrishiBondhuRoute: typeof AuthenticatedKrishiBondhuRoute
-  AuthenticatedMachinesRoute: typeof AuthenticatedMachinesRouteWithChildren
   AuthenticatedMarketRoute: typeof AuthenticatedMarketRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSchemesRoute: typeof AuthenticatedSchemesRoute
+  AuthenticatedMachinesIdRoute: typeof AuthenticatedMachinesIdRoute
   AuthenticatedSellBuyerIdRoute: typeof AuthenticatedSellBuyerIdRoute
+  AuthenticatedMachinesIndexRoute: typeof AuthenticatedMachinesIndexRoute
   AuthenticatedSellIndexRoute: typeof AuthenticatedSellIndexRoute
   AuthenticatedSellListingListingIdRoute: typeof AuthenticatedSellListingListingIdRoute
 }
@@ -372,12 +361,13 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedKrishiBondhuRoute: AuthenticatedKrishiBondhuRoute,
-  AuthenticatedMachinesRoute: AuthenticatedMachinesRouteWithChildren,
   AuthenticatedMarketRoute: AuthenticatedMarketRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSchemesRoute: AuthenticatedSchemesRoute,
+  AuthenticatedMachinesIdRoute: AuthenticatedMachinesIdRoute,
   AuthenticatedSellBuyerIdRoute: AuthenticatedSellBuyerIdRoute,
+  AuthenticatedMachinesIndexRoute: AuthenticatedMachinesIndexRoute,
   AuthenticatedSellIndexRoute: AuthenticatedSellIndexRoute,
   AuthenticatedSellListingListingIdRoute:
     AuthenticatedSellListingListingIdRoute,
@@ -396,3 +386,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
