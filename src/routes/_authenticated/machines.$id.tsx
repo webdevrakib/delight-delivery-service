@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
-import { Tractor, MapPin, Phone, Calendar, Bell, MessageCircle } from "lucide-react";
+import { Tractor, MapPin, Phone, Calendar, Bell, MessageCircle, User } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,12 @@ const machineQuery = (id: string) =>
     queryFn: async () => {
       const { data, error } = await supabase.from("machines").select("*").eq("id", id).maybeSingle();
       if (error) throw error;
-      return data;
+      let owner: { full_name: string | null; phone: string | null; district: string | null } | null = null;
+      if (data?.owner_id) {
+        const { data: o } = await supabase.from("profiles").select("full_name, phone, district").eq("id", data.owner_id).maybeSingle();
+        owner = o ?? null;
+      }
+      return { machine: data, owner };
     },
   });
 
@@ -30,7 +35,9 @@ export const Route = createFileRoute("/_authenticated/machines/$id")({
 function Detail() {
   const { t, lang } = useLang();
   const { id } = Route.useParams();
-  const { data: m } = useSuspenseQuery(machineQuery(id));
+  const { data } = useSuspenseQuery(machineQuery(id));
+  const m = data.machine;
+  const owner = data.owner;
   const qc = useQueryClient();
   const today = new Date().toISOString().slice(0, 10);
   const [start, setStart] = useState(today);
@@ -84,6 +91,29 @@ function Detail() {
       </div>
 
       {m.description && <p className={`rounded-2xl border border-border bg-card p-4 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{m.description}</p>}
+
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
+        <div className={`mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+          {lang === "bn" ? "মালিকের তথ্য" : "Owner Info"}
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <User className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className={`truncate text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+              {owner?.full_name || (lang === "bn" ? "মালিক" : "Owner")}
+            </div>
+            {(owner?.district || m.district) && (
+              <div className={`flex items-center gap-1 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                <MapPin className="h-3 w-3" /> {owner?.district || m.district}
+              </div>
+            )}
+            <div className="mt-0.5 text-xs text-muted-foreground">📞 {m.contact_phone}</div>
+          </div>
+        </div>
+      </div>
+
 
       <div className="grid grid-cols-2 gap-2">
         <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-3 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
