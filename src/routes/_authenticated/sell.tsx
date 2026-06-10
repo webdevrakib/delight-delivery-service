@@ -292,10 +292,18 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
             </Field>
           )}
           <Field label={t("crop")}>
-            <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value })}>
+            <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value, variety: "" })}>
               {CROPS.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </Field>
+          {form.crop === "ধান" && (
+            <Field label={lang === "bn" ? "ধানের জাত" : "Paddy variety"}>
+              <select required className="ip" value={form.variety} onChange={(e) => setForm({ ...form, variety: e.target.value })}>
+                <option value="">{lang === "bn" ? "— জাত নির্বাচন করুন —" : "— Select variety —"}</option>
+                {["ইরি", "বোরো", "আমন", "আউশ"].map((v) => <option key={v} value={v}>{v}</option>)}
+              </select>
+            </Field>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <Field label={t("quantity")}>
               <input required type="number" min={0} step="0.01" className="ip" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
