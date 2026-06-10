@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Sprout, ArrowRight, ShieldCheck, TrendingUp, Newspaper,
   AlertTriangle, Users, MapPin, Wheat, Lightbulb,
-  CheckCircle2, UserPlus, Settings2, HandHeart, Languages,
+  CheckCircle2, UserPlus, Settings2, HandHeart, Languages, PlayCircle,
 } from "lucide-react";
 import heroImg from "@/assets/hero-farmer.jpg";
 import { useLang, dict } from "@/lib/i18n";
