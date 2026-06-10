@@ -79,9 +79,9 @@ function ProfilePage() {
         irrigation_source: p.irrigation_source ?? "",
       });
       setAvatarUrl((data.profile as any).avatar_url ?? null);
-      if (data.profile.preferred_language === "en" || data.profile.preferred_language === "bn") setLang(data.profile.preferred_language);
     }
-  }, [data.profile, setLang]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.profile]);
 
   useEffect(() => {
     if (!avatarUrl) { setSignedAvatar(null); return; }
