@@ -55,9 +55,11 @@ function DashboardInner() {
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[color:var(--saffron)] text-[color:var(--saffron-foreground)]">
             <AlertTriangle className="h-5 w-5" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1 overflow-hidden">
             <div className={`text-xs font-bold uppercase tracking-wider text-[color:var(--saffron-foreground)] ${lang === "bn" ? "font-bangla" : ""}`}>{t("urgentNotice")}</div>
-            <p className={`mt-0.5 text-sm text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("noticeBody")}</p>
+            <div className="mt-0.5 overflow-hidden">
+              <span className={`marquee-track text-sm text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("noticeBody")}</span>
+            </div>
           </div>
         </div>
       </section>
