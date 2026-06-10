@@ -80,6 +80,31 @@ function AuthPage() {
     }
   }
 
+  async function handleDemo() {
+    setLoading(true);
+    try {
+      const demoEmail = "demo@krishibondhu.app";
+      const demoPassword = "demo123456";
+      let { error } = await supabase.auth.signInWithPassword({ email: demoEmail, password: demoPassword });
+      if (error) {
+        const { error: signUpErr } = await supabase.auth.signUp({
+          email: demoEmail,
+          password: demoPassword,
+          options: { data: { full_name: "Demo Farmer" } },
+        });
+        if (signUpErr && !signUpErr.message.toLowerCase().includes("registered")) throw signUpErr;
+        const retry = await supabase.auth.signInWithPassword({ email: demoEmail, password: demoPassword });
+        if (retry.error) throw retry.error;
+      }
+      toast.success(lang === "bn" ? "ডেমো অ্যাকাউন্টে লগইন হয়েছে" : "Logged in as demo");
+      navigate({ to: "/dashboard" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("authError"));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10">
       <div className="absolute inset-0 -z-10 opacity-40" style={{ background: "radial-gradient(60% 50% at 50% 0%, var(--primary-glow) 0%, transparent 60%)" }} />
@@ -112,6 +137,16 @@ function AuthPage() {
               >
                 {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 {t("continueWithGoogle")}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDemo}
+                disabled={loading}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary transition hover:bg-primary/15 disabled:opacity-60"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlayCircle className="h-4 w-4" />}
+                {lang === "bn" ? "ডেমো হিসেবে লগইন করুন (এক ক্লিক)" : "Continue as Demo (one click)"}
               </button>
 
               <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
