@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
-import { Newspaper, CloudSun, Bug, HelpCircle } from "lucide-react";
+import { Newspaper, CloudSun, Bug, HelpCircle, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
