@@ -273,6 +273,20 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
           <button type="button" onClick={onClose} className="rounded-full p-1 hover:bg-muted"><X className="h-5 w-5" /></button>
         </div>
         <div className="space-y-3">
+          <Field label={lang === "bn" ? "আপনি কে?" : "You are"}>
+            <div className="grid grid-cols-2 gap-2">
+              {(["farmer", "company"] as const).map((s) => (
+                <button key={s} type="button" onClick={() => setForm({ ...form, seller_type: s })} className={`rounded-lg border px-3 py-2 text-sm font-bold transition ${form.seller_type === s ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+                  {s === "farmer" ? (lang === "bn" ? "কৃষক" : "Farmer") : (lang === "bn" ? "প্রতিষ্ঠান" : "Company")}
+                </button>
+              ))}
+            </div>
+          </Field>
+          {form.seller_type === "company" && (
+            <Field label={lang === "bn" ? "প্রতিষ্ঠানের নাম" : "Company name"}>
+              <input required className="ip" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} maxLength={120} />
+            </Field>
+          )}
           <Field label={t("crop")}>
             <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value })}>
               {CROPS.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -297,6 +311,9 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
           </Field>
           <Field label={t("description")}>
             <textarea className="ip" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={300} rows={2} />
+          </Field>
+          <Field label={lang === "bn" ? "যোগাযোগের ফোন নম্বর" : "Contact phone"}>
+            <input required type="tel" className="ip" value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} maxLength={20} placeholder="01XXXXXXXXX" />
           </Field>
         </div>
         <button type="submit" disabled={saving} className={`mt-4 w-full rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60 ${lang === "bn" ? "font-bangla" : ""}`}>
