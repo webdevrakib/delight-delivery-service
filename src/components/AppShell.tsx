@@ -96,6 +96,7 @@ export function AppShell({
           })}
         </div>
       </nav>
+      <HelplineChatbot />
     </div>
   );
 }
