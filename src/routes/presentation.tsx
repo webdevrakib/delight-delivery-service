@@ -375,24 +375,32 @@ function PresentationPage() {
         </Link>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setLang((l) => (l === "bn" ? "en" : "bn"))}
+            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold hover:bg-muted"
+            aria-label="Toggle language"
+          >
+            <Languages className="h-3.5 w-3.5" />
+            {lang === "bn" ? "বাংলা" : "English"}
+          </button>
+          <button
             onClick={() => setPlaying((p) => !p)}
             className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold hover:bg-muted"
           >
             {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            {playing ? "থামান / Pause" : "চালান / Play"}
+            {playing ? (lang === "bn" ? "থামান" : "Pause") : (lang === "bn" ? "চালান" : "Play")}
           </button>
           <Link
             to="/auth"
             className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold hover:bg-muted"
           >
-            <X className="h-3.5 w-3.5" /> বন্ধ / Close
+            <X className="h-3.5 w-3.5" /> {lang === "bn" ? "বন্ধ" : "Close"}
           </Link>
         </div>
       </header>
 
       <main className="mx-auto flex min-h-[calc(100vh-200px)] max-w-4xl items-center px-4 py-6 sm:px-8">
         <div
-          key={i}
+          key={`${i}-${lang}`}
           className="w-full animate-fade-in rounded-3xl border border-border bg-card/85 p-6 shadow-[var(--shadow-elevated)] backdrop-blur-xl sm:p-12"
         >
           <div className="flex items-center gap-3">
@@ -400,21 +408,15 @@ function PresentationPage() {
               <Icon className="h-6 w-6" />
             </div>
             <div className="text-xs font-bold uppercase tracking-widest text-primary">
-              {s.kicker.bn} · {s.kicker.en} · {i + 1}/{total}
+              {s.kicker[lang]} · {i + 1}/{total}
             </div>
           </div>
 
           <h1 className="mt-5 text-2xl font-bold leading-tight text-foreground sm:text-4xl">
-            {s.title.bn}
+            {s.title[lang]}
           </h1>
-          <h2 className="mt-1 text-lg font-semibold leading-snug text-muted-foreground sm:text-2xl">
-            {s.title.en}
-          </h2>
           {s.body && (
-            <div className="mt-4 space-y-1">
-              <p className="text-base text-foreground/90 sm:text-lg">{s.body.bn}</p>
-              <p className="text-sm italic text-muted-foreground sm:text-base">{s.body.en}</p>
-            </div>
+            <p className="mt-4 text-base text-foreground/90 sm:text-lg">{s.body[lang]}</p>
           )}
 
           {s.bullets && (
@@ -429,10 +431,8 @@ function PresentationPage() {
                     <b.icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-foreground sm:text-base">{b.title.bn}</div>
-                    <div className="text-xs font-semibold text-foreground/70 sm:text-sm">{b.title.en}</div>
-                    <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{b.desc.bn}</div>
-                    <div className="text-xs italic text-muted-foreground/80">{b.desc.en}</div>
+                    <div className="text-sm font-bold text-foreground sm:text-base">{b.title[lang]}</div>
+                    <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{b.desc[lang]}</div>
                   </div>
                 </div>
               ))}
@@ -444,11 +444,12 @@ function PresentationPage() {
               to="/auth"
               className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-5 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-soft)] hover:-translate-y-0.5 transition"
             >
-              <Home className="h-4 w-4" /> অ্যাকাউন্ট তৈরি / Create account
+              <Home className="h-4 w-4" /> {lang === "bn" ? "অ্যাকাউন্ট তৈরি / লগইন" : "Create account / Login"}
             </Link>
           )}
         </div>
       </main>
+
 
       <footer className="fixed bottom-0 left-0 right-0 border-t border-border/60 bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
