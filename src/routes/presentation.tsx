@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Sprout, ChevronLeft, ChevronRight, Tractor, ShoppingBag, Leaf,
   Bell, MessageCircle, User, ShieldCheck, Users, Sparkles, Home, X,
-  Play, Pause, Code2, Database, Cloud, Rocket, Globe, Smartphone,
+  Code2, Database, Cloud, Rocket, Globe, Smartphone,
   Languages, LogIn, Search, FileText, CreditCard, Server, Cpu, Wrench,
   CheckCircle2, BookOpen, Target, TrendingUp, HeartHandshake, Phone,
   MapPin, Camera, Lock, Zap, GitBranch, Package,
