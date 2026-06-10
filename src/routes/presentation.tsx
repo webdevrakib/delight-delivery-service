@@ -293,12 +293,20 @@ function pickFemaleVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynt
 function PresentationPage() {
   const [i, setI] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const [lang, setLang] = useState<Lang>("bn");
   const total = slides.length;
   const s = slides[i];
   const Icon = s.icon;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") setI((v) => Math.min(total - 1, v + 1));
+      if (e.key === "ArrowLeft") setI((v) => Math.max(0, v - 1));
+      if (e.key === " ") { e.preventDefault(); setPlaying((p) => !p); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
       if (e.key === "ArrowRight") setI((v) => Math.min(total - 1, v + 1));
       if (e.key === "ArrowLeft") setI((v) => Math.max(0, v - 1));
       if (e.key === " ") { e.preventDefault(); setPlaying((p) => !p); }
