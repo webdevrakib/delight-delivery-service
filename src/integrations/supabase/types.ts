@@ -200,6 +200,48 @@ export type Database = {
         }
         Relationships: []
       }
+      helpline_tickets: {
+        Row: {
+          created_at: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          problem: string
+          replied_at: string | null
+          reply: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location: string
+          name: string
+          phone: string
+          problem: string
+          replied_at?: string | null
+          reply?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          phone?: string
+          problem?: string
+          replied_at?: string | null
+          reply?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       machine_bookings: {
         Row: {
           created_at: string
