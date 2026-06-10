@@ -226,7 +226,7 @@ function BuyMode() {
 function AddListingModal({ onClose }: { onClose: () => void }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
+  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", variety: "", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
   const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
@@ -247,7 +247,7 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
         farmer_id: u.user.id,
         seller_type: form.seller_type,
         company_name: form.seller_type === "company" ? form.company_name.trim() : null,
-        crop: form.crop.trim(),
+        crop: form.crop === "ধান" && form.variety ? `ধান (${form.variety})` : form.crop.trim(),
         quantity: Number(form.quantity),
         unit: form.unit,
         price_per_unit: Number(form.price_per_unit),
@@ -292,10 +292,18 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
             </Field>
           )}
           <Field label={t("crop")}>
-            <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value })}>
+            <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value, variety: "" })}>
               {CROPS.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </Field>
+          {form.crop === "ধান" && (
+            <Field label={lang === "bn" ? "ধানের জাত" : "Paddy variety"}>
+              <select required className="ip" value={form.variety} onChange={(e) => setForm({ ...form, variety: e.target.value })}>
+                <option value="">{lang === "bn" ? "— জাত নির্বাচন করুন —" : "— Select variety —"}</option>
+                {["ইরি", "বোরো", "আমন", "আউশ"].map((v) => <option key={v} value={v}>{v}</option>)}
+              </select>
+            </Field>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <Field label={t("quantity")}>
               <input required type="number" min={0} step="0.01" className="ip" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
