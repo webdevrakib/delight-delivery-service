@@ -266,19 +266,27 @@ const slides: Slide[] = [
   },
 ];
 
-function slideToSpeech(s: Slide): string {
-  const parts: string[] = [s.kicker.bn, s.title.bn];
-  if (s.body) parts.push(s.body.bn);
-  if (s.bullets) s.bullets.forEach((b) => parts.push(`${b.title.bn}। ${b.desc.bn}`));
-  return parts.join("। ");
+type Lang = "bn" | "en";
+
+function slideToSpeech(s: Slide, lang: Lang): string {
+  const sep = lang === "bn" ? "। " : ". ";
+  const parts: string[] = [s.kicker[lang], s.title[lang]];
+  if (s.body) parts.push(s.body[lang]);
+  if (s.bullets) s.bullets.forEach((b) => parts.push(`${b.title[lang]}${sep}${b.desc[lang]}`));
+  return parts.join(sep);
 }
 
-function pickFemaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
-  const bn = voices.filter((v) => v.lang?.toLowerCase().startsWith("bn"));
-  const hi = voices.filter((v) => v.lang?.toLowerCase().startsWith("hi"));
-  const en = voices.filter((v) => v.lang?.toLowerCase().startsWith("en"));
-  const pool = bn.length ? bn : hi.length ? hi : en;
-  const female = pool.find((v) => /female|woman|zira|samantha|google|priya|veena|rishi/i.test(v.name));
+function pickFemaleVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisVoice | undefined {
+  let pool: SpeechSynthesisVoice[] = [];
+  if (lang === "bn") {
+    const bn = voices.filter((v) => v.lang?.toLowerCase().startsWith("bn"));
+    const hi = voices.filter((v) => v.lang?.toLowerCase().startsWith("hi"));
+    pool = bn.length ? bn : hi;
+  } else {
+    pool = voices.filter((v) => v.lang?.toLowerCase().startsWith("en"));
+  }
+  if (!pool.length) pool = voices;
+  const female = pool.find((v) => /female|woman|zira|samantha|google|priya|veena|jenny|aria/i.test(v.name));
   return female || pool[0] || voices[0];
 }
 
