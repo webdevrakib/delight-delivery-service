@@ -247,7 +247,7 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
         farmer_id: u.user.id,
         seller_type: form.seller_type,
         company_name: form.seller_type === "company" ? form.company_name.trim() : null,
-        crop: form.crop.trim(),
+        crop: form.crop === "ধান" && form.variety ? `ধান (${form.variety})` : form.crop.trim(),
         quantity: Number(form.quantity),
         unit: form.unit,
         price_per_unit: Number(form.price_per_unit),
