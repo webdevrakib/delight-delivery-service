@@ -388,42 +388,87 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          date_of_birth: string | null
           district: string | null
+          father_name: string | null
           full_name: string | null
+          gender: string | null
+          holding_number: string | null
           id: string
+          irrigation_source: string | null
+          land_ownership: string | null
           land_size_acres: number | null
+          land_type: string | null
           land_unit: string
+          mother_name: string | null
+          nid_address: string | null
+          nid_name: string | null
+          nid_number: string | null
+          occupation: string | null
           phone: string | null
+          post_office: string | null
+          postal_code: string | null
           preferred_language: string
           primary_crops: string[] | null
+          upazila: string | null
           updated_at: string
           village: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          date_of_birth?: string | null
           district?: string | null
+          father_name?: string | null
           full_name?: string | null
+          gender?: string | null
+          holding_number?: string | null
           id: string
+          irrigation_source?: string | null
+          land_ownership?: string | null
           land_size_acres?: number | null
+          land_type?: string | null
           land_unit?: string
+          mother_name?: string | null
+          nid_address?: string | null
+          nid_name?: string | null
+          nid_number?: string | null
+          occupation?: string | null
           phone?: string | null
+          post_office?: string | null
+          postal_code?: string | null
           preferred_language?: string
           primary_crops?: string[] | null
+          upazila?: string | null
           updated_at?: string
           village?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          date_of_birth?: string | null
           district?: string | null
+          father_name?: string | null
           full_name?: string | null
+          gender?: string | null
+          holding_number?: string | null
           id?: string
+          irrigation_source?: string | null
+          land_ownership?: string | null
           land_size_acres?: number | null
+          land_type?: string | null
           land_unit?: string
+          mother_name?: string | null
+          nid_address?: string | null
+          nid_name?: string | null
+          nid_number?: string | null
+          occupation?: string | null
           phone?: string | null
+          post_office?: string | null
+          postal_code?: string | null
           preferred_language?: string
           primary_crops?: string[] | null
+          upazila?: string | null
           updated_at?: string
           village?: string | null
         }

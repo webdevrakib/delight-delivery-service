@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { LogOut, User, Loader2, Camera, History, ShoppingBag, Sprout } from "lucide-react";
+import { LogOut, User, Loader2, Camera, History, ShoppingBag, Sprout, ChevronDown, UserCircle, IdCard, MapPin, Wheat } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,6 +41,10 @@ function ProfilePage() {
     full_name: "", phone: "", district: "", village: "",
     land_size: "", land_unit: "acre" as "acre" | "shotok",
     primary_crops: "",
+    date_of_birth: "", gender: "", occupation: "", father_name: "", mother_name: "",
+    nid_number: "", nid_name: "", nid_address: "",
+    upazila: "", post_office: "", postal_code: "",
+    land_type: "", land_ownership: "", holding_number: "", irrigation_source: "",
   });
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [signedAvatar, setSignedAvatar] = useState<string | null>(null);
@@ -49,14 +53,30 @@ function ProfilePage() {
 
   useEffect(() => {
     if (data.profile) {
+      const p = data.profile as any;
       setForm({
-        full_name: data.profile.full_name ?? "",
-        phone: data.profile.phone ?? "",
-        district: data.profile.district ?? "",
-        village: data.profile.village ?? "",
-        land_size: data.profile.land_size_acres?.toString() ?? "",
-        land_unit: ((data.profile as any).land_unit as "acre" | "shotok") || "acre",
-        primary_crops: (data.profile.primary_crops ?? []).join(", "),
+        full_name: p.full_name ?? "",
+        phone: p.phone ?? "",
+        district: p.district ?? "",
+        village: p.village ?? "",
+        land_size: p.land_size_acres?.toString() ?? "",
+        land_unit: (p.land_unit as "acre" | "shotok") || "acre",
+        primary_crops: (p.primary_crops ?? []).join(", "),
+        date_of_birth: p.date_of_birth ?? "",
+        gender: p.gender ?? "",
+        occupation: p.occupation ?? "",
+        father_name: p.father_name ?? "",
+        mother_name: p.mother_name ?? "",
+        nid_number: p.nid_number ?? "",
+        nid_name: p.nid_name ?? "",
+        nid_address: p.nid_address ?? "",
+        upazila: p.upazila ?? "",
+        post_office: p.post_office ?? "",
+        postal_code: p.postal_code ?? "",
+        land_type: p.land_type ?? "",
+        land_ownership: p.land_ownership ?? "",
+        holding_number: p.holding_number ?? "",
+        irrigation_source: p.irrigation_source ?? "",
       });
       setAvatarUrl((data.profile as any).avatar_url ?? null);
       if (data.profile.preferred_language === "en" || data.profile.preferred_language === "bn") setLang(data.profile.preferred_language);
@@ -106,7 +126,22 @@ function ProfilePage() {
         land_unit: form.land_unit,
         primary_crops: form.primary_crops.split(",").map((s) => s.trim()).filter(Boolean),
         preferred_language: lang,
-      });
+        date_of_birth: form.date_of_birth || null,
+        gender: form.gender.trim() || null,
+        occupation: form.occupation.trim() || null,
+        father_name: form.father_name.trim() || null,
+        mother_name: form.mother_name.trim() || null,
+        nid_number: form.nid_number.trim() || null,
+        nid_name: form.nid_name.trim() || null,
+        nid_address: form.nid_address.trim() || null,
+        upazila: form.upazila.trim() || null,
+        post_office: form.post_office.trim() || null,
+        postal_code: form.postal_code.trim() || null,
+        land_type: form.land_type.trim() || null,
+        land_ownership: form.land_ownership.trim() || null,
+        holding_number: form.holding_number.trim() || null,
+        irrigation_source: form.irrigation_source.trim() || null,
+      } as any);
       if (error) throw error;
       toast.success(t("profileSaved"));
       await qc.invalidateQueries({ queryKey: ["profile-full"] });
@@ -153,42 +188,104 @@ function ProfilePage() {
         <Stat label={t("totalEarned")} value={`৳${totalEarned.toFixed(0)}`} />
       </div>
 
-      <form onSubmit={handleSave} className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
-        <Field label={t("fullName")}><input className="pf-input" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} maxLength={100} /></Field>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label={t("phone")}><input className="pf-input" inputMode="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} maxLength={15} /></Field>
-          <Field label={t("district")}><input className="pf-input" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} maxLength={60} /></Field>
-        </div>
-        <Field label={t("village")}><input className="pf-input" value={form.village} onChange={(e) => setForm({ ...form, village: e.target.value })} maxLength={60} /></Field>
-        <Field label={t("landSize")}>
-          <div className="flex gap-2">
-            <input className="pf-input flex-1" inputMode="decimal" value={form.land_size} onChange={(e) => setForm({ ...form, land_size: e.target.value })} />
-            <div className="flex gap-1 rounded-xl border border-border bg-background p-1">
-              {(["acre", "shotok"] as const).map((u) => (
-                <button key={u} type="button" onClick={() => setForm({ ...form, land_unit: u })}
-                  className={`rounded-lg px-3 py-1 text-xs font-bold transition ${form.land_unit === u ? "bg-primary text-primary-foreground" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
-                  {u === "acre" ? t("landUnitAcre") : t("landUnitShotok")}
+      <form onSubmit={handleSave} className="space-y-3">
+        <Section icon={UserCircle} title={lang === "bn" ? "ব্যক্তিগত তথ্য" : "Personal Information"} defaultOpen>
+          <Field label={t("fullName")}><input className="pf-input" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} maxLength={100} /></Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("phone")}><input className="pf-input" inputMode="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} maxLength={15} /></Field>
+            <Field label={lang === "bn" ? "জন্ম তারিখ" : "Date of Birth"}><input type="date" className="pf-input" value={form.date_of_birth} onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} /></Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={lang === "bn" ? "লিঙ্গ" : "Gender"}>
+              <select className="pf-input" value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })}>
+                <option value="">—</option>
+                <option value="male">{lang === "bn" ? "পুরুষ" : "Male"}</option>
+                <option value="female">{lang === "bn" ? "মহিলা" : "Female"}</option>
+                <option value="other">{lang === "bn" ? "অন্যান্য" : "Other"}</option>
+              </select>
+            </Field>
+            <Field label={lang === "bn" ? "পেশা" : "Occupation"}><input className="pf-input" value={form.occupation} onChange={(e) => setForm({ ...form, occupation: e.target.value })} maxLength={60} /></Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={lang === "bn" ? "পিতার নাম" : "Father's Name"}><input className="pf-input" value={form.father_name} onChange={(e) => setForm({ ...form, father_name: e.target.value })} maxLength={100} /></Field>
+            <Field label={lang === "bn" ? "মাতার নাম" : "Mother's Name"}><input className="pf-input" value={form.mother_name} onChange={(e) => setForm({ ...form, mother_name: e.target.value })} maxLength={100} /></Field>
+          </div>
+        </Section>
+
+        <Section icon={IdCard} title={lang === "bn" ? "এনআইডি (NID) তথ্য" : "NID Information"}>
+          <Field label={lang === "bn" ? "এনআইডি নম্বর" : "NID Number"}><input className="pf-input" inputMode="numeric" value={form.nid_number} onChange={(e) => setForm({ ...form, nid_number: e.target.value })} maxLength={20} placeholder="1234567890123" /></Field>
+          <Field label={lang === "bn" ? "এনআইডি অনুযায়ী নাম" : "Name as on NID"}><input className="pf-input" value={form.nid_name} onChange={(e) => setForm({ ...form, nid_name: e.target.value })} maxLength={100} /></Field>
+          <Field label={lang === "bn" ? "এনআইডি অনুযায়ী ঠিকানা" : "Address on NID"}><textarea className="pf-input" rows={2} value={form.nid_address} onChange={(e) => setForm({ ...form, nid_address: e.target.value })} maxLength={250} /></Field>
+        </Section>
+
+        <Section icon={MapPin} title={lang === "bn" ? "ঠিকানা" : "Address"}>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("district")}><input className="pf-input" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} maxLength={60} /></Field>
+            <Field label={lang === "bn" ? "উপজেলা" : "Upazila"}><input className="pf-input" value={form.upazila} onChange={(e) => setForm({ ...form, upazila: e.target.value })} maxLength={60} /></Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={lang === "bn" ? "ডাকঘর" : "Post Office"}><input className="pf-input" value={form.post_office} onChange={(e) => setForm({ ...form, post_office: e.target.value })} maxLength={60} /></Field>
+            <Field label={lang === "bn" ? "পোস্ট কোড" : "Postal Code"}><input className="pf-input" inputMode="numeric" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} maxLength={10} /></Field>
+          </div>
+          <Field label={t("village")}><input className="pf-input" value={form.village} onChange={(e) => setForm({ ...form, village: e.target.value })} maxLength={60} /></Field>
+        </Section>
+
+        <Section icon={Wheat} title={lang === "bn" ? "জমি ও কৃষি তথ্য" : "Land & Farming"}>
+          <Field label={t("landSize")}>
+            <div className="flex gap-2">
+              <input className="pf-input flex-1" inputMode="decimal" value={form.land_size} onChange={(e) => setForm({ ...form, land_size: e.target.value })} />
+              <div className="flex gap-1 rounded-xl border border-border bg-background p-1">
+                {(["acre", "shotok"] as const).map((u) => (
+                  <button key={u} type="button" onClick={() => setForm({ ...form, land_unit: u })}
+                    className={`rounded-lg px-3 py-1 text-xs font-bold transition ${form.land_unit === u ? "bg-primary text-primary-foreground" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+                    {u === "acre" ? t("landUnitAcre") : t("landUnitShotok")}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={lang === "bn" ? "জমির ধরন" : "Land Type"}>
+              <select className="pf-input" value={form.land_type} onChange={(e) => setForm({ ...form, land_type: e.target.value })}>
+                <option value="">—</option>
+                <option value="high">{lang === "bn" ? "উঁচু" : "Highland"}</option>
+                <option value="medium">{lang === "bn" ? "মাঝারি" : "Medium"}</option>
+                <option value="low">{lang === "bn" ? "নিচু" : "Lowland"}</option>
+              </select>
+            </Field>
+            <Field label={lang === "bn" ? "মালিকানা" : "Ownership"}>
+              <select className="pf-input" value={form.land_ownership} onChange={(e) => setForm({ ...form, land_ownership: e.target.value })}>
+                <option value="">—</option>
+                <option value="own">{lang === "bn" ? "নিজস্ব" : "Own"}</option>
+                <option value="leased">{lang === "bn" ? "লিজ" : "Leased"}</option>
+                <option value="shared">{lang === "bn" ? "বর্গা" : "Sharecrop"}</option>
+              </select>
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={lang === "bn" ? "হোল্ডিং নম্বর" : "Holding Number"}><input className="pf-input" value={form.holding_number} onChange={(e) => setForm({ ...form, holding_number: e.target.value })} maxLength={30} /></Field>
+            <Field label={lang === "bn" ? "সেচের উৎস" : "Irrigation Source"}><input className="pf-input" value={form.irrigation_source} onChange={(e) => setForm({ ...form, irrigation_source: e.target.value })} maxLength={60} /></Field>
+          </div>
+          <Field label={t("primaryCrops")}>
+            <input className="pf-input" value={form.primary_crops} onChange={(e) => setForm({ ...form, primary_crops: e.target.value })} placeholder="ধান, পাট, আলু" maxLength={200} />
+          </Field>
+        </Section>
+
+        <div className="rounded-3xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
+          <Field label={t("language")}>
+            <div className="flex gap-2">
+              {(["bn", "en"] as const).map((l) => (
+                <button key={l} type="button" onClick={() => setLang(l)}
+                  className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold transition ${lang === l ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}>
+                  {l === "bn" ? "বাংলা" : "English"}
                 </button>
               ))}
             </div>
-          </div>
-        </Field>
-        <Field label={t("primaryCrops")}>
-          <input className="pf-input" value={form.primary_crops} onChange={(e) => setForm({ ...form, primary_crops: e.target.value })} placeholder="ধান, পাট, আলু" maxLength={200} />
-        </Field>
-        <Field label={t("language")}>
-          <div className="flex gap-2">
-            {(["bn", "en"] as const).map((l) => (
-              <button key={l} type="button" onClick={() => setLang(l)}
-                className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold transition ${lang === l ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}>
-                {l === "bn" ? "বাংলা" : "English"}
-              </button>
-            ))}
-          </div>
-        </Field>
-        <button type="submit" disabled={saving} className={`mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60 ${lang === "bn" ? "font-bangla" : ""}`}>
-          {saving && <Loader2 className="h-4 w-4 animate-spin" />} {t("saveProfile")}
-        </button>
+          </Field>
+          <button type="submit" disabled={saving} className={`mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60 ${lang === "bn" ? "font-bangla" : ""}`}>
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />} {t("saveProfile")}
+          </button>
+        </div>
       </form>
 
       {/* My active crop listings */}
@@ -258,6 +355,21 @@ function ProfilePage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   const { lang } = useLang();
   return <label className="block"><span className={`mb-1 block text-xs font-semibold ${lang === "bn" ? "font-bangla" : ""}`}>{label}</span>{children}</label>;
+}
+
+function Section({ icon: Icon, title, children, defaultOpen = false }: { icon: React.ElementType; title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const { lang } = useLang();
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-soft)]">
+      <button type="button" onClick={() => setOpen(!open)} className="flex w-full items-center gap-3 p-4 text-left">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-4 w-4" /></div>
+        <div className={`flex-1 text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{title}</div>
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <div className="space-y-3 border-t border-border p-4">{children}</div>}
+    </div>
+  );
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
