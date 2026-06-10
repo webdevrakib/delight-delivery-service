@@ -42,6 +42,9 @@ function Landing() {
     { icon: UserPlus, key: "step1Title", desc: "step1Desc" },
     { icon: Settings2, key: "step2Title", desc: "step2Desc" },
     { icon: HandHeart, key: "step3Title", desc: "step3Desc" },
+    { icon: Bell, key: "step4Title", desc: "step4Desc" },
+    { icon: BarChart3, key: "step5Title", desc: "step5Desc" },
+    { icon: Users, key: "step6Title", desc: "step6Desc" },
   ];
   const stats: Array<{ icon: typeof ShieldCheck; value: string; key: keyof typeof dict }> = [
     { icon: ShieldCheck, value: "50+", key: "statSchemes" },
