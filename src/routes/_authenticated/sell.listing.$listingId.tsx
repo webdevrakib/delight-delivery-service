@@ -85,8 +85,11 @@ function Detail() {
             {seller?.avatar_url ? <img src={seller.avatar_url} alt="" className="h-full w-full object-cover" /> : <UserIcon className="h-6 w-6" />}
           </div>
           <div className="min-w-0">
-            <div className={`truncate text-base font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-              {seller?.full_name || (lang === "bn" ? "কৃষক" : "Farmer")}
+            <div className={`flex items-center gap-2 truncate text-base font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+              {sellerName}
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${isCompany ? "bg-[color:var(--saffron)]/15 text-[color:var(--saffron-foreground)]" : "bg-primary/10 text-primary"} ${lang === "bn" ? "font-bangla" : ""}`}>
+                {isCompany ? (lang === "bn" ? "প্রতিষ্ঠান" : "Company") : (lang === "bn" ? "কৃষক" : "Farmer")}
+              </span>
             </div>
             {(seller?.district || seller?.village) && (
               <div className={`mt-0.5 inline-flex items-center gap-1 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
