@@ -458,7 +458,7 @@ function PresentationPage() {
             disabled={i === 0}
             className="flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-xs font-bold disabled:opacity-40"
           >
-            <ChevronLeft className="h-4 w-4" /> পূর্ববর্তী / Prev
+            <ChevronLeft className="h-4 w-4" /> {lang === "bn" ? "পূর্ববর্তী" : "Prev"}
           </button>
 
           <div className="flex flex-1 items-center justify-center gap-1 overflow-x-auto px-2">
