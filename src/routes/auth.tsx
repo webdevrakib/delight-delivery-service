@@ -139,6 +139,16 @@ function AuthPage() {
                 {t("continueWithGoogle")}
               </button>
 
+              <button
+                type="button"
+                onClick={handleDemo}
+                disabled={loading}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary transition hover:bg-primary/15 disabled:opacity-60"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlayCircle className="h-4 w-4" />}
+                {lang === "bn" ? "ডেমো হিসেবে লগইন করুন (এক ক্লিক)" : "Continue as Demo (one click)"}
+              </button>
+
               <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
                 <div className="h-px flex-1 bg-border" /> {t("or")} <div className="h-px flex-1 bg-border" />
               </div>
