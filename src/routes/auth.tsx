@@ -95,55 +95,84 @@ function AuthPage() {
 
         <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-elevated)]">
           <h1 className={`text-2xl font-bold tracking-tight text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-            {mode === "login" ? t("login") : t("signup")}
+            {mode === "login" ? t("login") : mode === "signup" ? t("signup") : (lang === "bn" ? "পাসওয়ার্ড রিসেট" : "Reset password")}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">{t("tagline")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {mode === "forgot" ? (lang === "bn" ? "ইমেইল দিন, রিসেট লিঙ্ক পাঠানো হবে" : "Enter your email to receive a reset link") : t("tagline")}
+          </p>
 
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={googleLoading}
-            className="mt-5 flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-accent disabled:opacity-60"
-          >
-            {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
-            {t("continueWithGoogle")}
-          </button>
+          {mode !== "forgot" && (
+            <>
+              <button
+                type="button"
+                onClick={handleGoogle}
+                disabled={googleLoading}
+                className="mt-5 flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-accent disabled:opacity-60"
+              >
+                {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
+                {t("continueWithGoogle")}
+              </button>
 
-          <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="h-px flex-1 bg-border" /> {t("or")} <div className="h-px flex-1 bg-border" />
-          </div>
+              <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="h-px flex-1 bg-border" /> {t("or")} <div className="h-px flex-1 bg-border" />
+              </div>
+            </>
+          )}
 
-          <form onSubmit={handleSubmit} className="space-y-3">
-            {mode === "signup" && (
-              <Field icon={UserIcon} label={t("fullName")}>
-                <input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="input-field" />
+          {mode === "forgot" ? (
+            <form onSubmit={handleForgot} className="space-y-3 mt-5">
+              <Field icon={Mail} label={t("email")}>
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" />
               </Field>
-            )}
-            <Field icon={Mail} label={t("email")}>
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" />
-            </Field>
-            <Field icon={Lock} label={t("password")}>
-              <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" />
-            </Field>
+              <button type="submit" disabled={loading} className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 disabled:opacity-60">
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {lang === "bn" ? "রিসেট লিঙ্ক পাঠান" : "Send reset link"}
+              </button>
+              <button type="button" onClick={() => setMode("login")} className="w-full text-center text-xs text-muted-foreground hover:text-foreground">
+                ← {t("login")}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-3">
+              {mode === "signup" && (
+                <Field icon={UserIcon} label={t("fullName")}>
+                  <input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="input-field" />
+                </Field>
+              )}
+              <Field icon={Mail} label={t("email")}>
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" />
+              </Field>
+              <Field icon={Lock} label={t("password")}>
+                <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" />
+              </Field>
 
+              {mode === "login" && (
+                <button type="button" onClick={() => setMode("forgot")} className="block w-full text-right text-xs text-primary hover:underline">
+                  {lang === "bn" ? "পাসওয়ার্ড ভুলে গেছেন?" : "Forgot password?"}
+                </button>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 disabled:opacity-60"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {loading ? t("signingIn") : mode === "login" ? t("login") : t("signup")}
+              </button>
+            </form>
+          )}
+
+          {mode !== "forgot" && (
             <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 disabled:opacity-60"
+              type="button"
+              onClick={() => setMode(mode === "login" ? "signup" : "login")}
+              className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground"
             >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? t("signingIn") : mode === "login" ? t("login") : t("signup")}
+              {mode === "login" ? t("noAccount") : t("haveAccount")}{" "}
+              <span className="font-semibold text-primary">{mode === "login" ? t("signup") : t("login")}</span>
             </button>
-          </form>
-
-          <button
-            type="button"
-            onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground"
-          >
-            {mode === "login" ? t("noAccount") : t("haveAccount")}{" "}
-            <span className="font-semibold text-primary">{mode === "login" ? t("signup") : t("login")}</span>
-          </button>
+          )}
         </div>
       </div>
       <style>{`.input-field { width:100%; border-radius:0.625rem; background:var(--background); border:1px solid var(--border); padding:0.625rem 0.75rem 0.625rem 2.25rem; font-size:0.875rem; color:var(--foreground); outline:none; transition:border-color .15s; }
