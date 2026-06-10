@@ -35,7 +35,9 @@ export const Route = createFileRoute("/_authenticated/machines/$id")({
 function Detail() {
   const { t, lang } = useLang();
   const { id } = Route.useParams();
-  const { data: m } = useSuspenseQuery(machineQuery(id));
+  const { data } = useSuspenseQuery(machineQuery(id));
+  const m = data.machine;
+  const owner = data.owner;
   const qc = useQueryClient();
   const today = new Date().toISOString().slice(0, 10);
   const [start, setStart] = useState(today);
