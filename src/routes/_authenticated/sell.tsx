@@ -226,7 +226,7 @@ function BuyMode() {
 function AddListingModal({ onClose }: { onClose: () => void }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
+  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", variety: "", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
   const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
