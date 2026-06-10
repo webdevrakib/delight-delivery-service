@@ -380,7 +380,7 @@ function PresentationPage() {
       <footer className="fixed bottom-0 left-0 right-0 border-t border-border/60 bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
           <button
-            onClick={() => { setPlaying(false); setI((v) => Math.max(0, v - 1)); }}
+            onClick={() => { setI((v) => Math.max(0, v - 1)); }}
             disabled={i === 0}
             className="flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-xs font-bold disabled:opacity-40"
           >
@@ -391,7 +391,7 @@ function PresentationPage() {
             {slides.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => { setPlaying(false); setI(idx); }}
+                onClick={() => { setI(idx); }}
                 className={`h-1.5 shrink-0 rounded-full transition-all ${idx === i ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground"}`}
                 aria-label={`Slide ${idx + 1}`}
               />
@@ -399,7 +399,7 @@ function PresentationPage() {
           </div>
 
           <button
-            onClick={() => { setPlaying(false); setI((v) => Math.min(total - 1, v + 1)); }}
+            onClick={() => { setI((v) => Math.min(total - 1, v + 1)); }}
             disabled={i === total - 1}
             className="flex items-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground disabled:opacity-40"
           >
