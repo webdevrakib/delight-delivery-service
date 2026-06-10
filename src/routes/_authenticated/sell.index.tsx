@@ -29,7 +29,7 @@ const sellQuery = queryOptions({
   },
 });
 
-export const Route = createFileRoute("/_authenticated/sell")({
+export const Route = createFileRoute("/_authenticated/sell/")({
   head: () => ({ meta: [{ title: "ফসল বিক্রি — কৃষি বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(sellQuery),
   component: () => <AppShell><Suspense fallback={null}><Page /></Suspense></AppShell>,
