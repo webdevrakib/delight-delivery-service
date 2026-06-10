@@ -11,14 +11,21 @@ const sellQuery = queryOptions({
   queryKey: ["sell-data"],
   queryFn: async () => {
     const { data: u } = await supabase.auth.getUser();
-    const [buyers, listings] = await Promise.all([
+    const [buyers, myListings, activeListings] = await Promise.all([
       supabase.from("buyers").select("*").order("verified", { ascending: false }),
       u.user
         ? supabase.from("farmer_crop_listings").select("*").eq("farmer_id", u.user.id).neq("status", "removed").order("created_at", { ascending: false })
         : Promise.resolve({ data: [] as any[], error: null }),
+      supabase.from("farmer_crop_listings").select("*").eq("status", "active").order("created_at", { ascending: false }),
     ]);
     if (buyers.error) throw buyers.error;
-    return { buyers: buyers.data ?? [], listings: listings.data ?? [] };
+    const sellerIds = Array.from(new Set((activeListings.data ?? []).map((l: any) => l.farmer_id)));
+    const sellers = sellerIds.length
+      ? (await supabase.from("profiles").select("id, full_name, phone, district, village, avatar_url").in("id", sellerIds)).data ?? []
+      : [];
+    const sellerMap = Object.fromEntries(sellers.map((s: any) => [s.id, s]));
+    const listingsWithSeller = (activeListings.data ?? []).map((l: any) => ({ ...l, seller: sellerMap[l.farmer_id] ?? null }));
+    return { buyers: buyers.data ?? [], listings: myListings.data ?? [], farmerListings: listingsWithSeller };
   },
 });
 
@@ -143,31 +150,71 @@ function BuyMode() {
   const { lang } = useLang();
   const { data } = useSuspenseQuery(sellQuery);
   return (
-    <div className="space-y-3">
-      {data.buyers.map((b) => (
-        <Link key={b.id} to="/sell/$buyerId" params={{ buyerId: b.id }} className="block rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5">
-          <div className="flex gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[color:var(--saffron)]/20 text-[color:var(--saffron-foreground)]">
-              {b.logo_url ? <img src={b.logo_url} alt="" className="h-full w-full object-cover" /> : <ShoppingBag className="h-6 w-6" />}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <h3 className={`truncate text-base font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? b.name_bn : b.name_en}</h3>
-                {b.verified && <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />}
-              </div>
-              <div className={`flex items-center gap-2 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-                <span>{b.buyer_type}</span>·<span className="inline-flex items-center gap-0.5"><MapPin className="h-3 w-3" />{b.district}</span>
-              </div>
-              <div className={`mt-1.5 flex flex-wrap gap-1 ${lang === "bn" ? "font-bangla" : ""}`}>
-                {(b.crops_buying ?? []).slice(0, 4).map((c: string) => (
-                  <span key={c} className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground">{c}</span>
-                ))}
-              </div>
-              {b.offered_price_note && <p className={`mt-1.5 line-clamp-1 text-xs text-foreground/70 ${lang === "bn" ? "font-bangla" : ""}`}>{b.offered_price_note}</p>}
-            </div>
+    <div className="space-y-5">
+      <section className="space-y-3">
+        <h2 className={`text-sm font-bold uppercase tracking-wider text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+          {lang === "bn" ? "কৃষকদের ফসল" : "Farmer listings"}
+        </h2>
+        {data.farmerListings.length === 0 ? (
+          <div className={`rounded-2xl border border-dashed border-border bg-card p-6 text-center text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+            {lang === "bn" ? "এখনো কোনো কৃষক ফসল list করেননি" : "No farmer listings yet"}
           </div>
-        </Link>
-      ))}
+        ) : (
+          data.farmerListings.map((l: any) => (
+            <Link key={l.id} to="/sell/listing/$listingId" params={{ listingId: l.id }} className="block rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5">
+              <div className="flex gap-3">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-primary/10 text-primary">
+                  {l.image_url ? <img src={l.image_url} alt="" className="h-full w-full object-cover" /> : <Sprout className="h-6 w-6" />}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className={`flex items-center justify-between gap-2 ${lang === "bn" ? "font-bangla" : ""}`}>
+                    <h3 className="truncate text-base font-bold text-foreground">{l.crop}</h3>
+                    <span className="shrink-0 text-sm font-bold text-primary">৳{l.price_per_unit}/{l.unit}</span>
+                  </div>
+                  <div className={`mt-0.5 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                    {l.quantity} {l.unit} · {l.seller?.full_name ?? (lang === "bn" ? "কৃষক" : "Farmer")}
+                  </div>
+                  {l.seller?.district && (
+                    <div className={`mt-1 inline-flex items-center gap-1 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                      <MapPin className="h-3 w-3" />{l.seller.village ? `${l.seller.village}, ` : ""}{l.seller.district}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ))
+        )}
+      </section>
+
+      <section className="space-y-3">
+        <h2 className={`text-sm font-bold uppercase tracking-wider text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+          {lang === "bn" ? "ক্রেতা প্রতিষ্ঠান" : "Buyer companies"}
+        </h2>
+        {data.buyers.map((b) => (
+          <Link key={b.id} to="/sell/$buyerId" params={{ buyerId: b.id }} className="block rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5">
+            <div className="flex gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[color:var(--saffron)]/20 text-[color:var(--saffron-foreground)]">
+                {b.logo_url ? <img src={b.logo_url} alt="" className="h-full w-full object-cover" /> : <ShoppingBag className="h-6 w-6" />}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h3 className={`truncate text-base font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? b.name_bn : b.name_en}</h3>
+                  {b.verified && <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />}
+                </div>
+                <div className={`flex items-center gap-2 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                  <span>{b.buyer_type}</span>·<span className="inline-flex items-center gap-0.5"><MapPin className="h-3 w-3" />{b.district}</span>
+                </div>
+                <div className={`mt-1.5 flex flex-wrap gap-1 ${lang === "bn" ? "font-bangla" : ""}`}>
+                  {(b.crops_buying ?? []).slice(0, 4).map((c: string) => (
+                    <span key={c} className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground">{c}</span>
+                  ))}
+                </div>
+                {b.offered_price_note && <p className={`mt-1.5 line-clamp-1 text-xs text-foreground/70 ${lang === "bn" ? "font-bangla" : ""}`}>{b.offered_price_note}</p>}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </section>
     </div>
   );
 }
