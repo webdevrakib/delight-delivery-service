@@ -192,7 +192,7 @@ const slides: Slide[] = [
       { icon: LogIn, title: { bn: "Google OAuth", en: "Google OAuth" }, desc: { bn: "Social login integration।", en: "Social login integration." } },
       { icon: Bell, title: { bn: "Realtime Subscriptions", en: "Realtime subscriptions" }, desc: { bn: "Supabase Realtime দিয়ে live update।", en: "Live updates via Supabase Realtime." } },
       { icon: Camera, title: { bn: "Storage Buckets", en: "Storage buckets" }, desc: { bn: "ছবি ও ফাইল আপলোড।", en: "Image and file uploads." } },
-      { icon: GitBranch, title: { bn: "Git Version Control", en: "Git version control" }, desc: { bn: "Lovable platform-এ auto-sync।", en: "Auto-sync on the Lovable platform." } },
+      
     ],
     gradient: "from-teal-500/25 via-emerald-500/20 to-green-500/10",
     icon: Cpu,
