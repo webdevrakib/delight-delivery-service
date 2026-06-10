@@ -70,7 +70,15 @@ function Detail() {
             <div className={`mt-1 flex items-center gap-1 text-xs opacity-90 ${lang === "bn" ? "font-bangla" : ""}`}>
               <MapPin className="h-3 w-3" /> {m.district}{m.upazila ? `, ${m.upazila}` : ""}
             </div>
-            <div className="mt-2 text-2xl font-extrabold">৳{m.rate_per_day}<span className={`text-xs font-normal opacity-80 ${lang === "bn" ? "font-bangla" : ""}`}> / দিন</span></div>
+            <div className="mt-2 flex items-baseline gap-4">
+              <div className="text-2xl font-extrabold">৳{m.rate_per_day}<span className={`text-xs font-normal opacity-80 ${lang === "bn" ? "font-bangla" : ""}`}> {t("perDay")}</span></div>
+              {m.price_per_hour && (
+                <div className="text-lg font-bold opacity-95">৳{m.price_per_hour}<span className={`text-[10px] font-normal opacity-80 ${lang === "bn" ? "font-bangla" : ""}`}> {t("perHour")}</span></div>
+              )}
+            </div>
+            {m.available_from && (
+              <div className={`mt-1 text-[11px] opacity-85 ${lang === "bn" ? "font-bangla" : ""}`}>{t("availableFrom")}: {m.available_from}</div>
+            )}
           </div>
         </div>
       </div>
@@ -78,8 +86,9 @@ function Detail() {
       {m.description && <p className={`rounded-2xl border border-border bg-card p-4 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{m.description}</p>}
 
       <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-4 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
-        <Phone className="h-4 w-4" /> মালিকের সাথে যোগাযোগ — {m.contact_phone}
+        <Phone className="h-4 w-4" /> {t("contactOwner")} — {m.contact_phone}
       </a>
+
 
       <form onSubmit={book} className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
         <h3 className={`text-base font-bold ${lang === "bn" ? "font-bangla" : ""}`}><Calendar className="mr-2 inline h-4 w-4" />{t("bookNow")}</h3>

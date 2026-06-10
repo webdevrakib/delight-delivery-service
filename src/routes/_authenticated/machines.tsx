@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
-import { Tractor, MapPin, Plus, Phone, X } from "lucide-react";
+import { Suspense, useEffect, useState } from "react";
+import { Tractor, MapPin, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,9 +10,10 @@ import { useLang } from "@/lib/i18n";
 const machinesQuery = queryOptions({
   queryKey: ["machines"],
   queryFn: async () => {
+    const { data: u } = await supabase.auth.getUser();
     const { data, error } = await supabase.from("machines").select("*").order("created_at", { ascending: false });
     if (error) throw error;
-    return data ?? [];
+    return { list: data ?? [], uid: u.user?.id ?? null };
   },
 });
 
@@ -23,25 +24,42 @@ export const Route = createFileRoute("/_authenticated/machines")({
 });
 
 const TYPES = ["all", "paddyHarvester", "thresher", "tractor", "powerTiller"] as const;
+type Mode = "rent" | "mine";
 
 function MachinesPage() {
   const { t, lang } = useLang();
   const { data } = useSuspenseQuery(machinesQuery);
+  const [mode, setMode] = useState<Mode>("rent");
   const [filter, setFilter] = useState<string>("all");
   const [showAdd, setShowAdd] = useState(false);
-  const list = filter === "all" ? data : data.filter((m) => m.machine_type === filter);
+
+  let list = data.list;
+  if (mode === "rent") list = list.filter((m) => m.owner_id !== data.uid && m.available !== false);
+  else list = list.filter((m) => m.owner_id === data.uid);
+  if (filter !== "all") list = list.filter((m) => m.machine_type === filter);
 
   return (
     <div className="space-y-5">
-      <div className="flex items-end justify-between gap-3">
-        <div>
-          <h1 className={`text-2xl font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("machineBooking")}</h1>
-          <p className={`text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>কৃষি যন্ত্রপাতি ভাড়া নিন বা ভাড়া দিন</p>
-        </div>
-        <button onClick={() => setShowAdd(true)} className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground shadow-[var(--shadow-soft)]">
-          <Plus className="h-4 w-4" /> <span className={lang === "bn" ? "font-bangla" : ""}>{t("addMachine")}</span>
+      <div>
+        <h1 className={`text-2xl font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("machineBooking")}</h1>
+        <p className={`text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>কৃষি যন্ত্রপাতি ভাড়া নিন বা ভাড়া দিন</p>
+      </div>
+
+      {/* Mode toggle */}
+      <div className="grid grid-cols-2 gap-2 rounded-2xl border border-border bg-card p-1.5">
+        <button onClick={() => setMode("rent")} className={`rounded-xl px-3 py-2.5 text-sm font-bold transition ${mode === "rent" ? "bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)]" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+          {t("rentMachine")}
+        </button>
+        <button onClick={() => setMode("mine")} className={`rounded-xl px-3 py-2.5 text-sm font-bold transition ${mode === "mine" ? "bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)]" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+          {t("myMachines")}
         </button>
       </div>
+
+      {mode === "mine" && (
+        <button onClick={() => setShowAdd(true)} className={`flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 px-4 py-3.5 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
+          <Plus className="h-4 w-4" /> {t("addMachine")}
+        </button>
+      )}
 
       <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
         {TYPES.map((c) => (
@@ -54,7 +72,7 @@ function MachinesPage() {
 
       {list.length === 0 ? (
         <div className={`rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-          এখনো কোনো যন্ত্র listing নেই। প্রথম যন্ত্র যোগ করুন!
+          {mode === "mine" ? "আপনি এখনো কোনো যন্ত্র list করেননি" : "এই ধরনের কোনো যন্ত্র available নেই"}
         </div>
       ) : (
         <div className="space-y-3">
@@ -76,7 +94,12 @@ function MachinesPage() {
                   <div className={`mt-0.5 flex items-center gap-1 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
                     <MapPin className="h-3 w-3" /> {m.district}{m.upazila ? `, ${m.upazila}` : ""}
                   </div>
-                  <div className="mt-2 text-lg font-extrabold text-primary">৳{m.rate_per_day}<span className={`text-xs font-normal text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}> / দিন</span></div>
+                  <div className="mt-2 flex items-baseline gap-3">
+                    <div className="text-lg font-extrabold text-primary">৳{m.rate_per_day}<span className={`text-xs font-normal text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}> {t("perDay")}</span></div>
+                    {m.price_per_hour && (
+                      <div className="text-sm font-bold text-foreground/80">৳{m.price_per_hour}<span className={`text-[10px] font-normal text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}> {t("perHour")}</span></div>
+                    )}
+                  </div>
                 </div>
               </div>
             </Link>
@@ -92,7 +115,10 @@ function MachinesPage() {
 function AddMachineModal({ onClose }: { onClose: () => void }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ machine_type: "tractor", title: "", description: "", district: "", upazila: "", rate_per_day: "", contact_phone: "" });
+  const [form, setForm] = useState({
+    machine_type: "tractor", title: "", description: "", district: "", upazila: "",
+    rate_per_day: "", price_per_hour: "", available_from: "", contact_phone: "",
+  });
   const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
@@ -109,6 +135,8 @@ function AddMachineModal({ onClose }: { onClose: () => void }) {
         district: form.district.trim(),
         upazila: form.upazila.trim() || null,
         rate_per_day: Number(form.rate_per_day),
+        price_per_hour: form.price_per_hour ? Number(form.price_per_hour) : null,
+        available_from: form.available_from || null,
         contact_phone: form.contact_phone.trim(),
       });
       if (error) throw error;
@@ -145,7 +173,11 @@ function AddMachineModal({ onClose }: { onClose: () => void }) {
             <Field label={t("upazila")}><input className="ip" value={form.upazila} onChange={(e) => setForm({ ...form, upazila: e.target.value })} maxLength={60} /></Field>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label={`${t("ratePerDay")} (৳)`}><input required type="number" min={0} className="ip" value={form.rate_per_day} onChange={(e) => setForm({ ...form, rate_per_day: e.target.value })} /></Field>
+            <Field label={t("ratePerDay")}><input required type="number" min={0} className="ip" value={form.rate_per_day} onChange={(e) => setForm({ ...form, rate_per_day: e.target.value })} /></Field>
+            <Field label={t("ratePerHour")}><input type="number" min={0} className="ip" value={form.price_per_hour} onChange={(e) => setForm({ ...form, price_per_hour: e.target.value })} /></Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("availableFrom")}><input type="date" className="ip" value={form.available_from} onChange={(e) => setForm({ ...form, available_from: e.target.value })} /></Field>
             <Field label={t("contactPhone")}><input required className="ip" inputMode="tel" value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} maxLength={15} /></Field>
           </div>
         </div>
