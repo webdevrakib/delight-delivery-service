@@ -41,6 +41,10 @@ function ProfilePage() {
     full_name: "", phone: "", district: "", village: "",
     land_size: "", land_unit: "acre" as "acre" | "shotok",
     primary_crops: "",
+    date_of_birth: "", gender: "", occupation: "", father_name: "", mother_name: "",
+    nid_number: "", nid_name: "", nid_address: "",
+    upazila: "", post_office: "", postal_code: "",
+    land_type: "", land_ownership: "", holding_number: "", irrigation_source: "",
   });
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [signedAvatar, setSignedAvatar] = useState<string | null>(null);
