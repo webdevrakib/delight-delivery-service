@@ -286,7 +286,21 @@ const slides: Slide[] = [
   },
 ];
 
-const AUTOPLAY_MS = 7000;
+function slideToSpeech(s: Slide): string {
+  const parts: string[] = [s.kicker, s.title];
+  if (s.body) parts.push(s.body);
+  if (s.bullets) s.bullets.forEach((b) => parts.push(`${b.title}। ${b.desc}`));
+  return parts.join("। ");
+}
+
+function pickFemaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
+  const bn = voices.filter((v) => v.lang?.toLowerCase().startsWith("bn"));
+  const hi = voices.filter((v) => v.lang?.toLowerCase().startsWith("hi"));
+  const en = voices.filter((v) => v.lang?.toLowerCase().startsWith("en"));
+  const pool = bn.length ? bn : hi.length ? hi : en;
+  const female = pool.find((v) => /female|woman|zira|samantha|google|priya|veena|rishi/i.test(v.name));
+  return female || pool[0] || voices[0];
+}
 
 function PresentationPage() {
   const [i, setI] = useState(0);
@@ -305,11 +319,51 @@ function PresentationPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [total]);
 
+  // Speak current slide with female voice; auto-advance when speech ends
   useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const synth = window.speechSynthesis;
+    synth.cancel();
     if (!playing) return;
-    const id = setTimeout(() => setI((v) => (v + 1) % total), AUTOPLAY_MS);
-    return () => clearTimeout(id);
-  }, [i, playing, total]);
+
+    let cancelled = false;
+    const speak = () => {
+      if (cancelled) return;
+      const voices = synth.getVoices();
+      const u = new SpeechSynthesisUtterance(slideToSpeech(s));
+      const v = pickFemaleVoice(voices);
+      if (v) u.voice = v;
+      u.lang = v?.lang || "bn-BD";
+      u.rate = 0.95;
+      u.pitch = 1.15;
+      u.onend = () => {
+        if (cancelled) return;
+        setI((idx) => (idx + 1) % total);
+      };
+      synth.speak(u);
+    };
+
+    if (synth.getVoices().length === 0) {
+      synth.onvoiceschanged = () => { synth.onvoiceschanged = null; speak(); };
+      setTimeout(speak, 400);
+    } else {
+      speak();
+    }
+
+    return () => {
+      cancelled = true;
+      synth.cancel();
+    };
+  }, [i, playing, total, s]);
+
+  // Stop speech when leaving the page
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   const progress = ((i + 1) / total) * 100;
 
