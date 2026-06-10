@@ -268,36 +268,8 @@ const slides: Slide[] = [
 
 type Lang = "bn" | "en";
 
-function slideToSpeech(s: Slide, lang: Lang): string {
-  const sep = lang === "bn" ? "। " : ". ";
-  const parts: string[] = [s.kicker[lang], s.title[lang]];
-  if (s.body) parts.push(s.body[lang]);
-  if (s.bullets) s.bullets.forEach((b) => parts.push(`${b.title[lang]}${sep}${b.desc[lang]}`));
-  return parts.join(sep);
-}
-
-function pickFemaleVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisVoice | undefined {
-  let pool: SpeechSynthesisVoice[] = [];
-  if (lang === "bn") {
-    const bn = voices.filter((v) => v.lang?.toLowerCase().startsWith("bn"));
-    const hi = voices.filter((v) => v.lang?.toLowerCase().startsWith("hi"));
-    pool = bn.length ? bn : hi;
-  } else {
-    pool = voices.filter((v) => v.lang?.toLowerCase().startsWith("en"));
-  }
-  if (!pool.length) pool = voices;
-  const notMale = pool.filter((v) => !/male\b|man\b/i.test(v.name));
-  const femalePool = notMale.length ? notMale : pool;
-  const femaleRegex = lang === "en"
-    ? /female|woman|samantha|zira|jenny|aria|eva|karen|susan|victoria|tessa|allison|ava|joanna|salli|kimberly|amy|emma|sonia/i
-    : /female|woman|priya|veena|sonia|kalpana|swara/i;
-  const female = femalePool.find((v) => femaleRegex.test(v.name));
-  return female || femalePool[0] || pool[0] || voices[0];
-}
-
 function PresentationPage() {
   const [i, setI] = useState(0);
-  const [playing, setPlaying] = useState(true);
   const [lang, setLang] = useState<Lang>("bn");
   const total = slides.length;
   const s = slides[i];
@@ -307,55 +279,11 @@ function PresentationPage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") setI((v) => Math.min(total - 1, v + 1));
       if (e.key === "ArrowLeft") setI((v) => Math.max(0, v - 1));
-      if (e.key === " ") { e.preventDefault(); setPlaying((p) => !p); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [total]);
 
-  useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    const synth = window.speechSynthesis;
-    synth.cancel();
-    if (!playing) return;
-
-    let cancelled = false;
-    const speak = () => {
-      if (cancelled) return;
-      const voices = synth.getVoices();
-      const u = new SpeechSynthesisUtterance(slideToSpeech(s, lang));
-      const v = pickFemaleVoice(voices, lang);
-      if (v) u.voice = v;
-      u.lang = v?.lang || (lang === "bn" ? "bn-BD" : "en-US");
-      u.rate = 0.95;
-      u.pitch = 1.15;
-      u.onend = () => {
-        if (cancelled) return;
-        setI((idx) => (idx + 1) % total);
-      };
-      synth.speak(u);
-    };
-
-    if (synth.getVoices().length === 0) {
-      synth.onvoiceschanged = () => { synth.onvoiceschanged = null; speak(); };
-      setTimeout(speak, 400);
-    } else {
-      speak();
-    }
-
-    return () => {
-      cancelled = true;
-      synth.cancel();
-    };
-  }, [i, playing, total, s, lang]);
-
-  useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
 
   const progress = ((i + 1) / total) * 100;
 
