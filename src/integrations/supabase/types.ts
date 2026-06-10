@@ -337,6 +337,53 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          listing_crop: string | null
+          listing_id: string | null
+          message: string
+          read: boolean
+          recipient_id: string
+          sender_id: string
+          sender_name: string | null
+          sender_phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_crop?: string | null
+          listing_id?: string | null
+          message: string
+          read?: boolean
+          recipient_id: string
+          sender_id: string
+          sender_name?: string | null
+          sender_phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_crop?: string | null
+          listing_id?: string | null
+          message?: string
+          read?: boolean
+          recipient_id?: string
+          sender_id?: string
+          sender_name?: string | null
+          sender_phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "farmer_crop_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
