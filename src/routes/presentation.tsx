@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import {
   Sprout, ChevronLeft, ChevronRight, Tractor, ShoppingBag, Leaf,
   Bell, MessageCircle, User, ShieldCheck, Users, Sparkles, Home, X,
-  Play, Pause,
+  Play, Pause, Code2, Database, Cloud, Rocket, Globe, Smartphone,
+  Languages, LogIn, Search, FileText, CreditCard, Server, Cpu, Wrench,
+  CheckCircle2, BookOpen, Target, TrendingUp, HeartHandshake, Phone,
+  MapPin, Camera, Lock, Zap, GitBranch, Package,
 } from "lucide-react";
 
 export const Route = createFileRoute("/presentation")({
@@ -11,89 +14,269 @@ export const Route = createFileRoute("/presentation")({
   component: PresentationPage,
 });
 
+type Bullet = { icon: React.ElementType; title: string; desc: string };
 type Slide = {
   kicker: string;
   title: string;
   body?: string;
-  bullets?: { icon: React.ElementType; title: string; desc: string }[];
+  bullets?: Bullet[];
   gradient: string;
   icon: React.ElementType;
 };
 
 const slides: Slide[] = [
+  // 1. Cover
   {
     kicker: "কৃষি বন্ধু",
     title: "বাংলাদেশের কৃষকদের জন্য সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম",
-    body: "ফসল বিক্রি, যন্ত্র ভাড়া, রোগবালাই সমাধান এবং সরকারি সহায়তা—সব এক অ্যাপে।",
+    body: "ফসল বিক্রি, যন্ত্র ভাড়া, রোগবালাই সমাধান, সরকারি স্কিম ও ২৪/৭ হেল্পলাইন — সব এক অ্যাপে।",
     gradient: "from-emerald-500/30 via-green-500/20 to-teal-500/10",
     icon: Sprout,
   },
+  // 2. Problem
   {
     kicker: "সমস্যা",
-    title: "কৃষকরা কেন এই অ্যাপের প্রয়োজন বোধ করেন?",
+    title: "কৃষকরা যে সমস্যাগুলোর মুখোমুখি হন",
     bullets: [
       { icon: ShoppingBag, title: "মধ্যস্বত্বভোগীর চাপ", desc: "ন্যায্য দামে ফসল বিক্রির সুযোগ কম।" },
-      { icon: Tractor, title: "যন্ত্রের অভাব", desc: "সময়মতো যন্ত্র ভাড়া পাওয়া কঠিন।" },
-      { icon: Leaf, title: "রোগবালাইয়ে ক্ষতি", desc: "দ্রুত সঠিক পরামর্শ পাওয়া যায় না।" },
+      { icon: Tractor, title: "যন্ত্রের অভাব", desc: "মৌসুমে সময়মতো যন্ত্র ভাড়া পাওয়া কঠিন।" },
+      { icon: Leaf, title: "রোগবালাইয়ে ক্ষতি", desc: "দ্রুত ও সঠিক পরামর্শ পাওয়া যায় না।" },
+      { icon: BookOpen, title: "তথ্যের ঘাটতি", desc: "সরকারি স্কিম ও প্রকল্প সম্পর্কে অজ্ঞতা।" },
     ],
     gradient: "from-rose-500/25 via-orange-500/20 to-amber-500/10",
-    icon: ShieldCheck,
+    icon: Target,
   },
+  // 3. Solution overview
+  {
+    kicker: "সমাধান",
+    title: "এক অ্যাপেই সব সমাধান",
+    bullets: [
+      { icon: ShoppingBag, title: "মার্কেটপ্লেস", desc: "সরাসরি ক্রেতা-বিক্রেতা সংযোগ।" },
+      { icon: Tractor, title: "যন্ত্র ভাড়া", desc: "কাছাকাছি যন্ত্র খুঁজুন ও বুক করুন।" },
+      { icon: Leaf, title: "কৃষি বন্ধু", desc: "রোগবালাই ও পরামর্শ।" },
+      { icon: MessageCircle, title: "হেল্পলাইন", desc: "চ্যাটবট দিয়ে সাপোর্ট।" },
+    ],
+    gradient: "from-emerald-500/25 via-green-500/20 to-lime-500/10",
+    icon: Sparkles,
+  },
+  // 4. Registration & Login
   {
     kicker: "ফিচার ১",
-    title: "ফসল বিক্রি (Marketplace)",
+    title: "রেজিস্ট্রেশন ও লগইন",
+    body: "Email/Password বা Google দিয়ে এক ক্লিকে অ্যাকাউন্ট খুলুন।",
     bullets: [
-      { icon: ShoppingBag, title: "সরাসরি ক্রেতা", desc: "ফসল লিস্ট করে সরাসরি ক্রেতার সাথে যোগাযোগ।" },
-      { icon: MessageCircle, title: "ইন-অ্যাপ চ্যাট", desc: "ফোন/SMS ছাড়াই দরদাম ও যোগাযোগ।" },
-      { icon: Bell, title: "তাৎক্ষণিক নোটিফিকেশন", desc: "ক্রেতা আগ্রহ দেখালে সাথে সাথে জানতে পারবেন।" },
+      { icon: LogIn, title: "একাধিক লগইন অপশন", desc: "Email + Google OAuth সাপোর্ট।" },
+      { icon: ShieldCheck, title: "নিরাপদ পাসওয়ার্ড", desc: "Reset password ও email verification।" },
+      { icon: User, title: "ভূমিকা নির্বাচন", desc: "কৃষক, ক্রেতা বা যন্ত্র মালিক হিসেবে যুক্ত হন।" },
     ],
     gradient: "from-sky-500/25 via-blue-500/20 to-indigo-500/10",
-    icon: ShoppingBag,
+    icon: LogIn,
   },
+  // 5. Profile
   {
     kicker: "ফিচার ২",
-    title: "যন্ত্র ভাড়া",
+    title: "প্রোফাইল ও ভাষা",
     bullets: [
-      { icon: Tractor, title: "যন্ত্রের তালিকা", desc: "ট্রাক্টর, ধান কাটার মেশিনসহ সব যন্ত্র ফিল্টার করে দেখুন।" },
-      { icon: User, title: "মালিকের প্রোফাইল", desc: "যন্ত্রের বিস্তারিত ও মালিকের তথ্য দেখে সিদ্ধান্ত নিন।" },
-      { icon: Bell, title: "ভাড়ার অনুরোধ", desc: "এক ক্লিকেই মালিককে নোটিফিকেশন পাঠান।" },
-    ],
-    gradient: "from-amber-500/25 via-yellow-500/20 to-orange-500/10",
-    icon: Tractor,
-  },
-  {
-    kicker: "ফিচার ৩",
-    title: "কৃষি বন্ধু — পরামর্শ ও রোগবালাই",
-    bullets: [
-      { icon: Leaf, title: "রোগবালাই গাইড", desc: "সাধারণ রোগের লক্ষণ ও প্রতিকার লিস্টেড।" },
-      { icon: MessageCircle, title: "প্রশ্ন করুন", desc: "নিজের সমস্যা লিখে বিশেষজ্ঞ পরামর্শ নিন।" },
-      { icon: Sparkles, title: "সরকারি স্কিম", desc: "সর্বশেষ কৃষি সহায়তা ও প্রকল্পের তথ্য।" },
-    ],
-    gradient: "from-green-500/25 via-emerald-500/20 to-lime-500/10",
-    icon: Leaf,
-  },
-  {
-    kicker: "ফিচার ৪",
-    title: "হেল্পলাইন চ্যাটবট ও নোটিফিকেশন",
-    bullets: [
-      { icon: MessageCircle, title: "২৪/৭ সাপোর্ট", desc: "অ্যাপের ভিতরেই সমস্যা জমা দিন।" },
-      { icon: Bell, title: "রিপ্লাই নোটিফিকেশন", desc: "সাপোর্ট টিমের উত্তর সরাসরি নোটিফিকেশনে।" },
-      { icon: ShieldCheck, title: "নিরাপদ প্রোফাইল", desc: "NID ও জমির তথ্য সুরক্ষিতভাবে সংরক্ষণ।" },
+      { icon: User, title: "ব্যক্তিগত তথ্য", desc: "নাম, ফোন, ঠিকানা, NID সংরক্ষণ।" },
+      { icon: MapPin, title: "জমির তথ্য", desc: "জমির পরিমাণ ও অবস্থান যোগ করুন।" },
+      { icon: Languages, title: "দ্বিভাষিক UI", desc: "বাংলা ও English এক ক্লিকে পরিবর্তন।" },
+      { icon: Lock, title: "ডেটা সুরক্ষা", desc: "Row Level Security দিয়ে protected।" },
     ],
     gradient: "from-purple-500/25 via-violet-500/20 to-fuchsia-500/10",
-    icon: MessageCircle,
+    icon: User,
   },
+  // 6. Marketplace - how it works
   {
-    kicker: "কাদের উপকার?",
-    title: "এই অ্যাপ থেকে কে কীভাবে লাভবান হবেন?",
+    kicker: "ফিচার ৩",
+    title: "মার্কেটপ্লেস — কীভাবে কাজ করে",
     bullets: [
-      { icon: Sprout, title: "কৃষক", desc: "ন্যায্য দাম, কম খরচে যন্ত্র, দ্রুত পরামর্শ।" },
-      { icon: ShoppingBag, title: "ক্রেতা/ব্যবসায়ী", desc: "সরাসরি কৃষকের কাছ থেকে তাজা ফসল।" },
-      { icon: Users, title: "যন্ত্র মালিক", desc: "নিজের যন্ত্র ভাড়া দিয়ে অতিরিক্ত আয়।" },
+      { icon: Camera, title: "ফসল লিস্ট করুন", desc: "ছবি, পরিমাণ ও দাম দিয়ে পোস্ট করুন।" },
+      { icon: Search, title: "ক্রেতা খুঁজুন", desc: "ক্যাটাগরি ও এলাকা ভিত্তিক সার্চ।" },
+      { icon: MessageCircle, title: "চ্যাটে দরদাম", desc: "ইন-অ্যাপ চ্যাটে সরাসরি কথা বলুন।" },
+      { icon: Bell, title: "তাৎক্ষণিক নোটিফিকেশন", desc: "নতুন অফার সাথে সাথে জানুন।" },
+    ],
+    gradient: "from-amber-500/25 via-yellow-500/20 to-orange-500/10",
+    icon: ShoppingBag,
+  },
+  // 7. Machine rental
+  {
+    kicker: "ফিচার ৪",
+    title: "যন্ত্র ভাড়া — কীভাবে কাজ করে",
+    bullets: [
+      { icon: Tractor, title: "যন্ত্র ব্রাউজ", desc: "ট্রাক্টর, পাওয়ার টিলার, হারভেস্টার লিস্ট।" },
+      { icon: FileText, title: "বিস্তারিত দেখুন", desc: "ছবি, রেট, মালিকের তথ্য।" },
+      { icon: HeartHandshake, title: "ভাড়ার অনুরোধ", desc: "এক ক্লিকে মালিকের কাছে রিকোয়েস্ট।" },
+      { icon: Bell, title: "কনফার্মেশন", desc: "অনুমোদন হলে নোটিফিকেশন পাবেন।" },
+    ],
+    gradient: "from-orange-500/25 via-amber-500/20 to-yellow-500/10",
+    icon: Tractor,
+  },
+  // 8. Krishi Bondhu (advice)
+  {
+    kicker: "ফিচার ৫",
+    title: "কৃষি বন্ধু — পরামর্শ ও রোগবালাই",
+    bullets: [
+      { icon: Leaf, title: "রোগবালাই গাইড", desc: "ফসল অনুযায়ী লক্ষণ ও প্রতিকার।" },
+      { icon: MessageCircle, title: "প্রশ্ন করুন", desc: "নিজের সমস্যা লিখে বিশেষজ্ঞ পরামর্শ।" },
+      { icon: BookOpen, title: "চাষাবাদ টিপস", desc: "মৌসুম অনুযায়ী গাইডলাইন।" },
+    ],
+    gradient: "from-green-500/25 via-emerald-500/20 to-teal-500/10",
+    icon: Leaf,
+  },
+  // 9. Schemes
+  {
+    kicker: "ফিচার ৬",
+    title: "সরকারি স্কিম ও ভর্তুকি",
+    bullets: [
+      { icon: FileText, title: "স্কিম লিস্ট", desc: "চলমান সরকারি প্রকল্প এক জায়গায়।" },
+      { icon: CheckCircle2, title: "যোগ্যতা চেক", desc: "কে কোন স্কিমে আবেদন করতে পারবেন।" },
+      { icon: Globe, title: "আপডেটেড তথ্য", desc: "নতুন প্রকল্পের তাৎক্ষণিক নোটিফিকেশন।" },
     ],
     gradient: "from-teal-500/25 via-cyan-500/20 to-emerald-500/10",
-    icon: Users,
+    icon: FileText,
   },
+  // 10. Helpline
+  {
+    kicker: "ফিচার ৭",
+    title: "হেল্পলাইন চ্যাটবট",
+    bullets: [
+      { icon: MessageCircle, title: "চ্যাটবট সাপোর্ট", desc: "নাম, ফোন, লোকেশন ও সমস্যা জমা দিন।" },
+      { icon: Phone, title: "২৪/৭ অ্যাকসেস", desc: "যেকোনো সময় সমস্যা পাঠান।" },
+      { icon: Bell, title: "রিপ্লাই নোটিফিকেশন", desc: "Admin উত্তর দিলে সঙ্গে সঙ্গে notification।" },
+    ],
+    gradient: "from-pink-500/25 via-rose-500/20 to-red-500/10",
+    icon: MessageCircle,
+  },
+  // 11. Notifications
+  {
+    kicker: "ফিচার ৮",
+    title: "নোটিফিকেশন সিস্টেম",
+    bullets: [
+      { icon: Bell, title: "রিয়েল-টাইম", desc: "অর্ডার, মেসেজ ও রিপ্লাই সঙ্গে সঙ্গে।" },
+      { icon: ShoppingBag, title: "মার্কেট আপডেট", desc: "ক্রেতার আগ্রহ ও মেসেজ।" },
+      { icon: Tractor, title: "যন্ত্র বুকিং", desc: "ভাড়ার অনুরোধ ও কনফার্মেশন।" },
+    ],
+    gradient: "from-indigo-500/25 via-blue-500/20 to-sky-500/10",
+    icon: Bell,
+  },
+  // 12. Who benefits
+  {
+    kicker: "কাদের উপকার?",
+    title: "কে কীভাবে লাভবান হবেন?",
+    bullets: [
+      { icon: Sprout, title: "কৃষক", desc: "ন্যায্য দাম, সহজ যন্ত্র, দ্রুত পরামর্শ।" },
+      { icon: ShoppingBag, title: "ক্রেতা / ব্যবসায়ী", desc: "সরাসরি কৃষকের কাছ থেকে তাজা পণ্য।" },
+      { icon: Users, title: "যন্ত্র মালিক", desc: "অলস যন্ত্র ভাড়া দিয়ে অতিরিক্ত আয়।" },
+      { icon: TrendingUp, title: "অর্থনীতি", desc: "গ্রামীণ অর্থনীতিতে ডিজিটাল রূপান্তর।" },
+    ],
+    gradient: "from-emerald-500/25 via-teal-500/20 to-cyan-500/10",
+    icon: HeartHandshake,
+  },
+  // 13. Tech stack - Frontend
+  {
+    kicker: "টেকনোলজি ১",
+    title: "Frontend Technologies",
+    bullets: [
+      { icon: Code2, title: "React 19 + TypeScript", desc: "Type-safe, modern UI framework।" },
+      { icon: Zap, title: "TanStack Start + Vite 7", desc: "SSR/SSG, file-based routing।" },
+      { icon: Sparkles, title: "Tailwind CSS v4", desc: "Utility-first styling ও design tokens।" },
+      { icon: Package, title: "shadcn/ui + Lucide", desc: "Accessible UI components ও icons।" },
+    ],
+    gradient: "from-sky-500/25 via-blue-500/20 to-indigo-500/10",
+    icon: Code2,
+  },
+  // 14. Tech stack - Backend
+  {
+    kicker: "টেকনোলজি ২",
+    title: "Backend & Database",
+    bullets: [
+      { icon: Database, title: "Lovable Cloud (Supabase)", desc: "PostgreSQL database ও auth।" },
+      { icon: Lock, title: "Row Level Security", desc: "প্রতিটি row-এ permission নিয়ন্ত্রণ।" },
+      { icon: Server, title: "Server Functions", desc: "TanStack createServerFn দিয়ে API।" },
+      { icon: Cloud, title: "Edge Functions", desc: "Webhook ও public API endpoint।" },
+    ],
+    gradient: "from-purple-500/25 via-violet-500/20 to-indigo-500/10",
+    icon: Database,
+  },
+  // 15. Tech stack - Integrations
+  {
+    kicker: "টেকনোলজি ৩",
+    title: "Integrations & Tools",
+    bullets: [
+      { icon: LogIn, title: "Google OAuth", desc: "Social login integration।" },
+      { icon: Bell, title: "Realtime Subscriptions", desc: "Supabase Realtime দিয়ে live update।" },
+      { icon: Camera, title: "Storage Buckets", desc: "ছবি ও ফাইল আপলোড।" },
+      { icon: GitBranch, title: "Git Version Control", desc: "Lovable platform-এ auto-sync।" },
+    ],
+    gradient: "from-teal-500/25 via-emerald-500/20 to-green-500/10",
+    icon: Cpu,
+  },
+  // 16. Architecture
+  {
+    kicker: "আর্কিটেকচার",
+    title: "অ্যাপ কীভাবে কাজ করে",
+    bullets: [
+      { icon: Smartphone, title: "Client (Browser)", desc: "React UI, routing, state management।" },
+      { icon: Server, title: "Server Functions", desc: "Business logic, validation, auth check।" },
+      { icon: Database, title: "PostgreSQL DB", desc: "User, listings, machines, messages store।" },
+      { icon: Bell, title: "Realtime Channel", desc: "Live notifications push করে।" },
+    ],
+    gradient: "from-fuchsia-500/25 via-purple-500/20 to-violet-500/10",
+    icon: Wrench,
+  },
+  // 17. Security
+  {
+    kicker: "নিরাপত্তা",
+    title: "Security ও Data Protection",
+    bullets: [
+      { icon: Lock, title: "RLS Policies", desc: "প্রতিটি table-এ access control।" },
+      { icon: ShieldCheck, title: "Auth Middleware", desc: "Protected route ও server function।" },
+      { icon: Users, title: "User Roles Table", desc: "Admin, farmer, buyer আলাদা role।" },
+      { icon: Lock, title: "HTTPS Encryption", desc: "সব ডেটা এনক্রিপটেড transfer।" },
+    ],
+    gradient: "from-red-500/25 via-rose-500/20 to-pink-500/10",
+    icon: ShieldCheck,
+  },
+  // 18. Going live - steps
+  {
+    kicker: "লাইভ করার ধাপ",
+    title: "অ্যাপ লাইভ করতে যা যা দরকার",
+    bullets: [
+      { icon: CheckCircle2, title: "১. Testing", desc: "সব ফিচার লোকাল ও preview-এ পরীক্ষা।" },
+      { icon: ShieldCheck, title: "২. Security Audit", desc: "RLS policy ও secret key check।" },
+      { icon: FileText, title: "৩. Content & SEO", desc: "Title, meta description, favicon।" },
+      { icon: Rocket, title: "৪. Publish", desc: "Lovable Publish button → live URL।" },
+    ],
+    gradient: "from-orange-500/25 via-amber-500/20 to-yellow-500/10",
+    icon: Rocket,
+  },
+  // 19. Going live - infra
+  {
+    kicker: "ইনফ্রাস্ট্রাকচার",
+    title: "Production-এ যা যা দরকার",
+    bullets: [
+      { icon: Globe, title: "Custom Domain", desc: "নিজস্ব ডোমেইন কিনে DNS configure।" },
+      { icon: Database, title: "Database Backup", desc: "Daily auto-backup চালু রাখুন।" },
+      { icon: CreditCard, title: "Payment Gateway", desc: "bKash / Nagad / Stripe integration।" },
+      { icon: Phone, title: "SMS / Email Service", desc: "OTP ও নোটিফিকেশনের জন্য।" },
+    ],
+    gradient: "from-blue-500/25 via-sky-500/20 to-cyan-500/10",
+    icon: Cloud,
+  },
+  // 20. Future roadmap
+  {
+    kicker: "ভবিষ্যৎ পরিকল্পনা",
+    title: "Roadmap — পরবর্তী ফিচার",
+    bullets: [
+      { icon: Smartphone, title: "Mobile App", desc: "Android ও iOS native app।" },
+      { icon: Sparkles, title: "AI পরামর্শ", desc: "ছবি দেখে রোগ নির্ণয়।" },
+      { icon: CreditCard, title: "ডিজিটাল পেমেন্ট", desc: "ইন-অ্যাপ লেনদেন।" },
+      { icon: TrendingUp, title: "মার্কেট অ্যানালিটিক্স", desc: "দামের পূর্বাভাস ও trend।" },
+    ],
+    gradient: "from-violet-500/25 via-fuchsia-500/20 to-pink-500/10",
+    icon: TrendingUp,
+  },
+  // 21. CTA
   {
     kicker: "শুরু করুন",
     title: "আজই কৃষি বন্ধু-এর সাথে যুক্ত হন",
@@ -103,7 +286,7 @@ const slides: Slide[] = [
   },
 ];
 
-const AUTOPLAY_MS = 6000;
+const AUTOPLAY_MS = 7000;
 
 function PresentationPage() {
   const [i, setI] = useState(0);
@@ -140,7 +323,6 @@ function PresentationPage() {
         style={{ background: "radial-gradient(50% 40% at 50% 0%, var(--primary-glow) 0%, transparent 70%)" }}
       />
 
-      {/* progress bar */}
       <div className="fixed left-0 right-0 top-0 z-30 h-1 bg-border/40">
         <div
           className="h-full bg-primary transition-all duration-300"
@@ -194,12 +376,12 @@ function PresentationPage() {
           )}
 
           {s.bullets && (
-            <div className="mt-7 grid gap-3 sm:grid-cols-1">
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {s.bullets.map((b, idx) => (
                 <div
                   key={idx}
                   className="flex items-start gap-3 rounded-2xl border border-border bg-background/70 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]"
-                  style={{ animation: `fade-in 0.4s ease-out ${idx * 100}ms backwards` }}
+                  style={{ animation: `fade-in 0.4s ease-out ${idx * 90}ms backwards` }}
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <b.icon className="h-5 w-5" />
@@ -234,12 +416,12 @@ function PresentationPage() {
             <ChevronLeft className="h-4 w-4" /> পূর্ববর্তী
           </button>
 
-          <div className="flex flex-1 items-center justify-center gap-1.5">
+          <div className="flex flex-1 items-center justify-center gap-1 overflow-x-auto px-2">
             {slides.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => { setPlaying(false); setI(idx); }}
-                className={`h-1.5 rounded-full transition-all ${idx === i ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground"}`}
+                className={`h-1.5 shrink-0 rounded-full transition-all ${idx === i ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground"}`}
                 aria-label={`Slide ${idx + 1}`}
               />
             ))}
