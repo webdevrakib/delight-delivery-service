@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
-import { Tractor, MapPin, Phone, Calendar } from "lucide-react";
+import { Tractor, MapPin, Phone, Calendar, Bell, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -85,9 +85,17 @@ function Detail() {
 
       {m.description && <p className={`rounded-2xl border border-border bg-card p-4 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{m.description}</p>}
 
-      <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-4 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
-        <Phone className="h-4 w-4" /> {t("contactOwner")} — {m.contact_phone}
-      </a>
+      <div className="grid grid-cols-2 gap-2">
+        <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-3 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
+          <Phone className="h-4 w-4" /> {t("contactOwner")}
+        </a>
+        <a href={`https://wa.me/${(m.contact_phone || "").replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-2 rounded-2xl border border-[color:var(--saffron)]/40 bg-[color:var(--saffron)]/10 px-3 py-3 text-sm font-bold text-[color:var(--saffron-foreground)] ${lang === "bn" ? "font-bangla" : ""}`}>
+          <MessageCircle className="h-4 w-4" /> WhatsApp
+        </a>
+      </div>
+
+      <NotifyOwnerButton recipientId={m.owner_id} machineTitle={m.title} />
+
 
 
       <form onSubmit={book} className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
@@ -110,3 +118,54 @@ function Detail() {
     </div>
   );
 }
+
+function NotifyOwnerButton({ recipientId, machineTitle }: { recipientId: string; machineTitle: string }) {
+  const { lang } = useLang();
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  async function send() {
+    setSending(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) throw new Error("Not signed in");
+      if (u.user.id === recipientId) {
+        toast.error(lang === "bn" ? "আপনি নিজেকে নোটিফিকেশন পাঠাতে পারবেন না" : "Cannot notify yourself");
+        return;
+      }
+      const { data: prof } = await supabase.from("profiles").select("full_name, phone").eq("id", u.user.id).maybeSingle();
+      const senderName = prof?.full_name || (u.user.email ?? (lang === "bn" ? "একজন ভাড়াটিয়া" : "A renter"));
+      const message = lang === "bn"
+        ? `${senderName} আপনার "${machineTitle}" যন্ত্রটি ভাড়া নিতে চাচ্ছেন। আপনি তাঁর সাথে যোগাযোগ করতে পারেন।`
+        : `${senderName} wants to rent your "${machineTitle}". You can contact them.`;
+      const { error } = await supabase.from("notifications" as any).insert({
+        sender_id: u.user.id,
+        recipient_id: recipientId,
+        listing_id: null,
+        listing_crop: machineTitle,
+        sender_name: senderName,
+        sender_phone: prof?.phone ?? null,
+        message,
+      });
+      if (error) throw error;
+      setSent(true);
+      toast.success(lang === "bn" ? "মালিককে নোটিফিকেশন পাঠানো হয়েছে" : "Notification sent to owner");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <button onClick={send} disabled={sending || sent} className={`flex w-full items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-3 py-3 text-sm font-bold text-primary disabled:opacity-60 ${lang === "bn" ? "font-bangla" : ""}`}>
+      <Bell className="h-4 w-4" />
+      {sent
+        ? (lang === "bn" ? "পাঠানো হয়েছে ✓" : "Sent ✓")
+        : sending
+          ? (lang === "bn" ? "পাঠানো হচ্ছে..." : "Sending...")
+          : (lang === "bn" ? "মালিককে নোটিফিকেশন পাঠান" : "Notify owner")}
+    </button>
+  );
+}
+
