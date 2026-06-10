@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
-import { Newspaper, CloudSun, Bug, HelpCircle } from "lucide-react";
+import { Newspaper, CloudSun, Bug, HelpCircle, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/krishi-bondhu")({
   component: () => <AppShell><Suspense fallback={null}><Page /></Suspense></AppShell>,
 });
 
-type Tab = "tips" | "weather" | "disease";
+type Tab = "tips" | "weather" | "disease" | "advice";
 
 function Page() {
   const { t, lang } = useLang();
@@ -37,17 +37,18 @@ function Page() {
     <div className="space-y-5">
       <div>
         <h1 className={`text-2xl font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("krishiBondhu")}</h1>
-        <p className={`text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>কৃষি তথ্য, আবহাওয়া ও রোগবালাই পরামর্শ</p>
+        <p className={`text-sm text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>কৃষি তথ্য, আবহাওয়া, রোগবালাই ও পরামর্শ</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-1 rounded-2xl border border-border bg-card p-1">
+      <div className="grid grid-cols-4 gap-1 rounded-2xl border border-border bg-card p-1">
         {([
           ["tips", t("tipsTab"), Newspaper],
           ["weather", t("weatherTab"), CloudSun],
           ["disease", t("diseaseTab"), Bug],
+          ["advice", lang === "bn" ? "পরামর্শ" : "Advice", Lightbulb],
         ] as [Tab, string, any][]).map(([k, label, Icon]) => (
           <button key={k} onClick={() => setTab(k)}
-            className={`flex items-center justify-center gap-1 rounded-xl px-2 py-2 text-xs font-bold transition ${tab === k ? "bg-primary text-primary-foreground" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+            className={`flex flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-2 text-[11px] font-bold transition ${tab === k ? "bg-primary text-primary-foreground" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
             <Icon className="h-3.5 w-3.5" /> {label}
           </button>
         ))}
@@ -56,6 +57,37 @@ function Page() {
       {tab === "tips" && <TipsList tips={data.tips} />}
       {tab === "weather" && <WeatherPanel />}
       {tab === "disease" && <DiseasePanel questions={data.questions} />}
+      {tab === "advice" && <AdvicePanel />}
+    </div>
+  );
+}
+
+function AdvicePanel() {
+  const { lang } = useLang();
+  const tips = [
+    { t: "বীজ নির্বাচন ও শোধন", d: "উচ্চ ফলনশীল ও রোগমুক্ত বীজ বাছাই করুন। বপনের আগে ভিটাভ্যাক্স-২০০ (২.৫ গ্রাম/কেজি বীজ) দিয়ে শোধন করুন।" },
+    { t: "বীজ বপনের সঠিক সময়", d: "মৌসুম অনুযায়ী বপন করুন—আমন: জুন-জুলাই, বোরো: নভেম্বর-ডিসেম্বর। সারি থেকে সারি ২০ সেমি, চারা থেকে চারা ১৫ সেমি দূরত্ব রাখুন।" },
+    { t: "জমি প্রস্তুত ও সার প্রয়োগ", d: "৩-৪ বার চাষ ও মই দিয়ে জমি সমান করুন। শেষ চাষের সময় জৈব সার (৫ টন/হেক্টর) এবং TSP-MoP মিশিয়ে দিন। ইউরিয়া ৩ কিস্তিতে উপরিপ্রয়োগ করুন।" },
+    { t: "চারা পরিচর্যা", d: "চারা রোপণের ৭-১০ দিন পর্যন্ত ২-৩ সেমি পানি ধরে রাখুন। মরা চারা পুনঃরোপণ করুন। নিয়মিত আগাছা পরিষ্কার রাখুন।" },
+    { t: "সেচ ব্যবস্থাপনা", d: "কাইচ থোড় ও ফুল আসার সময় পানির ঘাটতি হতে দেবেন না। ধান পাকার ১০-১৫ দিন আগে সেচ বন্ধ করুন।" },
+    { t: "সুষম সার ব্যবহার", d: "মাটি পরীক্ষার ভিত্তিতে সার দিন। অতিরিক্ত ইউরিয়া রোগবালাই ডেকে আনে। দস্তা ও সালফার ঘাটতি থাকলে আলাদা প্রয়োগ করুন।" },
+    { t: "রোগের লক্ষণ চিনুন", d: "পাতায় দাগ দেখলে—গোলাকার বাদামি দাগ = ব্লাস্ট, হলুদ কিনারা = ব্যাকটেরিয়াল ব্লাইট, কমলা গুঁড়া = মরিচা রোগ। সাথে সাথে কৃষি কর্মকর্তার সাথে যোগাযোগ করুন।" },
+    { t: "পোকামাকড় নিয়ন্ত্রণ", d: "মাজরা পোকার জন্য আলোর ফাঁদ ও ফেরোমন ফাঁদ ব্যবহার করুন। বাদামি গাছফড়িং দেখলে জমির পানি সরিয়ে দিন। সর্বশেষে ইমিডাক্লোপ্রিড স্প্রে করুন।" },
+    { t: "জৈব পদ্ধতিতে রোগ প্রতিরোধ", d: "নিম পাতার নির্যাস (১ কেজি পাতা ১০ লিটার পানিতে) স্প্রে করলে অনেক পোকা দমন হয়। ফসল চক্র অনুসরণ করুন—একই জমিতে বারবার একই ফসল নয়।" },
+    { t: "ফসল কাটা ও সংরক্ষণ", d: "৮০-৮৫% দানা পাকলে কাটুন। ভালোভাবে শুকিয়ে (১২-১৪% আর্দ্রতা) সংরক্ষণ করুন। গুদামে নিম পাতা রাখলে পোকা কম হয়।" },
+  ];
+  return (
+    <div className="space-y-2">
+      {tips.map((tip, i) => (
+        <details key={i} className="group rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]">
+          <summary className={`flex cursor-pointer items-start gap-3 p-4 ${lang === "bn" ? "font-bangla" : ""}`}>
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{i + 1}</div>
+            <div className="min-w-0 flex-1 text-sm font-bold text-foreground">{tip.t}</div>
+            <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--saffron)]" />
+          </summary>
+          <p className={`border-t border-border px-4 py-3 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{tip.d}</p>
+        </details>
+      ))}
     </div>
   );
 }
