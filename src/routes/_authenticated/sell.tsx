@@ -171,8 +171,12 @@ function BuyMode() {
                     <h3 className="truncate text-base font-bold text-foreground">{l.crop}</h3>
                     <span className="shrink-0 text-sm font-bold text-primary">৳{l.price_per_unit}/{l.unit}</span>
                   </div>
-                  <div className={`mt-0.5 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-                    {l.quantity} {l.unit} · {l.seller?.full_name ?? (lang === "bn" ? "কৃষক" : "Farmer")}
+                  <div className={`mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                    <span>{l.quantity} {l.unit}</span>·
+                    <span className="truncate">{l.seller_type === "company" ? (l.company_name || (lang === "bn" ? "প্রতিষ্ঠান" : "Company")) : (l.seller?.full_name ?? (lang === "bn" ? "কৃষক" : "Farmer"))}</span>
+                    <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold ${l.seller_type === "company" ? "bg-[color:var(--saffron)]/15 text-[color:var(--saffron-foreground)]" : "bg-primary/10 text-primary"}`}>
+                      {l.seller_type === "company" ? (lang === "bn" ? "প্রতিষ্ঠান" : "Co.") : (lang === "bn" ? "কৃষক" : "Farmer")}
+                    </span>
                   </div>
                   {l.seller?.district && (
                     <div className={`mt-1 inline-flex items-center gap-1 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
@@ -222,24 +226,35 @@ function BuyMode() {
 function AddListingModal({ onClose }: { onClose: () => void }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", description: "" });
+  const [form, setForm] = useState({ seller_type: "farmer" as "farmer" | "company", company_name: "", crop: "ধান", quantity: "", unit: "kg", price_per_unit: "", area: "", contact_phone: "", description: "" });
   const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!form.contact_phone.trim()) {
+      toast.error(lang === "bn" ? "যোগাযোগের ফোন নম্বর দিন" : "Please add a contact phone");
+      return;
+    }
+    if (form.seller_type === "company" && !form.company_name.trim()) {
+      toast.error(lang === "bn" ? "প্রতিষ্ঠানের নাম দিন" : "Please add a company name");
+      return;
+    }
     setSaving(true);
     try {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) throw new Error("Not signed in");
       const { error } = await supabase.from("farmer_crop_listings").insert({
         farmer_id: u.user.id,
+        seller_type: form.seller_type,
+        company_name: form.seller_type === "company" ? form.company_name.trim() : null,
         crop: form.crop.trim(),
         quantity: Number(form.quantity),
         unit: form.unit,
         price_per_unit: Number(form.price_per_unit),
         area: form.area.trim() || null,
+        contact_phone: form.contact_phone.trim(),
         description: form.description.trim() || null,
-      });
+      } as any);
       if (error) throw error;
       toast.success(t("listingAdded"));
       await qc.invalidateQueries({ queryKey: ["sell-data"] });
@@ -262,6 +277,20 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
           <button type="button" onClick={onClose} className="rounded-full p-1 hover:bg-muted"><X className="h-5 w-5" /></button>
         </div>
         <div className="space-y-3">
+          <Field label={lang === "bn" ? "আপনি কে?" : "You are"}>
+            <div className="grid grid-cols-2 gap-2">
+              {(["farmer", "company"] as const).map((s) => (
+                <button key={s} type="button" onClick={() => setForm({ ...form, seller_type: s })} className={`rounded-lg border px-3 py-2 text-sm font-bold transition ${form.seller_type === s ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+                  {s === "farmer" ? (lang === "bn" ? "কৃষক" : "Farmer") : (lang === "bn" ? "প্রতিষ্ঠান" : "Company")}
+                </button>
+              ))}
+            </div>
+          </Field>
+          {form.seller_type === "company" && (
+            <Field label={lang === "bn" ? "প্রতিষ্ঠানের নাম" : "Company name"}>
+              <input required className="ip" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} maxLength={120} />
+            </Field>
+          )}
           <Field label={t("crop")}>
             <select className="ip" value={form.crop} onChange={(e) => setForm({ ...form, crop: e.target.value })}>
               {CROPS.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -286,6 +315,9 @@ function AddListingModal({ onClose }: { onClose: () => void }) {
           </Field>
           <Field label={t("description")}>
             <textarea className="ip" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={300} rows={2} />
+          </Field>
+          <Field label={lang === "bn" ? "যোগাযোগের ফোন নম্বর" : "Contact phone"}>
+            <input required type="tel" className="ip" value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} maxLength={20} placeholder="01XXXXXXXXX" />
           </Field>
         </div>
         <button type="submit" disabled={saving} className={`mt-4 w-full rounded-xl bg-[image:var(--gradient-hero)] px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-60 ${lang === "bn" ? "font-bangla" : ""}`}>
