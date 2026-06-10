@@ -315,13 +315,6 @@ function PresentationPage() {
             <Languages className="h-3.5 w-3.5" />
             {lang === "bn" ? "বাংলা" : "English"}
           </button>
-          <button
-            onClick={() => setPlaying((p) => !p)}
-            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold hover:bg-muted"
-          >
-            {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-            {playing ? (lang === "bn" ? "থামান" : "Pause") : (lang === "bn" ? "চালান" : "Play")}
-          </button>
           <Link
             to="/auth"
             className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-bold hover:bg-muted"
