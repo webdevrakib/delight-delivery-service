@@ -3,6 +3,7 @@ import { Home, Tractor, ShoppingBag, Leaf, User, ArrowLeft, Sprout } from "lucid
 import { useLang, type dict as Dict } from "@/lib/i18n";
 import { LangToggle } from "./LangToggle";
 import { NotificationBell } from "./NotificationBell";
+import { HelplineChatbot } from "./HelplineChatbot";
 import type { ReactNode } from "react";
 
 type NavKey = keyof typeof Dict;
