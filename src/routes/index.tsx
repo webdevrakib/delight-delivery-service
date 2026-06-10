@@ -3,6 +3,7 @@ import {
   Sprout, ArrowRight, ShieldCheck, TrendingUp, Newspaper,
   AlertTriangle, Users, MapPin, Wheat, Lightbulb,
   CheckCircle2, UserPlus, Settings2, HandHeart, Languages, PlayCircle,
+  Bell, BarChart3,
 } from "lucide-react";
 import heroImg from "@/assets/hero-farmer.jpg";
 import { useLang, dict } from "@/lib/i18n";
