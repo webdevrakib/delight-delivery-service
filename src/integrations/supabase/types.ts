@@ -22,6 +22,7 @@ export type Database = {
           crops_buying: string[]
           district: string
           id: string
+          logo_url: string | null
           name_bn: string
           name_en: string
           offered_price_note: string | null
@@ -36,6 +37,7 @@ export type Database = {
           crops_buying?: string[]
           district: string
           id?: string
+          logo_url?: string | null
           name_bn: string
           name_en: string
           offered_price_note?: string | null
@@ -50,6 +52,7 @@ export type Database = {
           crops_buying?: string[]
           district?: string
           id?: string
+          logo_url?: string | null
           name_bn?: string
           name_en?: string
           offered_price_note?: string | null
@@ -66,6 +69,7 @@ export type Database = {
           crop: string
           farmer_id: string
           id: string
+          listing_id: string | null
           notes: string | null
           price_per_kg: number
           quantity_kg: number
@@ -77,6 +81,7 @@ export type Database = {
           crop: string
           farmer_id: string
           id?: string
+          listing_id?: string | null
           notes?: string | null
           price_per_kg: number
           quantity_kg: number
@@ -88,6 +93,7 @@ export type Database = {
           crop?: string
           farmer_id?: string
           id?: string
+          listing_id?: string | null
           notes?: string | null
           price_per_kg?: number
           quantity_kg?: number
@@ -99,6 +105,13 @@ export type Database = {
             columns: ["buyer_id"]
             isOneToOne: false
             referencedRelation: "buyers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crop_sales_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "farmer_crop_listings"
             referencedColumns: ["id"]
           },
         ]
@@ -130,6 +143,51 @@ export type Database = {
           farmer_id?: string
           id?: string
           question?: string
+        }
+        Relationships: []
+      }
+      farmer_crop_listings: {
+        Row: {
+          area: string | null
+          created_at: string
+          crop: string
+          description: string | null
+          farmer_id: string
+          id: string
+          image_url: string | null
+          price_per_unit: number
+          quantity: number
+          status: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          area?: string | null
+          created_at?: string
+          crop: string
+          description?: string | null
+          farmer_id: string
+          id?: string
+          image_url?: string | null
+          price_per_unit: number
+          quantity: number
+          status?: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          area?: string | null
+          created_at?: string
+          crop?: string
+          description?: string | null
+          farmer_id?: string
+          id?: string
+          image_url?: string | null
+          price_per_unit?: number
+          quantity?: number
+          status?: string
+          unit?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -177,6 +235,7 @@ export type Database = {
       machines: {
         Row: {
           available: boolean
+          available_from: string | null
           contact_phone: string
           created_at: string
           description: string | null
@@ -185,6 +244,8 @@ export type Database = {
           image_url: string | null
           machine_type: string
           owner_id: string
+          price_per_day: number | null
+          price_per_hour: number | null
           rate_per_day: number
           title: string
           upazila: string | null
@@ -192,6 +253,7 @@ export type Database = {
         }
         Insert: {
           available?: boolean
+          available_from?: string | null
           contact_phone: string
           created_at?: string
           description?: string | null
@@ -200,6 +262,8 @@ export type Database = {
           image_url?: string | null
           machine_type: string
           owner_id: string
+          price_per_day?: number | null
+          price_per_hour?: number | null
           rate_per_day: number
           title: string
           upazila?: string | null
@@ -207,6 +271,7 @@ export type Database = {
         }
         Update: {
           available?: boolean
+          available_from?: string | null
           contact_phone?: string
           created_at?: string
           description?: string | null
@@ -215,6 +280,8 @@ export type Database = {
           image_url?: string | null
           machine_type?: string
           owner_id?: string
+          price_per_day?: number | null
+          price_per_hour?: number | null
           rate_per_day?: number
           title?: string
           upazila?: string | null
