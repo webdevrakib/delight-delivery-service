@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sprout, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
+import { Sprout, Mail, Lock, User as UserIcon, Loader2, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
