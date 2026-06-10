@@ -477,7 +477,7 @@ function PresentationPage() {
             disabled={i === total - 1}
             className="flex items-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground disabled:opacity-40"
           >
-            পরবর্তী / Next <ChevronRight className="h-4 w-4" />
+            {lang === "bn" ? "পরবর্তী" : "Next"} <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </footer>
