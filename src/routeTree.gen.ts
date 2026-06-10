@@ -22,6 +22,7 @@ import { Route as AuthenticatedKrishiBondhuRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSellBuyerIdRouteImport } from './routes/_authenticated/sell.$buyerId'
 import { Route as AuthenticatedMachinesIdRouteImport } from './routes/_authenticated/machines.$id'
+import { Route as AuthenticatedSellListingListingIdRouteImport } from './routes/_authenticated/sell.listing.$listingId'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -89,6 +90,12 @@ const AuthenticatedMachinesIdRoute = AuthenticatedMachinesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedMachinesRoute,
 } as any)
+const AuthenticatedSellListingListingIdRoute =
+  AuthenticatedSellListingListingIdRouteImport.update({
+    id: '/listing/$listingId',
+    path: '/listing/$listingId',
+    getParentRoute: () => AuthenticatedSellRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/sell': typeof AuthenticatedSellRouteWithChildren
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/sell': typeof AuthenticatedSellRouteWithChildren
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/sell': typeof AuthenticatedSellRouteWithChildren
   '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/_authenticated/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
+  '/_authenticated/sell/listing/$listingId': typeof AuthenticatedSellListingListingIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/sell'
     | '/machines/$id'
     | '/sell/$buyerId'
+    | '/sell/listing/$listingId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/sell'
     | '/machines/$id'
     | '/sell/$buyerId'
+    | '/sell/listing/$listingId'
   id:
     | '__root__'
     | '/'
@@ -178,6 +190,7 @@ export interface FileRouteTypes {
     | '/_authenticated/sell'
     | '/_authenticated/machines/$id'
     | '/_authenticated/sell/$buyerId'
+    | '/_authenticated/sell/listing/$listingId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMachinesIdRouteImport
       parentRoute: typeof AuthenticatedMachinesRoute
     }
+    '/_authenticated/sell/listing/$listingId': {
+      id: '/_authenticated/sell/listing/$listingId'
+      path: '/listing/$listingId'
+      fullPath: '/sell/listing/$listingId'
+      preLoaderRoute: typeof AuthenticatedSellListingListingIdRouteImport
+      parentRoute: typeof AuthenticatedSellRoute
+    }
   }
 }
 
@@ -298,10 +318,13 @@ const AuthenticatedMachinesRouteWithChildren =
 
 interface AuthenticatedSellRouteChildren {
   AuthenticatedSellBuyerIdRoute: typeof AuthenticatedSellBuyerIdRoute
+  AuthenticatedSellListingListingIdRoute: typeof AuthenticatedSellListingListingIdRoute
 }
 
 const AuthenticatedSellRouteChildren: AuthenticatedSellRouteChildren = {
   AuthenticatedSellBuyerIdRoute: AuthenticatedSellBuyerIdRoute,
+  AuthenticatedSellListingListingIdRoute:
+    AuthenticatedSellListingListingIdRoute,
 }
 
 const AuthenticatedSellRouteWithChildren =
@@ -339,3 +362,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
