@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { LogOut, User, Loader2, Camera, History, ShoppingBag } from "lucide-react";
+import { LogOut, User, Loader2, Camera, History, ShoppingBag, Sprout } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,12 +13,14 @@ const profileQuery = queryOptions({
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) throw new Error("No user");
     const uid = userData.user.id;
-    const [profileRes, bookingsRes, salesRes] = await Promise.all([
+    const [profileRes, bookingsRes, salesRes, listingsRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", uid).maybeSingle(),
       supabase.from("machine_bookings").select("*, machines(title)").eq("farmer_id", uid).order("created_at", { ascending: false }).limit(10),
       supabase.from("crop_sales").select("*").eq("farmer_id", uid).order("sale_date", { ascending: false }).limit(20),
+      supabase.from("farmer_crop_listings").select("*").eq("farmer_id", uid).eq("status", "active").order("created_at", { ascending: false }),
     ]);
-    return { user: userData.user, profile: profileRes.data, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [] };
+    return { user: userData.user, profile: profileRes.data, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [], listings: listingsRes.data ?? [] };
+
   },
 });
 
@@ -189,6 +191,24 @@ function ProfilePage() {
         </button>
       </form>
 
+      {/* My active crop listings */}
+      <section>
+        <h3 className={`mb-2 flex items-center gap-2 text-sm font-bold ${lang === "bn" ? "font-bangla" : ""}`}><Sprout className="h-4 w-4 text-primary" />{t("myActiveListings")}</h3>
+        {data.listings.length === 0 ? <Empty msg={t("noListingsYet")} /> : (
+          <div className="space-y-2">
+            {data.listings.map((l: any) => (
+              <div key={l.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-3">
+                <div className="min-w-0">
+                  <div className={`truncate text-sm font-semibold ${lang === "bn" ? "font-bangla" : ""}`}>{l.crop} · {l.quantity} {l.unit}</div>
+                  <div className={`text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>৳{l.price_per_unit}/{l.unit}{l.area ? ` · ${l.area}` : ""}</div>
+                </div>
+                <div className="text-sm font-extrabold text-primary">৳{(Number(l.quantity) * Number(l.price_per_unit)).toFixed(0)}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* Booking history */}
       <section>
         <h3 className={`mb-2 flex items-center gap-2 text-sm font-bold ${lang === "bn" ? "font-bangla" : ""}`}><History className="h-4 w-4 text-primary" />{t("bookingHistory")}</h3>
@@ -206,6 +226,7 @@ function ProfilePage() {
           </div>
         )}
       </section>
+
 
       {/* Sales history */}
       <section>

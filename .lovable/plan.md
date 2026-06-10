@@ -1,81 +1,71 @@
-## App কাঠামো (Bangladesh-focused)
+# Plan: হোম clock, বাজারদর expand, ফসল বিক্রি/ক্রয়, যন্ত্র যোগ/ভাড়া
 
-ছবি দুটো analyze করে নিচের plan তৈরি করেছি। পুরো app বাংলাদেশকে target করে বানাবো (ধান, পাট, ইত্যাদি; জেলা — ঢাকা, রংপুর, বগুড়া etc; দাম BDT ৳-এ)।
+## 1. হোম পেজ (Home)
 
-### Bottom Navigation — ৫টা Tab
+**লাইভ ঘড়ি** — আবহাওয়ার ৩১° কার্ডের উপরে বাংলাদেশ time (Asia/Dhaka) লাইভ চলবে — তারিখ + ঘন্টা:মিনিট:সেকেন্ড, প্রতি সেকেন্ডে update.
+
+**আজকের বাজারদর** — উপরে শুধু top ৩-৪টি (ধান summary সহ). পাশে arrow button — click করলে `/market` route এ যাবে, যেখানে সব ধানের (আমন, বোরো, ইরি, ব্রি-২৮ ইত্যাদি) পূর্ণ list দেখাবে, district filter সহ।
+
+## 2. ফসল বিক্রি Tab (`/sell`)
+
+উপরে দুটি বড় button:
 
 ```text
-[হোম] [যন্ত্র Booking] [ফসল বিক্রি] [কৃষি বন্ধু] [প্রোফাইল]
+[ ফসল বিক্রি করুন ]   [ ফসল ক্রয় করুন ]
 ```
 
-### ১) হোম পেজ
-- আজকের বাজার দর (top 4-5 ফসল preview)
-- আবহাওয়ার তথ্য (আজকের weather card)
-- জরুরি নোটিশ (banner)
-- **দ্রুত অ্যাক্সেস** grid: সরকারি যোজনা · কৃষি পরামর্শ · বাজার দর · যন্ত্র Booking · ফসল বিক্রি
+### ফসল বিক্রি করুন (নতুন — কৃষক নিজে listing দিবে)
+- "+ ফসল যোগ করুন" button → form: ফসল (ধান/পাট/আলু/গম/ভুট্টা/সবজি), পরিমাণ (কেজি/মণ), দাম, এলাকা, বিবরণ, ছবি
+- কৃষকের নিজের active listings এই পেজে কার্ড আকারে দেখাবে — edit/delete/বিক্রিত mark করার option
+- বিক্রিত হলে sales history তে চলে যাবে
 
-### ২) যন্ত্র Booking (নতুন)
-- ক্যাটাগরি: ধান কাটার মেশিন, মাড়াই যন্ত্র, ট্রাক্টর, পাওয়ার টিলার
-- প্রতিটার জন্য listing → owner, এলাকা, ভাড়া/দিন, available date
-- "Booking দিন" → তারিখ select → confirmation
-- কৃষক নিজেও যন্ত্র ভাড়া দিতে list করতে পারবে
+### ফসল ক্রয় করুন (existing buyers grid, refined)
+- করিম Enterprise, রহিমের আরত, ACI Business, সিলেট Fresh Market — ছবি/logo সহ card
+- কোন পণ্য কত দামে কিনছে summary
+- Card click → buyer detail page (`/sell/$buyerId`) — তাদের পণ্যের list, দাম, location, "যোগাযোগ করুন" (Call + WhatsApp button)
 
-### ৩) ফসল বিক্রি (নতুন)
-- ক্রেতার তালিকা (paikar/aroth/company)
-- প্রতি ক্রেতার: নাম, এলাকা, কোন ফসল কিনে, offered দাম
-- "সরাসরি যোগাযোগ" — phone/WhatsApp button
-- দরদাম — simple message/offer thread
+### Profile তে integration
+- "আমার listings" section — active বিক্রির listings
+- "বিক্রির ইতিহাস" — already আছে, sold items এখানে দেখাবে
 
-### ৪) কৃষি বন্ধু (পরামর্শ tab নাম পরিবর্তন)
-- কৃষি তথ্য / টিপস list
-- আবহাওয়া বিস্তারিত (৭ দিন)
-- রোগবালাই পরামর্শ — ফসল ভিত্তিক common diseases
-- চাষাবাদ পরামর্শ — seasonal guide
-- "প্রশ্ন করুন" — কৃষক রোগবালাই সম্পর্কে জিজ্ঞাসা করতে পারবে
+## 3. যন্ত্র Tab (`/machines`)
 
-### ৫) প্রোফাইল (update)
-বর্তমান field রাখবো + যোগ করবো:
-- **প্রোফাইল ছবি** upload (Lovable Cloud storage)
-- কৃষকের তথ্য: নাম, ফোন, ভাষা ✓
-- জমির তথ্য: জেলা, গ্রাম, জমির পরিমাণ (একর/শতাংশ unit toggle)
-- প্রধান ফসল ✓
-- **Booking ইতিহাস** section
-- **ফসল বিক্রির ইতিহাস** (কত কাটা, কত পরিমাণ বিক্রি)
+উপরে দুটি button:
 
-### সব পেজে Back Button
-প্রতিটি sub-page (যন্ত্র detail, ক্রেতা detail, scheme detail, tips detail) এর top-এ back button add করবো। AppShell-এ optional `showBack` prop যোগ করে route-aware back নেভিগেশন।
+```text
+[ যন্ত্র ভাড়া করুন ]   [ যন্ত্র যোগ করুন ]
+```
 
-### সরকারি যোজনা
-আলাদা tab থেকে সরিয়ে homepage দ্রুত অ্যাক্সেস-এর under-এ নিয়ে আসবো। route থাকবে `/schemes` কিন্তু bottom nav থেকে বাদ।
+- **যন্ত্র ভাড়া করুন** (default view): অন্যদের list করা সব যন্ত্র category-wise (ধান কাটা, মাড়াই, ট্রাক্টর, পাওয়ার টিলার). card click → `/machines/$id` detail
+- **যন্ত্র যোগ করুন**: form — যন্ত্রের নাম, type, ঘন্টা প্রতি দাম, দিন প্রতি দাম, এলাকা, available date, ছবি, ফোন
+- Detail page: ছবি, owner, এলাকা, ঘন্টা rate, দিন rate, "যোগাযোগ করুন" (call + booking request)
 
----
+## Technical
 
-## Database পরিবর্তন (Lovable Cloud)
+### Database (migration)
+- নতুন table `farmer_crop_listings` — farmer_id, crop, quantity, unit, price_per_unit, area, description, image_url, status (active/sold), created_at, updated_at. RLS: owner CRUD; সবাই active গুলো read.
+- `machines` table-এ already আছে — শুধু `image_url`, `price_per_hour`, `price_per_day`, `available_from` কলাম confirm/add করব। 
+- `buyers` table-এ `logo_url` থাকলে use, না থাকলে add.
+- `crop_sales`-এ `listing_id` (nullable FK to farmer_crop_listings) যোগ — bridge।
+- Storage bucket `crops` (public) — farmer listing ছবির জন্য, owner-only write.
 
-নতুন table:
-- **machines** — যন্ত্র listing (type, owner_id, location, rate_per_day, available, photo)
-- **machine_bookings** — booking history (machine_id, farmer_id, dates, status)
-- **buyers** — ক্রেতার তালিকা (name, area, crops_buying, phone, offered_price)
-- **crop_sales** — বিক্রির ইতিহাস (farmer_id, crop, quantity, price, buyer_id, date)
-- **disease_questions** — কৃষকের রোগবালাই প্রশ্ন (farmer_id, crop, question, answer)
+### Frontend (TanStack Start, existing pattern)
+- `src/components/LiveClock.tsx` — Asia/Dhaka time, 1s interval, Bangla numerals.
+- `src/routes/_authenticated/dashboard.tsx` — clock উপরে weather কার্ডে inject; market section refactor (top ৪টি + arrow→/market).
+- `src/routes/_authenticated/market.tsx` — সব ধানের list + filter (already mostly আছে).
+- `src/routes/_authenticated/sell.tsx` — উপরে dual button + "My Listings" + "Buyers Grid" দুটো mode toggle.
+- `src/routes/_authenticated/sell.add.tsx` (নতুন) — ফসল listing form.
+- `src/routes/_authenticated/machines.tsx` — dual button; default rent view + add mode.
+- `src/routes/_authenticated/machines.add.tsx` (নতুন) — যন্ত্র add form.
+- `src/routes/_authenticated/profile.tsx` — "আমার ফসল listings" section যোগ।
+- `src/lib/i18n.tsx` — সব নতুন string (bn/en)।
 
-profiles table-এ যোগ:
-- `avatar_url` (profile picture)
-- `land_unit` ('acre' | 'shotok')
+### Implementation order
+1. DB migration (farmer_crop_listings + crops bucket + columns)
+2. LiveClock + dashboard refactor
+3. sell.tsx dual-mode + sell.add.tsx form
+4. machines.tsx dual-mode + machines.add.tsx form
+5. profile.tsx — listings section
+6. i18n strings
 
-Storage bucket: `avatars` (public read, auth write)
-
-বাজার দর data বাংলাদেশের জেলা ও ফসল (ধান-আমন/বোরো, পাট, আলু, পেঁয়াজ, ইলিশ-mandi) দিয়ে seed করবো।
-
----
-
-## Build order
-1. DB migration (tables + storage + seed Bangladesh data)
-2. AppShell-এ back button support
-3. Bottom nav update (৫ tab)
-4. নতুন route: machines, machines/$id, sell, sell/$buyerId, schemes homepage থেকে link
-5. Profile update (avatar upload, unit toggle, history sections)
-6. কৃষি বন্ধু tab restructure
-7. i18n strings (বাংলা first, English secondary)
-
-প্রায় 1500+ line code আসবে, kintu চাইলে আমি এক ধাপে সব করে দিতে পারি — approve করলেই শুরু করছি।
+আনুমানিক ~1000 line code change।
