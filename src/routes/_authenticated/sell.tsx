@@ -171,8 +171,12 @@ function BuyMode() {
                     <h3 className="truncate text-base font-bold text-foreground">{l.crop}</h3>
                     <span className="shrink-0 text-sm font-bold text-primary">৳{l.price_per_unit}/{l.unit}</span>
                   </div>
-                  <div className={`mt-0.5 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
-                    {l.quantity} {l.unit} · {l.seller?.full_name ?? (lang === "bn" ? "কৃষক" : "Farmer")}
+                  <div className={`mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
+                    <span>{l.quantity} {l.unit}</span>·
+                    <span className="truncate">{l.seller_type === "company" ? (l.company_name || (lang === "bn" ? "প্রতিষ্ঠান" : "Company")) : (l.seller?.full_name ?? (lang === "bn" ? "কৃষক" : "Farmer"))}</span>
+                    <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold ${l.seller_type === "company" ? "bg-[color:var(--saffron)]/15 text-[color:var(--saffron-foreground)]" : "bg-primary/10 text-primary"}`}>
+                      {l.seller_type === "company" ? (lang === "bn" ? "প্রতিষ্ঠান" : "Co.") : (lang === "bn" ? "কৃষক" : "Farmer")}
+                    </span>
                   </div>
                   {l.seller?.district && (
                     <div className={`mt-1 inline-flex items-center gap-1 text-[11px] text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>
