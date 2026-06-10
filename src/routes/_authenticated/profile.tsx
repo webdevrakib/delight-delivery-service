@@ -357,6 +357,21 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="block"><span className={`mb-1 block text-xs font-semibold ${lang === "bn" ? "font-bangla" : ""}`}>{label}</span>{children}</label>;
 }
 
+function Section({ icon: Icon, title, children, defaultOpen = false }: { icon: React.ElementType; title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const { lang } = useLang();
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-soft)]">
+      <button type="button" onClick={() => setOpen(!open)} className="flex w-full items-center gap-3 p-4 text-left">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-4 w-4" /></div>
+        <div className={`flex-1 text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{title}</div>
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <div className="space-y-3 border-t border-border p-4">{children}</div>}
+    </div>
+  );
+}
+
 function Stat({ label, value }: { label: string; value: string }) {
   const { lang } = useLang();
   return (
