@@ -46,8 +46,10 @@ function Detail() {
   }
 
   const seller = l.seller as any;
-  const phone = seller?.phone as string | undefined;
+  const isCompany = (l as any).seller_type === "company";
+  const phone = ((l as any).contact_phone as string | undefined) || (seller?.phone as string | undefined);
   const waNumber = phone?.replace(/\D/g, "");
+  const sellerName = isCompany ? ((l as any).company_name || (lang === "bn" ? "প্রতিষ্ঠান" : "Company")) : (seller?.full_name || (lang === "bn" ? "কৃষক" : "Farmer"));
 
   return (
     <div className="space-y-5">
