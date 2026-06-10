@@ -15,12 +15,29 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t, lang } = useLang();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success(lang === "bn" ? "রিসেট লিঙ্ক ইমেইলে পাঠানো হয়েছে" : "Reset link sent to your email");
+      setMode("login");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("authError"));
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
