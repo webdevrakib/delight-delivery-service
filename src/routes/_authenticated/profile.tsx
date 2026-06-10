@@ -126,7 +126,22 @@ function ProfilePage() {
         land_unit: form.land_unit,
         primary_crops: form.primary_crops.split(",").map((s) => s.trim()).filter(Boolean),
         preferred_language: lang,
-      });
+        date_of_birth: form.date_of_birth || null,
+        gender: form.gender.trim() || null,
+        occupation: form.occupation.trim() || null,
+        father_name: form.father_name.trim() || null,
+        mother_name: form.mother_name.trim() || null,
+        nid_number: form.nid_number.trim() || null,
+        nid_name: form.nid_name.trim() || null,
+        nid_address: form.nid_address.trim() || null,
+        upazila: form.upazila.trim() || null,
+        post_office: form.post_office.trim() || null,
+        postal_code: form.postal_code.trim() || null,
+        land_type: form.land_type.trim() || null,
+        land_ownership: form.land_ownership.trim() || null,
+        holding_number: form.holding_number.trim() || null,
+        irrigation_source: form.irrigation_source.trim() || null,
+      } as any);
       if (error) throw error;
       toast.success(t("profileSaved"));
       await qc.invalidateQueries({ queryKey: ["profile-full"] });
