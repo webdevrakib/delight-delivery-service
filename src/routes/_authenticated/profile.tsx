@@ -53,14 +53,30 @@ function ProfilePage() {
 
   useEffect(() => {
     if (data.profile) {
+      const p = data.profile as any;
       setForm({
-        full_name: data.profile.full_name ?? "",
-        phone: data.profile.phone ?? "",
-        district: data.profile.district ?? "",
-        village: data.profile.village ?? "",
-        land_size: data.profile.land_size_acres?.toString() ?? "",
-        land_unit: ((data.profile as any).land_unit as "acre" | "shotok") || "acre",
-        primary_crops: (data.profile.primary_crops ?? []).join(", "),
+        full_name: p.full_name ?? "",
+        phone: p.phone ?? "",
+        district: p.district ?? "",
+        village: p.village ?? "",
+        land_size: p.land_size_acres?.toString() ?? "",
+        land_unit: (p.land_unit as "acre" | "shotok") || "acre",
+        primary_crops: (p.primary_crops ?? []).join(", "),
+        date_of_birth: p.date_of_birth ?? "",
+        gender: p.gender ?? "",
+        occupation: p.occupation ?? "",
+        father_name: p.father_name ?? "",
+        mother_name: p.mother_name ?? "",
+        nid_number: p.nid_number ?? "",
+        nid_name: p.nid_name ?? "",
+        nid_address: p.nid_address ?? "",
+        upazila: p.upazila ?? "",
+        post_office: p.post_office ?? "",
+        postal_code: p.postal_code ?? "",
+        land_type: p.land_type ?? "",
+        land_ownership: p.land_ownership ?? "",
+        holding_number: p.holding_number ?? "",
+        irrigation_source: p.irrigation_source ?? "",
       });
       setAvatarUrl((data.profile as any).avatar_url ?? null);
       if (data.profile.preferred_language === "en" || data.profile.preferred_language === "bn") setLang(data.profile.preferred_language);
