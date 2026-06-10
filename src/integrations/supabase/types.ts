@@ -149,6 +149,8 @@ export type Database = {
       farmer_crop_listings: {
         Row: {
           area: string | null
+          company_name: string | null
+          contact_phone: string | null
           created_at: string
           crop: string
           description: string | null
@@ -157,12 +159,15 @@ export type Database = {
           image_url: string | null
           price_per_unit: number
           quantity: number
+          seller_type: string
           status: string
           unit: string
           updated_at: string
         }
         Insert: {
           area?: string | null
+          company_name?: string | null
+          contact_phone?: string | null
           created_at?: string
           crop: string
           description?: string | null
@@ -171,12 +176,15 @@ export type Database = {
           image_url?: string | null
           price_per_unit: number
           quantity: number
+          seller_type?: string
           status?: string
           unit?: string
           updated_at?: string
         }
         Update: {
           area?: string | null
+          company_name?: string | null
+          contact_phone?: string | null
           created_at?: string
           crop?: string
           description?: string | null
@@ -185,6 +193,7 @@ export type Database = {
           image_url?: string | null
           price_per_unit?: number
           quantity?: number
+          seller_type?: string
           status?: string
           unit?: string
           updated_at?: string
