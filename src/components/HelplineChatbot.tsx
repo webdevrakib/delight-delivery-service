@@ -120,13 +120,21 @@ export function HelplineChatbot() {
   return (
     <>
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Helpline"
-          className="fixed bottom-24 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)] transition active:scale-95"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </button>
+        <div className="fixed bottom-24 right-4 z-40 flex items-center gap-2">
+          <button
+            onClick={() => setOpen(true)}
+            className={`animate-pulse rounded-full border border-primary/30 bg-card px-3 py-1.5 text-xs font-bold text-primary shadow-[var(--shadow-soft)] ${bn ? "font-bangla" : ""}`}
+          >
+            {bn ? "সাহায্য দরকার?" : "Need help?"}
+          </button>
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Helpline"
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)] transition active:scale-95"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </button>
+        </div>
       )}
 
       {open && (
