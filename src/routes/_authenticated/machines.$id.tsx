@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
-import { Tractor, MapPin, Phone, Calendar, Bell, MessageCircle } from "lucide-react";
+import { Tractor, MapPin, Phone, Calendar, Bell, MessageCircle, User } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,12 @@ const machineQuery = (id: string) =>
     queryFn: async () => {
       const { data, error } = await supabase.from("machines").select("*").eq("id", id).maybeSingle();
       if (error) throw error;
-      return data;
+      let owner: { full_name: string | null; phone: string | null; district: string | null } | null = null;
+      if (data?.owner_id) {
+        const { data: o } = await supabase.from("profiles").select("full_name, phone, district").eq("id", data.owner_id).maybeSingle();
+        owner = o ?? null;
+      }
+      return { machine: data, owner };
     },
   });
 
