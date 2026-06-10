@@ -53,6 +53,10 @@ function Landing() {
     { q: "faq2Q", a: "faq2A" },
     { q: "faq3Q", a: "faq3A" },
     { q: "faq4Q", a: "faq4A" },
+    { q: "faq5Q", a: "faq5A" },
+    { q: "faq6Q", a: "faq6A" },
+    { q: "faq7Q", a: "faq7A" },
+    { q: "faq8Q", a: "faq8A" },
   ];
 
   return (
