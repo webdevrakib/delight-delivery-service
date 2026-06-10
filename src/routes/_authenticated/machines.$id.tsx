@@ -85,9 +85,17 @@ function Detail() {
 
       {m.description && <p className={`rounded-2xl border border-border bg-card p-4 text-sm text-foreground/85 ${lang === "bn" ? "font-bangla" : ""}`}>{m.description}</p>}
 
-      <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-4 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
-        <Phone className="h-4 w-4" /> {t("contactOwner")} — {m.contact_phone}
-      </a>
+      <div className="grid grid-cols-2 gap-2">
+        <a href={`tel:${m.contact_phone}`} className={`flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/5 px-3 py-3 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
+          <Phone className="h-4 w-4" /> {t("contactOwner")}
+        </a>
+        <a href={`https://wa.me/${(m.contact_phone || "").replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-2 rounded-2xl border border-[color:var(--saffron)]/40 bg-[color:var(--saffron)]/10 px-3 py-3 text-sm font-bold text-[color:var(--saffron-foreground)] ${lang === "bn" ? "font-bangla" : ""}`}>
+          <MessageCircle className="h-4 w-4" /> WhatsApp
+        </a>
+      </div>
+
+      <NotifyOwnerButton recipientId={m.owner_id} machineTitle={m.title} />
+
 
 
       <form onSubmit={book} className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
