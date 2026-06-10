@@ -125,6 +125,44 @@ export const dict: Dict = {
   cancel: { bn: "বাতিল", en: "Cancel" },
   save: { bn: "সংরক্ষণ", en: "Save" },
 
+  // sell modes
+  sellMyCrop: { bn: "ফসল বিক্রি করুন", en: "Sell my crop" },
+  buyCrop: { bn: "ফসল ক্রয় করুন", en: "Buy crops" },
+  addCropListing: { bn: "+ ফসল যোগ করুন", en: "+ Add crop" },
+  myActiveListings: { bn: "আমার active listings", en: "My active listings" },
+  noListingsYet: { bn: "এখনো কোনো listing নেই — আপনার প্রথম ফসল যোগ করুন!", en: "No listings yet — add your first crop!" },
+  quantity: { bn: "পরিমাণ", en: "Quantity" },
+  unit: { bn: "একক", en: "Unit" },
+  pricePerUnit: { bn: "প্রতি এককের দাম (৳)", en: "Price per unit (BDT)" },
+  area: { bn: "এলাকা", en: "Area" },
+  unitKg: { bn: "কেজি", en: "kg" },
+  unitMon: { bn: "মণ", en: "mon" },
+  cropPaddy: { bn: "ধান", en: "Paddy" },
+  cropJute: { bn: "পাট", en: "Jute" },
+  cropPotato: { bn: "আলু", en: "Potato" },
+  cropWheat: { bn: "গম", en: "Wheat" },
+  cropCorn: { bn: "ভুট্টা", en: "Corn" },
+  cropVeg: { bn: "সবজি", en: "Vegetables" },
+  listingAdded: { bn: "ফসল listing যোগ হয়েছে", en: "Listing added" },
+  markSold: { bn: "বিক্রিত mark করুন", en: "Mark as sold" },
+  remove: { bn: "সরান", en: "Remove" },
+  removed: { bn: "সরানো হয়েছে", en: "Removed" },
+  markedSold: { bn: "বিক্রিত mark করা হয়েছে", en: "Marked as sold" },
+
+  // machines modes
+  rentMachine: { bn: "যন্ত্র ভাড়া করুন", en: "Rent a machine" },
+  myMachines: { bn: "আমার যন্ত্র", en: "My machines" },
+  ratePerHour: { bn: "প্রতি ঘন্টা ভাড়া (৳)", en: "Rate per hour (BDT)" },
+  perHour: { bn: "/ ঘন্টা", en: "/ hour" },
+  perDay: { bn: "/ দিন", en: "/ day" },
+  contactOwner: { bn: "মালিকের সাথে যোগাযোগ করুন", en: "Contact owner" },
+  availableFrom: { bn: "কবে থেকে available", en: "Available from" },
+
+  // dashboard
+  liveTime: { bn: "বাংলাদেশ সময়", en: "Bangladesh time" },
+  viewAll: { bn: "সব দেখুন", en: "View all" },
+
+
   // landing page
   problemsTitle: { bn: "কৃষকের সমস্যা", en: "Farmer's challenges" },
   problemsSub: { bn: "যে সমস্যাগুলো প্রতিদিন কৃষককে সামলাতে হয়", en: "Daily challenges farmers face" },
