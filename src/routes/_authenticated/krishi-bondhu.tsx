@@ -143,8 +143,69 @@ function DiseasePanel({ questions }: { questions: any[] }) {
     }
   }
 
+  const diseases = [
+    {
+      name: "ধানের ব্লাস্ট রোগ",
+      crop: "ধান",
+      symptom: "পাতায় ধূসর-সাদা দাগ, কিনারা বাদামি। শীষে আক্রমণে দানা চিটা হয়।",
+      remedy: "ট্রাইসাইক্লাজল ৭৫% WP প্রতি লিটার পানিতে ০.৬ গ্রাম মিশিয়ে স্প্রে করুন। বীজ শোধন করুন এবং অতিরিক্ত ইউরিয়া পরিহার করুন।",
+    },
+    {
+      name: "ধানের ব্যাকটেরিয়াল লিফ ব্লাইট",
+      crop: "ধান",
+      symptom: "পাতার কিনারা থেকে হলুদ-সাদা দাগ শুরু হয়ে শুকিয়ে যায়।",
+      remedy: "আক্রান্ত পাতা কেটে পুড়িয়ে ফেলুন। কপার অক্সিক্লোরাইড ৫ গ্রাম/লিটার স্প্রে। পানি নিষ্কাশন নিশ্চিত করুন।",
+    },
+    {
+      name: "টমেটোর লেট ব্লাইট",
+      crop: "টমেটো",
+      symptom: "পাতা ও ফলে কালো-বাদামি দাগ, নিচে সাদা ছত্রাকের আবরণ।",
+      remedy: "ম্যানকোজেব ৮০% WP ২ গ্রাম/লিটার পানিতে ৭ দিন পর পর স্প্রে। গাছের গোড়া শুকনো রাখুন।",
+    },
+    {
+      name: "বেগুনের ডগা ও ফল ছিদ্রকারী পোকা",
+      crop: "বেগুন",
+      symptom: "ডগা শুকিয়ে যায়, ফলের ভেতরে পোকা ঢুকে গর্ত করে।",
+      remedy: "আক্রান্ত ডগা ও ফল কেটে ধ্বংস করুন। ফেরোমন ফাঁদ ব্যবহার করুন। প্রয়োজনে কারটাপ ৫০ SP ২ গ্রাম/লিটার স্প্রে।",
+    },
+    {
+      name: "আলুর আগাম ধ্বসা",
+      crop: "আলু",
+      symptom: "পাতায় বৃত্তাকার বাদামি দাগ, দাগের মধ্যে চক্রাকার দাগ থাকে।",
+      remedy: "ম্যানকোজেব ০.২% হারে স্প্রে। আক্রান্ত পাতা সংগ্রহ করে নষ্ট করুন। সুষম সার ব্যবহার করুন।",
+    },
+  ];
+
   return (
     <div className="space-y-4">
+      <div>
+        <h3 className={`mb-2 text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>সাধারণ রোগবালাই ও প্রতিকার</h3>
+        <div className="space-y-2">
+          {diseases.map((d) => (
+            <details key={d.name} className="group rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]">
+              <summary className={`flex cursor-pointer items-start gap-2 p-4 ${lang === "bn" ? "font-bangla" : ""}`}>
+                <Bug className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold text-foreground">{d.name}</div>
+                  <div className="mt-0.5 text-[11px] font-semibold uppercase text-muted-foreground">{d.crop}</div>
+                </div>
+              </summary>
+              <div className={`space-y-2 border-t border-border px-4 py-3 ${lang === "bn" ? "font-bangla" : ""}`}>
+                <div>
+                  <div className="text-[11px] font-bold uppercase text-muted-foreground">লক্ষণ</div>
+                  <p className="text-sm text-foreground/85">{d.symptom}</p>
+                </div>
+                <div>
+                  <div className="text-[11px] font-bold uppercase text-primary">প্রতিকার / করণীয়</div>
+                  <p className="text-sm text-foreground/85">{d.remedy}</p>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+
       <form onSubmit={ask} className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)]">
         <div className={`flex items-center gap-2 text-base font-bold ${lang === "bn" ? "font-bangla" : ""}`}>
           <HelpCircle className="h-4 w-4 text-primary" /> {t("askQuestion")}
