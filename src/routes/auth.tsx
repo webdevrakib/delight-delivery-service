@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sprout, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
+import { Sprout, Mail, Lock, User as UserIcon, Loader2, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -91,6 +91,14 @@ function AuthPage() {
             <Sprout className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold">{t("appName")}</span>
+        </Link>
+
+        <Link
+          to="/presentation"
+          className={`mb-4 flex w-full items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5 text-sm font-bold text-primary transition hover:bg-primary/10 ${lang === "bn" ? "font-bangla" : ""}`}
+        >
+          <PlayCircle className="h-4 w-4" />
+          {lang === "bn" ? "অ্যাপ পরিচিতি দেখুন (প্রেজেন্টেশন)" : "View App Presentation"}
         </Link>
 
         <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-elevated)]">
