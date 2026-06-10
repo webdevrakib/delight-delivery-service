@@ -3,8 +3,10 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { Sprout, Newspaper, TrendingUp, Tractor, ShoppingBag, AlertTriangle, CloudSun, ArrowRight } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { LiveClock } from "@/components/LiveClock";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
+
 
 const dashboardData = queryOptions({
   queryKey: ["dashboard"],
@@ -60,8 +62,9 @@ function DashboardInner() {
         </div>
       </section>
 
-      {/* Weather */}
-      <section className="rounded-2xl border border-border bg-[image:var(--gradient-card)] p-4 shadow-[var(--shadow-soft)]">
+      {/* Weather with live clock */}
+      <section className="space-y-2 rounded-2xl border border-border bg-[image:var(--gradient-card)] p-4 shadow-[var(--shadow-soft)]">
+        <LiveClock />
         <div className="flex items-center justify-between">
           <div>
             <div className={`text-xs font-semibold uppercase tracking-wider text-muted-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{t("weatherInfo")}</div>
@@ -78,20 +81,21 @@ function DashboardInner() {
         </div>
       </section>
 
-      {/* Today market */}
+      {/* Today market — preview, click arrow to see all */}
       <section>
-        <SectionHeader title={t("todayMarket")} to="/sell" />
+        <SectionHeader title={t("todayMarket")} to="/market" />
         <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
           {data.prices.map((p) => (
-            <div key={p.id} className="w-36 shrink-0 rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-soft)]">
+            <Link key={p.id} to="/market" className="w-36 shrink-0 rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5">
               <div className={`text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? p.crop_bn : p.crop_en}</div>
               <div className="text-[11px] text-muted-foreground">{lang === "bn" ? p.market_bn : p.market_en}</div>
               <div className="mt-1.5 text-base font-extrabold text-primary">৳{p.price_min}–{p.price_max}</div>
               <div className="text-[10px] text-muted-foreground">{p.unit === "kg" ? t("perKg") : t("perQuintal")}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
+
 
       {/* Quick Access */}
       <section>
@@ -109,16 +113,17 @@ function DashboardInner() {
 }
 
 function SectionHeader({ title, to }: { title: string; to: string }) {
-  const { lang } = useLang();
+  const { t, lang } = useLang();
   return (
     <div className="mb-3 flex items-center justify-between">
       <h2 className={`text-sm font-bold text-foreground ${lang === "bn" ? "font-bangla" : ""}`}>{title}</h2>
-      <Link to={to} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
-        <ArrowRight className="h-3 w-3" />
+      <Link to={to} className={`inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition hover:bg-primary/20 ${lang === "bn" ? "font-bangla" : ""}`}>
+        {t("viewAll")} <ArrowRight className="h-3.5 w-3.5" />
       </Link>
     </div>
   );
 }
+
 
 function QuickCard({ to, icon: Icon, title, tint }: { to: string; icon: React.ElementType; title: string; tint: "primary" | "saffron" | "earth" }) {
   const { lang } = useLang();
