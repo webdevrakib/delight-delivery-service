@@ -120,21 +120,31 @@ export function HelplineChatbot() {
   return (
     <>
       {!open && (
-        <div className="fixed bottom-24 right-4 z-40 flex items-center gap-2">
-          <button
-            onClick={() => setOpen(true)}
-            className={`animate-pulse rounded-full border border-primary/30 bg-card px-3 py-1.5 text-xs font-bold text-primary shadow-[var(--shadow-soft)] ${bn ? "font-bangla" : ""}`}
+        <>
+          <a
+            href="https://rakibulalams.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-44 right-4 z-40 rounded-full border border-primary/30 bg-card px-3 py-1 text-[11px] font-bold text-primary shadow-[var(--shadow-soft)] hover:bg-primary hover:text-primary-foreground transition"
           >
-            {bn ? "সাহায্য দরকার?" : "Need help?"}
-          </button>
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Helpline"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)] transition active:scale-95"
-          >
-            <MessageCircle className="h-6 w-6" />
-          </button>
-        </div>
+            Developed by <span className="underline">Rakib</span>
+          </a>
+          <div className="fixed bottom-24 right-4 z-40 flex items-center gap-2">
+            <button
+              onClick={() => setOpen(true)}
+              className={`animate-pulse rounded-full border border-primary/30 bg-card px-3 py-1.5 text-xs font-bold text-primary shadow-[var(--shadow-soft)] ${bn ? "font-bangla" : ""}`}
+            >
+              {bn ? "সাহায্য দরকার?" : "Need help?"}
+            </button>
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Helpline"
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)] transition active:scale-95"
+            >
+              <MessageCircle className="h-6 w-6" />
+            </button>
+          </div>
+        </>
       )}
 
       {open && (
