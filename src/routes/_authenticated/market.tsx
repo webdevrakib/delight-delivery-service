@@ -16,7 +16,7 @@ const pricesQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/market")({
-  head: () => ({ meta: [{ title: "বাজার দর — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "বাজার দর — কৃষক বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(pricesQuery),
   component: () => <AppShell title="বাজার দর" showBack><Suspense fallback={null}><MarketPage /></Suspense></AppShell>,
 });

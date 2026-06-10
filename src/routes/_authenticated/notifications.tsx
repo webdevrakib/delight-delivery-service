@@ -23,7 +23,7 @@ const notifQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/notifications")({
-  head: () => ({ meta: [{ title: "নোটিফিকেশন — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "নোটিফিকেশন — কৃষক বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(notifQuery),
   component: () => (
     <AppShell title="নোটিফিকেশন" showBack>

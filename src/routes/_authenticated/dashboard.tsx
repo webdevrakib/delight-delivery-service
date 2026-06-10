@@ -26,7 +26,7 @@ const dashboardData = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "হোম — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "হোম — কৃষক বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(dashboardData),
   component: () => (
     <AppShell>

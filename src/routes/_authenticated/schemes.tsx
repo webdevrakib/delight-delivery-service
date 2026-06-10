@@ -16,7 +16,7 @@ const schemesQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/schemes")({
-  head: () => ({ meta: [{ title: "সরকারি যোজনা — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "সরকারি যোজনা — কৃষক বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(schemesQuery),
   component: () => <AppShell title="সরকারি যোজনা" showBack><Suspense fallback={null}><SchemesPage /></Suspense></AppShell>,
 });

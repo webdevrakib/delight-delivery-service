@@ -5,7 +5,7 @@ const STORAGE_KEY = "krishi-lang";
 type Dict = Record<string, { bn: string; en: string }>;
 
 export const dict: Dict = {
-  appName: { bn: "কৃষি বন্ধু", en: "Krishi Bondhu" },
+  appName: { bn: "কৃষক বন্ধু", en: "Krishok Bondhu" },
   tagline: { bn: "কৃষকের পাশে সরকারি সাহায্য", en: "Beside every farmer" },
   heroTitle: { bn: "মাটির সাথে, প্রযুক্তির হাতে", en: "Rooted in soil, powered by tech" },
   heroSub: { bn: "যন্ত্র বুকিং, ফসল বিক্রি ও কৃষি পরামর্শ — একটাই অ্যাপে।", en: "Machine booking, crop selling and farming tips — all in one app." },
@@ -26,7 +26,7 @@ export const dict: Dict = {
   home: { bn: "হোম", en: "Home" },
   machines: { bn: "যন্ত্র", en: "Machines" },
   sell: { bn: "ফসল বিক্রি", en: "Sell" },
-  krishiBondhu: { bn: "কৃষি বন্ধু", en: "Krishi Bondhu" },
+  krishiBondhu: { bn: "কৃষক বন্ধু", en: "Krishok Bondhu" },
   profile: { bn: "প্রোফাইল", en: "Profile" },
 
   welcome: { bn: "স্বাগতম", en: "Welcome" },
@@ -204,7 +204,7 @@ export const dict: Dict = {
   statTips: { bn: "কৃষি পরামর্শ", en: "Farming tips" },
   faqTitle: { bn: "সাধারণ প্রশ্ন", en: "FAQs" },
   faq1Q: { bn: "এই অ্যাপ কি বিনামূল্যে?", en: "Is it free?" },
-  faq1A: { bn: "হ্যাঁ, কৃষি বন্ধু সম্পূর্ণ বিনামূল্যে।", en: "Yes, completely free." },
+  faq1A: { bn: "হ্যাঁ, কৃষক বন্ধু সম্পূর্ণ বিনামূল্যে।", en: "Yes, completely free." },
   faq2Q: { bn: "তথ্য কতটা সঠিক?", en: "How accurate is the info?" },
   faq2A: { bn: "সরকারি সূত্র থেকে সংগ্রহ করা ও নিয়মিত আপডেট করা।", en: "From official sources, updated regularly." },
   faq3Q: { bn: "ইন্টারনেট ছাড়া কাজ করে?", en: "Does it work offline?" },

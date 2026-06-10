@@ -24,7 +24,7 @@ const listingQuery = (id: string) =>
   });
 
 export const Route = createFileRoute("/_authenticated/sell/listing/$listingId")({
-  head: () => ({ meta: [{ title: "ফসলের বিস্তারিত — কৃষি বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "ফসলের বিস্তারিত — কৃষক বন্ধু" }] }),
   loader: ({ params, context }) => context.queryClient.ensureQueryData(listingQuery(params.listingId)),
   component: () => (
     <AppShell title="ফসলের বিস্তারিত" showBack>

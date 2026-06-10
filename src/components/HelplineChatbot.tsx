@@ -18,8 +18,8 @@ export function HelplineChatbot() {
     {
       role: "bot",
       text: bn
-        ? "আসসালামু আলাইকুম! আমি কৃষি বন্ধু হেল্পলাইন। আপনার সমস্যা সমাধানে সাহায্য করতে চাই। শুরু করতে আপনার নাম লিখুন।"
-        : "Hi! I'm Krishi Bondhu Helpline. To start, please tell me your name.",
+        ? "আসসালামু আলাইকুম! আমি কৃষক বন্ধু হেল্পলাইন। আপনার সমস্যা সমাধানে সাহায্য করতে চাই। শুরু করতে আপনার নাম লিখুন।"
+        : "Hi! I'm Krishok Bondhu Helpline. To start, please tell me your name.",
     },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
