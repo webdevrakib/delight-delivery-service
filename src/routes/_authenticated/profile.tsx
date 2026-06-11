@@ -25,7 +25,7 @@ const profileQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "প্রোফাইল — কৃষক বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "প্রোফাইল — কৃষি বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(profileQuery),
   component: () => <AppShell><Suspense fallback={null}><ProfilePage /></Suspense></AppShell>,
 });

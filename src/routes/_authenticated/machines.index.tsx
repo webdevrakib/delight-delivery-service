@@ -18,7 +18,7 @@ const machinesQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/machines/")({
-  head: () => ({ meta: [{ title: "যন্ত্র বুকিং — কৃষক বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "যন্ত্র বুকিং — কৃষি বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(machinesQuery),
   component: () => <AppShell><Suspense fallback={null}><MachinesPage /></Suspense></AppShell>,
 });

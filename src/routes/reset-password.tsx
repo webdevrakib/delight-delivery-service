@@ -7,7 +7,7 @@ import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Reset password — Krishok Bondhu" }] }),
+  head: () => ({ meta: [{ title: "Reset password — Krishi Bondhu" }] }),
   component: ResetPasswordPage,
 });
 
@@ -55,7 +55,7 @@ function ResetPasswordPage() {
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)]">
             <Sprout className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold">Krishok Bondhu</span>
+          <span className="text-lg font-bold">Krishi Bondhu</span>
         </Link>
         <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-elevated)]">
           <h1 className="text-2xl font-bold">{lang === "bn" ? "নতুন পাসওয়ার্ড" : "Set new password"}</h1>

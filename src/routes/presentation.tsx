@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/presentation")({
-  head: () => ({ meta: [{ title: "App Presentation — Krishok Bondhu" }] }),
+  head: () => ({ meta: [{ title: "App Presentation — Krishi Bondhu" }] }),
   component: PresentationPage,
 });
 
@@ -27,10 +27,17 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    kicker: { bn: "কৃষক বন্ধু", en: "Krishok Bondhu" },
+    kicker: { bn: "আমাদের প্রজেক্ট", en: "Our Project" },
+    title: { bn: "কৃষি বন্ধু (মোবাইল অ্যাপ)", en: "Krishi Bondhu (Mobile App)" },
+    body: { bn: "রওশন আরা বালিকা উচ্চ বিদ্যালয়", en: "Rawshan Ara Balika Uchcha Bidyalay" },
+    gradient: "from-emerald-500/30 via-green-500/20 to-teal-500/10",
+    icon: Sprout,
+  },
+  {
+    kicker: { bn: "কৃষি বন্ধু", en: "Krishi Bondhu" },
     title: { bn: "বাংলাদেশের কৃষকদের জন্য সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম", en: "A complete digital platform for Bangladeshi farmers" },
     body: { bn: "ফসল বিক্রি, যন্ত্র ভাড়া, রোগবালাই সমাধান, সরকারি স্কিম ও ২৪/৭ হেল্পলাইন — সব এক অ্যাপে।", en: "Sell crops, rent machines, get disease advice, government schemes & 24/7 helpline — all in one app." },
-    gradient: "from-emerald-500/30 via-green-500/20 to-teal-500/10",
+    gradient: "from-teal-500/30 via-emerald-500/20 to-green-500/10",
     icon: Sprout,
   },
   {
@@ -51,7 +58,7 @@ const slides: Slide[] = [
     bullets: [
       { icon: ShoppingBag, title: { bn: "মার্কেটপ্লেস", en: "Marketplace" }, desc: { bn: "সরাসরি ক্রেতা-বিক্রেতা সংযোগ।", en: "Direct buyer-seller connection." } },
       { icon: Tractor, title: { bn: "যন্ত্র ভাড়া", en: "Machine rental" }, desc: { bn: "কাছাকাছি যন্ত্র খুঁজুন ও বুক করুন।", en: "Find nearby machines and book instantly." } },
-      { icon: Leaf, title: { bn: "কৃষক বন্ধু", en: "Krishok Bondhu" }, desc: { bn: "রোগবালাই ও পরামর্শ।", en: "Disease guides and expert advice." } },
+      { icon: Leaf, title: { bn: "কৃষি বন্ধু", en: "Krishi Bondhu" }, desc: { bn: "রোগবালাই ও পরামর্শ।", en: "Disease guides and expert advice." } },
       { icon: MessageCircle, title: { bn: "হেল্পলাইন", en: "Helpline" }, desc: { bn: "চ্যাটবট দিয়ে সাপোর্ট।", en: "Chatbot-powered live support." } },
     ],
     gradient: "from-emerald-500/25 via-green-500/20 to-lime-500/10",
@@ -107,7 +114,7 @@ const slides: Slide[] = [
   },
   {
     kicker: { bn: "ফিচার ৫", en: "Feature 5" },
-    title: { bn: "কৃষক বন্ধু — পরামর্শ ও রোগবালাই", en: "Krishok Bondhu — advice & disease help" },
+    title: { bn: "কৃষি বন্ধু — পরামর্শ ও রোগবালাই", en: "Krishi Bondhu — advice & disease help" },
     bullets: [
       { icon: Leaf, title: { bn: "রোগবালাই গাইড", en: "Disease guide" }, desc: { bn: "ফসল অনুযায়ী লক্ষণ ও প্রতিকার।", en: "Symptoms and remedies for each crop." } },
       { icon: MessageCircle, title: { bn: "প্রশ্ন করুন", en: "Ask a question" }, desc: { bn: "নিজের সমস্যা লিখে বিশেষজ্ঞ পরামর্শ।", en: "Write your problem and get expert advice." } },
@@ -259,7 +266,7 @@ const slides: Slide[] = [
   },
   {
     kicker: { bn: "শুরু করুন", en: "Get started" },
-    title: { bn: "আজই কৃষক বন্ধু-এর সাথে যুক্ত হন", en: "Join Krishok Bondhu today" },
+    title: { bn: "আজই কৃষি বন্ধু-এর সাথে যুক্ত হন", en: "Join Krishi Bondhu today" },
     body: { bn: "একটি অ্যাকাউন্ট তৈরি করুন এবং স্মার্ট কৃষির যাত্রা শুরু করুন।", en: "Create an account and begin your smart farming journey." },
     gradient: "from-primary/30 via-emerald-500/20 to-teal-500/10",
     icon: Sparkles,
@@ -304,7 +311,7 @@ function PresentationPage() {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[image:var(--gradient-hero)] shadow-[var(--shadow-soft)]">
             <Sprout className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-base font-bold">কৃষক বন্ধু · Krishok Bondhu</span>
+          <span className="text-base font-bold">কৃষি বন্ধু · Krishi Bondhu</span>
         </Link>
         <div className="flex items-center gap-2">
           <button

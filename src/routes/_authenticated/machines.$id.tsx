@@ -23,7 +23,7 @@ const machineQuery = (id: string) =>
   });
 
 export const Route = createFileRoute("/_authenticated/machines/$id")({
-  head: () => ({ meta: [{ title: "যন্ত্র বিস্তারিত — কৃষক বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "যন্ত্র বিস্তারিত — কৃষি বন্ধু" }] }),
   loader: ({ params, context }) => context.queryClient.ensureQueryData(machineQuery(params.id)),
   component: () => (
     <AppShell title="যন্ত্র বিস্তারিত" showBack>
