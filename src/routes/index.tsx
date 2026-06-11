@@ -13,9 +13,9 @@ import { useState } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Krishok Bondhu — কৃষকের পাশে সরকারি সাহায্য" },
+      { title: "Krishi Bondhu — কৃষকের পাশে সরকারি সাহায্য" },
       { name: "description", content: "All-in-one app for farmers: government schemes (PM-Kisan, KCC), daily market prices and expert crop tips in Bangla and English." },
-      { property: "og:title", content: "Krishok Bondhu" },
+      { property: "og:title", content: "Krishi Bondhu" },
       { property: "og:description", content: "Government schemes, market prices and farming tips — beside every farmer." },
     ],
   }),

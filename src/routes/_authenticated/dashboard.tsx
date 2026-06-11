@@ -26,7 +26,7 @@ const dashboardData = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "হোম — কৃষক বন্ধু" }] }),
+  head: () => ({ meta: [{ title: "হোম — কৃষি বন্ধু" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(dashboardData),
   component: () => (
     <AppShell>
@@ -45,7 +45,7 @@ function DashboardInner() {
       <section className="relative overflow-hidden rounded-3xl bg-[image:var(--gradient-hero)] p-5 text-primary-foreground shadow-[var(--shadow-elevated)]">
         <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[color:var(--saffron)] opacity-30 blur-2xl" />
         <p className="text-xs font-semibold uppercase tracking-wider opacity-80">{t("welcome")}</p>
-        <h1 className={`mt-1 text-2xl font-bold ${lang === "bn" ? "font-bangla" : ""}`}>{data.name || (lang === "bn" ? "কৃষক বন্ধু" : "Farmer")} 🌾</h1>
+        <h1 className={`mt-1 text-2xl font-bold ${lang === "bn" ? "font-bangla" : ""}`}>{data.name || (lang === "bn" ? "কৃষি বন্ধু" : "Farmer")} 🌾</h1>
         <p className={`mt-1 text-sm opacity-90 ${lang === "bn" ? "font-bangla" : ""}`}>{t("tagline")}</p>
       </section>
 

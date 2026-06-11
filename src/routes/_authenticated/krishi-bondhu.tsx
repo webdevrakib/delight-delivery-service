@@ -21,7 +21,7 @@ const kbQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/_authenticated/krishi-bondhu")({
-  head: () => ({ meta: [{ title: "কৃষক বন্ধু — পরামর্শ" }] }),
+  head: () => ({ meta: [{ title: "কৃষি বন্ধু — পরামর্শ" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(kbQuery),
   component: () => <AppShell><Suspense fallback={null}><Page /></Suspense></AppShell>,
 });

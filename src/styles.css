@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Krishok Bondhu — earthy, hopeful, farmer-first design system */
+/* Krishi Bondhu — earthy, hopeful, farmer-first design system */
 
 @theme inline {
   --font-sans: 'Plus Jakarta Sans', 'Hind Siliguri', system-ui, sans-serif;
