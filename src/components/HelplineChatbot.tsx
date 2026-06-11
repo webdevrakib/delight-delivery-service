@@ -121,14 +121,6 @@ export function HelplineChatbot() {
     <>
       {!open && (
         <>
-          <a
-            href="https://rakibulalams.netlify.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fixed bottom-44 right-4 z-40 rounded-full border border-primary/30 bg-card px-3 py-1 text-[11px] font-bold text-primary shadow-[var(--shadow-soft)] hover:bg-primary hover:text-primary-foreground transition"
-          >
-            Developed by <span className="underline">Rakib</span>
-          </a>
           <div className="fixed bottom-24 right-4 z-40 flex items-center gap-2">
             <button
               onClick={() => setOpen(true)}
