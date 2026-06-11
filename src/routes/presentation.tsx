@@ -27,10 +27,17 @@ type Slide = {
 
 const slides: Slide[] = [
   {
+    kicker: { bn: "আমাদের প্রজেক্ট", en: "Our Project" },
+    title: { bn: "কৃষি বন্ধু (মোবাইল অ্যাপ)", en: "Krishi Bondhu (Mobile App)" },
+    body: { bn: "রওশন আরা বালিকা উচ্চ বিদ্যালয়", en: "Rawshan Ara Balika Uchcha Bidyalay" },
+    gradient: "from-emerald-500/30 via-green-500/20 to-teal-500/10",
+    icon: Sprout,
+  },
+  {
     kicker: { bn: "কৃষি বন্ধু", en: "Krishi Bondhu" },
     title: { bn: "বাংলাদেশের কৃষকদের জন্য সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম", en: "A complete digital platform for Bangladeshi farmers" },
     body: { bn: "ফসল বিক্রি, যন্ত্র ভাড়া, রোগবালাই সমাধান, সরকারি স্কিম ও ২৪/৭ হেল্পলাইন — সব এক অ্যাপে।", en: "Sell crops, rent machines, get disease advice, government schemes & 24/7 helpline — all in one app." },
-    gradient: "from-emerald-500/30 via-green-500/20 to-teal-500/10",
+    gradient: "from-teal-500/30 via-emerald-500/20 to-green-500/10",
     icon: Sprout,
   },
   {
