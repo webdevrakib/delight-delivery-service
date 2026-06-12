@@ -558,6 +558,104 @@ export type Database = {
         }
         Relationships: []
       }
+      smart_card_transactions: {
+        Row: {
+          amount: number
+          card_id: string
+          created_at: string
+          id: string
+          is_own_number: boolean | null
+          note: string | null
+          payment_method: string | null
+          payment_number: string | null
+          request_birthdate: string | null
+          request_name: string | null
+          request_nid: string | null
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          card_id: string
+          created_at?: string
+          id?: string
+          is_own_number?: boolean | null
+          note?: string | null
+          payment_method?: string | null
+          payment_number?: string | null
+          request_birthdate?: string | null
+          request_name?: string | null
+          request_nid?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          card_id?: string
+          created_at?: string
+          id?: string
+          is_own_number?: boolean | null
+          note?: string | null
+          payment_method?: string | null
+          payment_number?: string | null
+          request_birthdate?: string | null
+          request_name?: string | null
+          request_nid?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_card_transactions_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "smart_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_cards: {
+        Row: {
+          balance: number
+          card_number: string
+          created_at: string
+          expires_at: string
+          id: string
+          issued_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          card_number: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          issued_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          card_number?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          issued_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tips: {
         Row: {
           category: string
