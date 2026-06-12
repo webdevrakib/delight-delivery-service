@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.create_smart_card_for_user() FROM PUBLIC, anon, authenticated;
