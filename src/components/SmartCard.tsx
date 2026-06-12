@@ -88,13 +88,6 @@ export function SmartCard() {
             transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
         >
-        <div
-          className="relative h-56 w-full cursor-pointer transition-transform duration-700"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-          }}
-        >
           {/* Front */}
           <div
             className="absolute inset-0 overflow-hidden rounded-2xl bg-[image:var(--gradient-hero)] p-4 text-primary-foreground shadow-[var(--shadow-elevated)]"
