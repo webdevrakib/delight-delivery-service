@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { LogOut, User, Loader2, Camera, History, ShoppingBag, Sprout, ChevronDown, UserCircle, IdCard, MapPin, Wheat } from "lucide-react";
+import { LogOut, User, Loader2, Camera, History, ShoppingBag, Sprout, ChevronDown, UserCircle, IdCard, MapPin, Wheat, CreditCard, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
