@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { LiveClock } from "@/components/LiveClock";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
+import { SmartCard } from "@/components/SmartCard";
 
 
 const dashboardData = queryOptions({
