@@ -50,6 +50,10 @@ function DashboardInner() {
         <p className={`mt-1 text-sm opacity-90 ${lang === "bn" ? "font-bangla" : ""}`}>{t("tagline")}</p>
       </section>
 
+      {/* Smart Farmer Card */}
+      <SmartCard />
+
+
       {/* Urgent Notice */}
       <section className="rounded-2xl border border-[color:var(--saffron)]/40 bg-[color:var(--saffron)]/10 p-4">
         <div className="flex gap-3">
