@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { LiveClock } from "@/components/LiveClock";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
+import { SmartCard } from "@/components/SmartCard";
 
 
 const dashboardData = queryOptions({
@@ -48,6 +49,10 @@ function DashboardInner() {
         <h1 className={`mt-1 text-2xl font-bold ${lang === "bn" ? "font-bangla" : ""}`}>{data.name || (lang === "bn" ? "কৃষি বন্ধু" : "Farmer")} 🌾</h1>
         <p className={`mt-1 text-sm opacity-90 ${lang === "bn" ? "font-bangla" : ""}`}>{t("tagline")}</p>
       </section>
+
+      {/* Smart Farmer Card */}
+      <SmartCard />
+
 
       {/* Urgent Notice */}
       <section className="rounded-2xl border border-[color:var(--saffron)]/40 bg-[color:var(--saffron)]/10 p-4">
