@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { Sprout, User, Calendar, IdCard, MapPin, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
@@ -67,14 +68,26 @@ export function SmartCard() {
 
   return (
     <section>
-      <h2 className={`mb-2 text-sm font-bold text-foreground ${bn}`}>
-        {lang === "bn" ? "স্মার্ট কৃষক কার্ড" : "Smart Farmer Card"}
-      </h2>
+      <div className="mb-2 flex items-center justify-between">
+        <h2 className={`text-sm font-bold text-foreground ${bn}`}>
+          {lang === "bn" ? "স্মার্ট কৃষক কার্ড" : "Smart Farmer Card"}
+        </h2>
+        <Link to="/smart-card" className={`text-[11px] font-bold text-primary ${bn}`}>
+          {lang === "bn" ? "বিস্তারিত →" : "Details →"}
+        </Link>
+      </div>
       <div
         className="smart-card-wrap"
         style={{ perspective: "1200px" }}
         onClick={() => setFlipped((v) => !v)}
       >
+        <div
+          className="relative h-56 w-full cursor-pointer transition-transform duration-700"
+          style={{
+            transformStyle: "preserve-3d",
+            transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          }}
+        >
         <div
           className="relative h-56 w-full cursor-pointer transition-transform duration-700"
           style={{
