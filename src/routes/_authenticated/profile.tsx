@@ -188,6 +188,19 @@ function ProfilePage() {
         <Stat label={t("totalEarned")} value={`৳${totalEarned.toFixed(0)}`} />
       </div>
 
+      {/* Smart Card entry */}
+      <Link to="/smart-card" className="group flex items-center gap-3 rounded-2xl border border-border bg-[image:var(--gradient-hero)] p-4 text-primary-foreground shadow-[var(--shadow-elevated)] transition active:scale-[0.99]">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
+          <CreditCard className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className={`text-sm font-extrabold ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? "স্মার্ট কার্ড" : "Smart Card"}</div>
+          <div className={`text-[11px] opacity-85 ${lang === "bn" ? "font-bangla" : ""}`}>{lang === "bn" ? "ব্যালেন্স, উত্তোলন, ইতিহাস ও PDF" : "Balance, withdraw, history & PDF"}</div>
+        </div>
+        <ChevronRight className="h-5 w-5 opacity-80 transition group-hover:translate-x-0.5" />
+      </Link>
+
+
       <form onSubmit={handleSave} className="space-y-3">
         <Section icon={UserCircle} title={lang === "bn" ? "ব্যক্তিগত তথ্য" : "Personal Information"} defaultOpen>
           <Field label={t("fullName")}><input className="pf-input" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} maxLength={100} /></Field>
