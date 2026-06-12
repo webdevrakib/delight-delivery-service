@@ -14,11 +14,13 @@ import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSmartCardRouteImport } from './routes/_authenticated/smart-card'
 import { Route as AuthenticatedSchemesRouteImport } from './routes/_authenticated/schemes'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMarketRouteImport } from './routes/_authenticated/market'
 import { Route as AuthenticatedKrishiBondhuRouteImport } from './routes/_authenticated/krishi-bondhu'
+import { Route as AuthenticatedSmartCardRouteImport } from './routes/_authenticated/smart-card'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSellIndexRouteImport } from './routes/_authenticated/sell.index'
 import { Route as AuthenticatedMachinesIndexRouteImport } from './routes/_authenticated/machines.index'
@@ -50,6 +52,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSmartCardRoute = AuthenticatedSmartCardRouteImport.update({
+  id: '/smart-card',
+  path: '/smart-card',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSchemesRoute = AuthenticatedSchemesRouteImport.update({
   id: '/schemes',
   path: '/schemes',
@@ -77,6 +84,11 @@ const AuthenticatedKrishiBondhuRoute =
     path: '/krishi-bondhu',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSmartCardRoute = AuthenticatedSmartCardRouteImport.update({
+  id: '/smart-card',
+  path: '/smart-card',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -122,6 +134,8 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
+  '/smart-card': typeof AuthenticatedSmartCardRoute
+  '/smart-card': typeof AuthenticatedSmartCardRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
   '/machines/': typeof AuthenticatedMachinesIndexRoute
@@ -139,6 +153,8 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/schemes': typeof AuthenticatedSchemesRoute
+  '/smart-card': typeof AuthenticatedSmartCardRoute
+  '/smart-card': typeof AuthenticatedSmartCardRoute
   '/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
   '/machines': typeof AuthenticatedMachinesIndexRoute
@@ -158,6 +174,8 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schemes': typeof AuthenticatedSchemesRoute
+  '/_authenticated/smart-card': typeof AuthenticatedSmartCardRoute
+  '/_authenticated/smart-card': typeof AuthenticatedSmartCardRoute
   '/_authenticated/machines/$id': typeof AuthenticatedMachinesIdRoute
   '/_authenticated/sell/$buyerId': typeof AuthenticatedSellBuyerIdRoute
   '/_authenticated/machines/': typeof AuthenticatedMachinesIndexRoute
@@ -177,6 +195,9 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/profile'
     | '/schemes'
+    | '/smart-card'
+    | '/smart-card'
+    | '/smart-card'
     | '/machines/$id'
     | '/sell/$buyerId'
     | '/machines/'
@@ -194,6 +215,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/profile'
     | '/schemes'
+    | '/smart-card'
     | '/machines/$id'
     | '/sell/$buyerId'
     | '/machines'
@@ -212,6 +234,8 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/schemes'
+    | '/_authenticated/smart-card'
+    | '/_authenticated/smart-card'
     | '/_authenticated/machines/$id'
     | '/_authenticated/sell/$buyerId'
     | '/_authenticated/machines/'
@@ -264,11 +288,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/smart-card': {
+      id: '/_authenticated/smart-card'
+      path: '/smart-card'
+      fullPath: '/smart-card'
+      preLoaderRoute: typeof AuthenticatedSmartCardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/schemes': {
       id: '/_authenticated/schemes'
       path: '/schemes'
       fullPath: '/schemes'
       preLoaderRoute: typeof AuthenticatedSchemesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/smart-card': {
+      id: '/_authenticated/smart-card'
+      path: '/smart-card'
+      fullPath: '/smart-card'
+      preLoaderRoute: typeof AuthenticatedSmartCardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile': {
@@ -351,6 +389,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSchemesRoute: typeof AuthenticatedSchemesRoute
+  AuthenticatedSmartCardRoute: typeof AuthenticatedSmartCardRoute
   AuthenticatedMachinesIdRoute: typeof AuthenticatedMachinesIdRoute
   AuthenticatedSellBuyerIdRoute: typeof AuthenticatedSellBuyerIdRoute
   AuthenticatedMachinesIndexRoute: typeof AuthenticatedMachinesIndexRoute
@@ -365,6 +404,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSchemesRoute: AuthenticatedSchemesRoute,
+  AuthenticatedSmartCardRoute: AuthenticatedSmartCardRoute,
   AuthenticatedMachinesIdRoute: AuthenticatedMachinesIdRoute,
   AuthenticatedSellBuyerIdRoute: AuthenticatedSellBuyerIdRoute,
   AuthenticatedMachinesIndexRoute: AuthenticatedMachinesIndexRoute,
