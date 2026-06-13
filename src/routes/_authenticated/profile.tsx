@@ -19,7 +19,26 @@ const profileQuery = queryOptions({
       supabase.from("crop_sales").select("*").eq("farmer_id", uid).order("sale_date", { ascending: false }).limit(20),
       supabase.from("farmer_crop_listings").select("*").eq("farmer_id", uid).eq("status", "active").order("created_at", { ascending: false }),
     ]);
-    return { user: userData.user, profile: profileRes.data, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [], listings: listingsRes.data ?? [] };
+    let profile = profileRes.data;
+    const metadata = userData.user.user_metadata;
+    if (metadata && (!profile || !profile.phone)) {
+      const { data: synced } = await supabase.from("profiles").upsert({
+        id: uid,
+        full_name: metadata.full_name || profile?.full_name || null,
+        phone: metadata.phone || profile?.phone || null,
+        nid_number: metadata.nid_number || profile?.nid_number || null,
+        krishi_card_no: metadata.krishi_card_no || profile?.krishi_card_no || null,
+        date_of_birth: metadata.date_of_birth || profile?.date_of_birth || null,
+        division: metadata.division || profile?.division || null,
+        district: metadata.district || profile?.district || null,
+        upazila: metadata.upazila || profile?.upazila || null,
+        post_office: metadata.post_office || profile?.post_office || null,
+        village: metadata.village || profile?.village || null,
+        ward_no: metadata.ward_no || profile?.ward_no || null,
+      }).select("*").single();
+      if (synced) profile = synced;
+    }
+    return { user: userData.user, profile, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [], listings: listingsRes.data ?? [] };
 
   },
 });
