@@ -242,6 +242,57 @@ export type Database = {
         }
         Relationships: []
       }
+      labor_profiles: {
+        Row: {
+          available: boolean
+          categories: string[]
+          created_at: string
+          daily_rate: number
+          description: string | null
+          district: string
+          division: string
+          full_name: string
+          id: string
+          phone: string
+          upazila: string
+          updated_at: string
+          user_id: string
+          village: string
+        }
+        Insert: {
+          available?: boolean
+          categories?: string[]
+          created_at?: string
+          daily_rate: number
+          description?: string | null
+          district: string
+          division: string
+          full_name: string
+          id?: string
+          phone: string
+          upazila: string
+          updated_at?: string
+          user_id: string
+          village: string
+        }
+        Update: {
+          available?: boolean
+          categories?: string[]
+          created_at?: string
+          daily_rate?: number
+          description?: string | null
+          district?: string
+          division?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          upazila?: string
+          updated_at?: string
+          user_id?: string
+          village?: string
+        }
+        Relationships: []
+      }
       machine_bookings: {
         Row: {
           created_at: string
@@ -432,12 +483,14 @@ export type Database = {
           created_at: string
           date_of_birth: string | null
           district: string | null
+          division: string | null
           father_name: string | null
           full_name: string | null
           gender: string | null
           holding_number: string | null
           id: string
           irrigation_source: string | null
+          krishi_card_no: string | null
           land_ownership: string | null
           land_size_acres: number | null
           land_type: string | null
@@ -455,18 +508,21 @@ export type Database = {
           upazila: string | null
           updated_at: string
           village: string | null
+          ward_no: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
           date_of_birth?: string | null
           district?: string | null
+          division?: string | null
           father_name?: string | null
           full_name?: string | null
           gender?: string | null
           holding_number?: string | null
           id: string
           irrigation_source?: string | null
+          krishi_card_no?: string | null
           land_ownership?: string | null
           land_size_acres?: number | null
           land_type?: string | null
@@ -484,18 +540,21 @@ export type Database = {
           upazila?: string | null
           updated_at?: string
           village?: string | null
+          ward_no?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
           date_of_birth?: string | null
           district?: string | null
+          division?: string | null
           father_name?: string | null
           full_name?: string | null
           gender?: string | null
           holding_number?: string | null
           id?: string
           irrigation_source?: string | null
+          krishi_card_no?: string | null
           land_ownership?: string | null
           land_size_acres?: number | null
           land_type?: string | null
@@ -513,6 +572,7 @@ export type Database = {
           upazila?: string | null
           updated_at?: string
           village?: string | null
+          ward_no?: string | null
         }
         Relationships: []
       }

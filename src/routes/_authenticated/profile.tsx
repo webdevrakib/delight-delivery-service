@@ -19,7 +19,26 @@ const profileQuery = queryOptions({
       supabase.from("crop_sales").select("*").eq("farmer_id", uid).order("sale_date", { ascending: false }).limit(20),
       supabase.from("farmer_crop_listings").select("*").eq("farmer_id", uid).eq("status", "active").order("created_at", { ascending: false }),
     ]);
-    return { user: userData.user, profile: profileRes.data, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [], listings: listingsRes.data ?? [] };
+    let profile = profileRes.data;
+    const metadata = userData.user.user_metadata;
+    if (metadata && (!profile || !profile.phone)) {
+      const { data: synced } = await supabase.from("profiles").upsert({
+        id: uid,
+        full_name: metadata.full_name || profile?.full_name || null,
+        phone: metadata.phone || profile?.phone || null,
+        nid_number: metadata.nid_number || profile?.nid_number || null,
+        krishi_card_no: metadata.krishi_card_no || profile?.krishi_card_no || null,
+        date_of_birth: metadata.date_of_birth || profile?.date_of_birth || null,
+        division: metadata.division || profile?.division || null,
+        district: metadata.district || profile?.district || null,
+        upazila: metadata.upazila || profile?.upazila || null,
+        post_office: metadata.post_office || profile?.post_office || null,
+        village: metadata.village || profile?.village || null,
+        ward_no: metadata.ward_no || profile?.ward_no || null,
+      }).select("*").single();
+      if (synced) profile = synced;
+    }
+    return { user: userData.user, profile, bookings: bookingsRes.data ?? [], sales: salesRes.data ?? [], listings: listingsRes.data ?? [] };
 
   },
 });
@@ -38,7 +57,7 @@ function ProfilePage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
-    full_name: "", phone: "", district: "", village: "",
+    full_name: "", phone: "", division: "", district: "", village: "", ward_no: "", krishi_card_no: "",
     land_size: "", land_unit: "acre" as "acre" | "shotok",
     primary_crops: "",
     date_of_birth: "", gender: "", occupation: "", father_name: "", mother_name: "",
@@ -57,8 +76,11 @@ function ProfilePage() {
       setForm({
         full_name: p.full_name ?? "",
         phone: p.phone ?? "",
+        division: p.division ?? "",
         district: p.district ?? "",
         village: p.village ?? "",
+        ward_no: p.ward_no ?? "",
+        krishi_card_no: p.krishi_card_no ?? "",
         land_size: p.land_size_acres?.toString() ?? "",
         land_unit: (p.land_unit as "acre" | "shotok") || "acre",
         primary_crops: (p.primary_crops ?? []).join(", "),
@@ -120,8 +142,11 @@ function ProfilePage() {
         id: data.user.id,
         full_name: form.full_name.trim() || null,
         phone: form.phone.trim() || null,
+        division: form.division.trim() || null,
         district: form.district.trim() || null,
         village: form.village.trim() || null,
+        ward_no: form.ward_no.trim() || null,
+        krishi_card_no: form.krishi_card_no.trim() || null,
         land_size_acres: form.land_size ? Number(form.land_size) : null,
         land_unit: form.land_unit,
         primary_crops: form.primary_crops.split(",").map((s) => s.trim()).filter(Boolean),
@@ -227,11 +252,13 @@ function ProfilePage() {
 
         <Section icon={IdCard} title={lang === "bn" ? "এনআইডি (NID) তথ্য" : "NID Information"}>
           <Field label={lang === "bn" ? "এনআইডি নম্বর" : "NID Number"}><input className="pf-input" inputMode="numeric" value={form.nid_number} onChange={(e) => setForm({ ...form, nid_number: e.target.value })} maxLength={20} placeholder="1234567890123" /></Field>
+          <Field label={lang === "bn" ? "কৃষি কার্ড নম্বর (থাকলে)" : "Agriculture Card Number (optional)"}><input className="pf-input" value={form.krishi_card_no} onChange={(e) => setForm({ ...form, krishi_card_no: e.target.value })} maxLength={30} /></Field>
           <Field label={lang === "bn" ? "এনআইডি অনুযায়ী নাম" : "Name as on NID"}><input className="pf-input" value={form.nid_name} onChange={(e) => setForm({ ...form, nid_name: e.target.value })} maxLength={100} /></Field>
           <Field label={lang === "bn" ? "এনআইডি অনুযায়ী ঠিকানা" : "Address on NID"}><textarea className="pf-input" rows={2} value={form.nid_address} onChange={(e) => setForm({ ...form, nid_address: e.target.value })} maxLength={250} /></Field>
         </Section>
 
         <Section icon={MapPin} title={lang === "bn" ? "ঠিকানা" : "Address"}>
+          <Field label={lang === "bn" ? "বিভাগ" : "Division"}><input className="pf-input" value={form.division} onChange={(e) => setForm({ ...form, division: e.target.value })} maxLength={60} /></Field>
           <div className="grid grid-cols-2 gap-3">
             <Field label={t("district")}><input className="pf-input" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} maxLength={60} /></Field>
             <Field label={lang === "bn" ? "উপজেলা" : "Upazila"}><input className="pf-input" value={form.upazila} onChange={(e) => setForm({ ...form, upazila: e.target.value })} maxLength={60} /></Field>
@@ -240,7 +267,10 @@ function ProfilePage() {
             <Field label={lang === "bn" ? "ডাকঘর" : "Post Office"}><input className="pf-input" value={form.post_office} onChange={(e) => setForm({ ...form, post_office: e.target.value })} maxLength={60} /></Field>
             <Field label={lang === "bn" ? "পোস্ট কোড" : "Postal Code"}><input className="pf-input" inputMode="numeric" value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} maxLength={10} /></Field>
           </div>
-          <Field label={t("village")}><input className="pf-input" value={form.village} onChange={(e) => setForm({ ...form, village: e.target.value })} maxLength={60} /></Field>
+          <div className="grid grid-cols-[1fr_110px] gap-3">
+            <Field label={t("village")}><input className="pf-input" value={form.village} onChange={(e) => setForm({ ...form, village: e.target.value })} maxLength={100} /></Field>
+            <Field label={lang === "bn" ? "ওয়ার্ড নং" : "Ward No."}><input className="pf-input" value={form.ward_no} onChange={(e) => setForm({ ...form, ward_no: e.target.value })} maxLength={10} /></Field>
+          </div>
         </Section>
 
         <Section icon={Wheat} title={lang === "bn" ? "জমি ও কৃষি তথ্য" : "Land & Farming"}>

@@ -6,14 +6,19 @@ import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
+import { LaborMarketplace } from "@/components/LaborMarketplace";
 
 const machinesQuery = queryOptions({
   queryKey: ["machines"],
   queryFn: async () => {
     const { data: u } = await supabase.auth.getUser();
-    const { data, error } = await supabase.from("machines").select("*").order("created_at", { ascending: false });
-    if (error) throw error;
-    return { list: data ?? [], uid: u.user?.id ?? null };
+    const [machines, labor] = await Promise.all([
+      supabase.from("machines").select("*").order("created_at", { ascending: false }),
+      supabase.from("labor_profiles").select("*").order("created_at", { ascending: false }),
+    ]);
+    if (machines.error) throw machines.error;
+    if (labor.error) throw labor.error;
+    return { list: machines.data ?? [], labor: labor.data ?? [], uid: u.user?.id ?? null };
   },
 });
 
@@ -24,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/machines/")({
 });
 
 const TYPES = ["all", "paddyHarvester", "thresher", "tractor", "powerTiller"] as const;
-type Mode = "rent" | "mine";
+type Mode = "rent" | "labor" | "mine";
 
 function MachinesPage() {
   const { t, lang } = useLang();
@@ -35,7 +40,7 @@ function MachinesPage() {
 
   let list = data.list;
   if (mode === "rent") list = list.filter((m) => m.owner_id !== data.uid && m.available !== false);
-  else list = list.filter((m) => m.owner_id === data.uid);
+  else if (mode === "mine") list = list.filter((m) => m.owner_id === data.uid);
   if (filter !== "all") list = list.filter((m) => m.machine_type === filter);
 
   return (
@@ -46,15 +51,19 @@ function MachinesPage() {
       </div>
 
       {/* Mode toggle */}
-      <div className="grid grid-cols-2 gap-2 rounded-2xl border border-border bg-card p-1.5">
+      <div className="grid grid-cols-3 gap-1.5 rounded-2xl border border-border bg-card p-1.5">
         <button onClick={() => setMode("rent")} className={`rounded-xl px-3 py-2.5 text-sm font-bold transition ${mode === "rent" ? "bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)]" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
           {t("rentMachine")}
+        </button>
+        <button onClick={() => setMode("labor")} className={`rounded-xl px-2 py-2.5 text-xs font-bold transition ${mode === "labor" ? "bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)]" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
+          {lang === "bn" ? "শ্রমিক ভাড়া করুন" : "Hire Workers"}
         </button>
         <button onClick={() => setMode("mine")} className={`rounded-xl px-3 py-2.5 text-sm font-bold transition ${mode === "mine" ? "bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-soft)]" : "text-muted-foreground"} ${lang === "bn" ? "font-bangla" : ""}`}>
           {t("myMachines")}
         </button>
       </div>
 
+      {mode === "labor" ? <LaborMarketplace profiles={data.labor} uid={data.uid} /> : <>
       {mode === "mine" && (
         <button onClick={() => setShowAdd(true)} className={`flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 px-4 py-3.5 text-sm font-bold text-primary ${lang === "bn" ? "font-bangla" : ""}`}>
           <Plus className="h-4 w-4" /> {t("addMachine")}
@@ -106,6 +115,7 @@ function MachinesPage() {
           ))}
         </div>
       )}
+      </>}
 
       {showAdd && <AddMachineModal onClose={() => setShowAdd(false)} />}
     </div>

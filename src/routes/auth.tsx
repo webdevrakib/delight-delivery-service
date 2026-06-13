@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sprout, Mail, Lock, User as UserIcon, Loader2, PlayCircle } from "lucide-react";
+import { Sprout, Mail, Lock, User as UserIcon, Loader2, PlayCircle, Phone, IdCard, CalendarDays, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -19,6 +19,10 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [signupDetails, setSignupDetails] = useState({
+    phone: "", nid_number: "", krishi_card_no: "", date_of_birth: "",
+    division: "", district: "", upazila: "", post_office: "", village: "", ward_no: "",
+  });
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -49,7 +53,7 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
-            data: { full_name: fullName },
+            data: { full_name: fullName.trim(), ...signupDetails },
           },
         });
         if (error) throw error;
@@ -171,9 +175,40 @@ function AuthPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
               {mode === "signup" && (
-                <Field icon={UserIcon} label={t("fullName")}>
-                  <input type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="input-field" />
-                </Field>
+                <div className="space-y-3">
+                  <Field icon={UserIcon} label={t("fullName")}>
+                    <input type="text" required maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} className="input-field" />
+                  </Field>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field icon={Phone} label={lang === "bn" ? "ফোন" : "Phone"}>
+                      <input required inputMode="tel" pattern="[0-9+ -]{7,15}" maxLength={15} value={signupDetails.phone} onChange={(e) => setSignupDetails({ ...signupDetails, phone: e.target.value })} className="input-field" />
+                    </Field>
+                    <Field icon={CalendarDays} label={lang === "bn" ? "জন্ম তারিখ" : "Date of birth"}>
+                      <input required type="date" value={signupDetails.date_of_birth} onChange={(e) => setSignupDetails({ ...signupDetails, date_of_birth: e.target.value })} className="input-field" />
+                    </Field>
+                  </div>
+                  <Field icon={IdCard} label={lang === "bn" ? "এনআইডি নম্বর" : "NID number"}>
+                    <input required inputMode="numeric" pattern="[0-9]{10,20}" maxLength={20} value={signupDetails.nid_number} onChange={(e) => setSignupDetails({ ...signupDetails, nid_number: e.target.value.replace(/\D/g, "") })} className="input-field" />
+                  </Field>
+                  <Field icon={IdCard} label={lang === "bn" ? "কৃষি কার্ড নম্বর (থাকলে)" : "Agriculture card no. (optional)"}>
+                    <input maxLength={30} value={signupDetails.krishi_card_no} onChange={(e) => setSignupDetails({ ...signupDetails, krishi_card_no: e.target.value })} className="input-field" />
+                  </Field>
+                  <div className="grid grid-cols-2 gap-3">
+                    {([['division', 'বিভাগ', 'Division'], ['district', 'জেলা', 'District'], ['upazila', 'উপজেলা', 'Upazila'], ['post_office', 'ডাকঘর', 'Post office']] as const).map(([key, bn, en]) => (
+                      <Field key={key} icon={MapPin} label={lang === "bn" ? bn : en}>
+                        <input required maxLength={60} value={signupDetails[key]} onChange={(e) => setSignupDetails({ ...signupDetails, [key]: e.target.value })} className="input-field" />
+                      </Field>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-[1fr_110px] gap-3">
+                    <Field icon={MapPin} label={lang === "bn" ? "গ্রাম" : "Village"}>
+                      <input required maxLength={100} value={signupDetails.village} onChange={(e) => setSignupDetails({ ...signupDetails, village: e.target.value })} className="input-field" />
+                    </Field>
+                    <Field icon={MapPin} label={lang === "bn" ? "ওয়ার্ড নং" : "Ward no."}>
+                      <input required maxLength={10} value={signupDetails.ward_no} onChange={(e) => setSignupDetails({ ...signupDetails, ward_no: e.target.value })} className="input-field" />
+                    </Field>
+                  </div>
+                </div>
               )}
               <Field icon={Mail} label={t("email")}>
                 <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" />
