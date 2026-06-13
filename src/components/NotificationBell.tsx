@@ -24,18 +24,23 @@ export function NotificationBell() {
 
   useEffect(() => {
     let channel: ReturnType<typeof supabase.channel> | null = null;
+    let active = true;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return;
-      channel = supabase
-        .channel(`notif-${u.user.id}`)
+      if (!u.user || !active) return;
+      const nextChannel = supabase
+        .channel(`notif-${u.user.id}-${crypto.randomUUID()}`)
         .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `recipient_id=eq.${u.user.id}` }, () => {
           qc.invalidateQueries({ queryKey: ["notifications-unread"] });
           qc.invalidateQueries({ queryKey: ["notifications"] });
-        })
-        .subscribe();
+        });
+      channel = nextChannel;
+      nextChannel.subscribe();
     })();
-    return () => { if (channel) supabase.removeChannel(channel); };
+    return () => {
+      active = false;
+      if (channel) void supabase.removeChannel(channel);
+    };
   }, [qc]);
 
   return (
