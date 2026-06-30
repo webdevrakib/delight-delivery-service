@@ -21,7 +21,7 @@ const sellQuery = queryOptions({
     if (buyers.error) throw buyers.error;
     const sellerIds = Array.from(new Set((activeListings.data ?? []).map((l: any) => l.farmer_id)));
     const sellers = sellerIds.length
-      ? (await supabase.from("profiles").select("id, full_name, phone, district, village, avatar_url").in("id", sellerIds)).data ?? []
+      ? (await supabase.rpc("get_public_seller_profiles" as any, { seller_ids: sellerIds })).data ?? []
       : [];
     const sellerMap = Object.fromEntries(sellers.map((s: any) => [s.id, s]));
     const listingsWithSeller = (activeListings.data ?? []).map((l: any) => ({ ...l, seller: sellerMap[l.farmer_id] ?? null }));
