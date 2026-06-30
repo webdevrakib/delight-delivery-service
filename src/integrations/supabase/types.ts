@@ -751,36 +751,20 @@ export type Database = {
       }
     }
     Views: {
-      public_seller_profiles: {
-        Row: {
-          avatar_url: string | null
-          district: string | null
-          full_name: string | null
-          id: string | null
-          phone: string | null
-          village: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          district?: string | null
-          full_name?: string | null
-          id?: string | null
-          phone?: string | null
-          village?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          district?: string | null
-          full_name?: string | null
-          id?: string | null
-          phone?: string | null
-          village?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_public_seller_profiles: {
+        Args: { seller_ids: string[] }
+        Returns: {
+          avatar_url: string
+          district: string
+          full_name: string
+          id: string
+          phone: string
+          village: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
