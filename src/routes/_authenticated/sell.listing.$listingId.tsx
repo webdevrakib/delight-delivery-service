@@ -14,11 +14,8 @@ const listingQuery = (id: string) =>
       const { data: l, error } = await supabase.from("farmer_crop_listings").select("*").eq("id", id).maybeSingle();
       if (error) throw error;
       if (!l) return null;
-      const { data: seller } = await supabase
-        .from("profiles")
-        .select("id, full_name, phone, district, village, avatar_url")
-        .eq("id", l.farmer_id)
-        .maybeSingle();
+      const { data: sellers } = await supabase.rpc("get_public_seller_profiles" as any, { seller_ids: [l.farmer_id] });
+      const seller = (sellers as any[] | null)?.[0] ?? null;
       return { ...l, seller };
     },
   });
