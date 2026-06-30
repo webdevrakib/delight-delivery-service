@@ -754,7 +754,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_public_seller_profiles: {
+        Args: { seller_ids: string[] }
+        Returns: {
+          avatar_url: string
+          district: string
+          full_name: string
+          id: string
+          phone: string
+          village: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
